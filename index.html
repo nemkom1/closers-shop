@@ -223,9 +223,9 @@
         </header>
 
         <nav class="tabs">
-            <button class="tab active" onclick="showTab('catalog')">Каталог</button>
-            <button class="tab" onclick="showTab('request')">Заявка по ссылке</button>
-            <button class="tab" onclick="showTab('orders')">Мои заказы</button>
+            <button class="tab active" id="tab-catalog">Каталог</button>
+            <button class="tab" id="tab-request">Заявка по ссылке</button>
+            <button class="tab" id="tab-orders">Мои заказы</button>
         </nav>
 
         <!-- Вкладка Каталог -->
@@ -236,21 +236,21 @@
                     <h3>Nike Air Jordan 1 Retro High</h3>
                     <p class="price">от 15 990 ₽</p>
                     <p class="vendor">POIZON</p>
-                    <button class="btn-order" onclick="quickOrder('Nike Air Jordan 1')">Быстрый заказ</button>
+                    <button class="btn-order" data-product="Nike Air Jordan 1">Быстрый заказ</button>
                 </div>
                 <div class="product-card">
                     <img src="https://via.placeholder.com/200" alt="Essentials Hoodie">
                     <h3>Essentials Fear of God Hoodie</h3>
                     <p class="price">от 8 490 ₽</p>
                     <p class="vendor">POIZON</p>
-                    <button class="btn-order" onclick="quickOrder('Essentials Hoodie')">Быстрый заказ</button>
+                    <button class="btn-order" data-product="Essentials Hoodie">Быстрый заказ</button>
                 </div>
                 <div class="product-card">
                     <img src="https://via.placeholder.com/200" alt="Stussy Zip Hoodie">
                     <h3>Stussy 8 Ball Zip Hoodie</h3>
                     <p class="price">от 11 990 ₽</p>
                     <p class="vendor">POIZON</p>
-                    <button class="btn-order" onclick="quickOrder('Stussy Hoodie')">Быстрый заказ</button>
+                    <button class="btn-order" data-product="Stussy Hoodie">Быстрый заказ</button>
                 </div>
             </div>
         </div>
@@ -314,27 +314,64 @@
         // Адрес твоего сервера (ЗАМЕНИ НА СВОЙ IP)
         const API_URL = 'http://192.168.2.138:5000/api';
 
-        // Переключение вкладок
-        window.showTab = function(tabName) {
+        // Дождемся загрузки DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Страница загружена');
+            
+            // Назначаем обработчики на кнопки табов
+            document.getElementById('tab-catalog').addEventListener('click', function() {
+                showTab('catalog');
+            });
+            
+            document.getElementById('tab-request').addEventListener('click', function() {
+                showTab('request');
+            });
+            
+            document.getElementById('tab-orders').addEventListener('click', function() {
+                showTab('orders');
+            });
+            
+            // Назначаем обработчики на кнопки быстрого заказа
+            document.querySelectorAll('.btn-order').forEach(button => {
+                button.addEventListener('click', function() {
+                    const product = this.getAttribute('data-product');
+                    quickOrder(product);
+                });
+            });
+            
+            // Назначаем обработчик на форму
+            document.getElementById('order-form').addEventListener('submit', handleOrderSubmit);
+            
+            // Загружаем заказы
+            loadOrders();
+        });
+
+        // Функция переключения вкладок
+        function showTab(tabName) {
+            console.log('Переключаемся на:', tabName);
+            
+            // Убираем активный класс у всех
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
-            event.target.classList.add('active');
+            // Активируем нужную вкладку
+            document.getElementById(`tab-${tabName}`).classList.add('active');
             document.getElementById(tabName).classList.add('active');
             
+            // Если открыли вкладку заказов - обновляем список
             if (tabName === 'orders') {
                 loadOrders();
             }
-        };
+        }
 
-        // Быстрый заказ
-        window.quickOrder = function(productName) {
+        // Функция быстрого заказа
+        function quickOrder(productName) {
             document.getElementById('product-link').value = `Поиск: ${productName} на POIZON`;
-            document.querySelector('.tab[onclick="showTab(\'request\')"]').click();
-        };
+            showTab('request');
+        }
 
-        // Отправка заказа
-        document.getElementById('order-form').addEventListener('submit', async function(e) {
+        // Функция отправки заказа
+        async function handleOrderSubmit(e) {
             e.preventDefault();
             
             const orderData = {
@@ -362,9 +399,9 @@
                 
                 if (result.success) {
                     tg.showAlert(`✅ Заказ №${result.orderId} отправлен! Админ получил уведомление.`);
-                    this.reset();
+                    document.getElementById('order-form').reset();
                     loadOrders();
-                    document.querySelector('.tab[onclick="showTab(\'orders\')"]').click();
+                    showTab('orders');
                 } else {
                     tg.showAlert('❌ Ошибка при отправке');
                 }
@@ -372,9 +409,9 @@
                 console.error(error);
                 tg.showAlert('❌ Сервер не отвечает. Проверь, запущен ли сервер!');
             }
-        });
+        }
 
-        // Загрузка заказов
+        // Функция загрузки заказов
         async function loadOrders() {
             const ordersList = document.getElementById('orders-list');
             
@@ -417,9 +454,6 @@
                 ordersList.innerHTML = '<p class="loading">❌ Ошибка загрузки заказов</p>';
             }
         }
-
-        // Загружаем заказы при старте
-        loadOrders();
     </script>
 </body>
 </html>
