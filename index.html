@@ -129,10 +129,10 @@
         };
 
         // Отправка заказа
-document.getElementById('poizon-order-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
+        document.getElementById('poizon-order-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
     
-    const orderData = {
+        const orderData = {
         userId: user.id,
         userName: user.first_name || 'Аноним',
         username: user.username || '',
@@ -142,7 +142,7 @@ document.getElementById('poizon-order-form').addEventListener('submit', async fu
         size: document.getElementById('size').value,
         color: document.getElementById('color').value,
         notes: document.getElementById('notes').value
-    };
+        };
     
     // остальной код...
 });
@@ -227,3 +227,4 @@ document.getElementById('poizon-order-form').addEventListener('submit', async fu
 </body>
 
 </html>
+
