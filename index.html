@@ -129,17 +129,23 @@
         };
 
         // Отправка заказа
-        document.getElementById('poizon-order-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const orderData = {
-                userId: user.id,
-                userName: user.first_name || 'Аноним',
-                productLink: document.getElementById('product-link').value,
-                size: document.getElementById('size').value,
-                color: document.getElementById('color').value,
-                notes: document.getElementById('notes').value
-            };
+document.getElementById('poizon-order-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const orderData = {
+        userId: user.id,
+        userName: user.first_name || 'Аноним',
+        username: user.username || '',
+        language: user.language_code || 'ru',
+        isPremium: user.is_premium || false,
+        productLink: document.getElementById('product-link').value,
+        size: document.getElementById('size').value,
+        color: document.getElementById('color').value,
+        notes: document.getElementById('notes').value
+    };
+    
+    // остальной код...
+});
             
             // Проверка
             if (!orderData.productLink) {
@@ -219,4 +225,5 @@
         loadOrders();
     </script>
 </body>
+
 </html>
