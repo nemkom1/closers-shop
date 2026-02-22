@@ -60,7 +60,6 @@
             display: block;
         }
         
-        /* Каталог */
         .catalog-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -103,7 +102,6 @@
             cursor: pointer;
         }
         
-        /* Форма */
         .request-form {
             background: var(--tg-theme-secondary-bg-color, #f5f5f5);
             border-radius: 12px;
@@ -168,7 +166,6 @@
             cursor: pointer;
         }
         
-        /* Заказы */
         .orders-list {
             display: flex;
             flex-direction: column;
@@ -228,7 +225,6 @@
             <button class="tab" id="tab-orders">Мои заказы</button>
         </nav>
 
-        <!-- Вкладка Каталог -->
         <div id="catalog" class="tab-content active">
             <div class="catalog-grid">
                 <div class="product-card">
@@ -255,7 +251,6 @@
             </div>
         </div>
 
-        <!-- Вкладка Заявка по ссылке -->
         <div id="request" class="tab-content">
             <div class="request-form">
                 <h2>Заказ с POIZON</h2>
@@ -292,7 +287,6 @@
             </div>
         </div>
 
-        <!-- Вкладка Мои заказы -->
         <div id="orders" class="tab-content">
             <div class="orders-list" id="orders-list">
                 <p class="loading">Загрузка заказов...</p>
@@ -301,87 +295,51 @@
     </div>
 
     <script>
-        // Telegram Web App инициализация
+        // Telegram Web App
         let tg = window.Telegram.WebApp;
         tg.expand();
         
-        // Данные пользователя
         let user = tg.initDataUnsafe?.user || {
             id: Math.floor(Math.random() * 1000000),
             first_name: 'Пользователь'
         };
 
-        // Адрес твоего сервера (ЗАМЕНИ НА СВОЙ IP)
-        // Определяем, где мы находимся
-const isLocalFile = window.location.protocol === 'file:';
-const isLocalhost = window.location.hostname === 'localhost' || 
-                    window.location.hostname === '127.0.0.1';
+        // ТВОЙ IP АДРЕС (поменяй если нужно)
+        const SERVER_IP = '10.70.22.82';
+        
+        // Используем прокси для обхода блокировки HTTPS → HTTP
+        const API_URL = `https://corsproxy.io/?http://${SERVER_IP}:5000/api`;
 
-// Адрес твоего сервера (поменяй IP на свой!)
-const SERVER_IP = '10.70.22.82';  // ← ВСТАВЬ СВОЙ IP
-
-// Выбираем правильный протокол
-const API_URL = isLocalFile || isLocalhost 
-    ? `http://${SERVER_IP}:5000/api`           // для локального теста
-    : `https://cors-anywhere.herokuapp.com/http://${SERVER_IP}:5000/api`; // для GitHub Pages
-
-        // Дождемся загрузки DOM
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Страница загружена');
+            // Табы
+            document.getElementById('tab-catalog').addEventListener('click', () => showTab('catalog'));
+            document.getElementById('tab-request').addEventListener('click', () => showTab('request'));
+            document.getElementById('tab-orders').addEventListener('click', () => showTab('orders'));
             
-            // Назначаем обработчики на кнопки табов
-            document.getElementById('tab-catalog').addEventListener('click', function() {
-                showTab('catalog');
-            });
-            
-            document.getElementById('tab-request').addEventListener('click', function() {
-                showTab('request');
-            });
-            
-            document.getElementById('tab-orders').addEventListener('click', function() {
-                showTab('orders');
-            });
-            
-            // Назначаем обработчики на кнопки быстрого заказа
+            // Кнопки быстрого заказа
             document.querySelectorAll('.btn-order').forEach(button => {
                 button.addEventListener('click', function() {
-                    const product = this.getAttribute('data-product');
-                    quickOrder(product);
+                    document.getElementById('product-link').value = `Поиск: ${this.dataset.product} на POIZON`;
+                    showTab('request');
                 });
             });
             
-            // Назначаем обработчик на форму
+            // Форма
             document.getElementById('order-form').addEventListener('submit', handleOrderSubmit);
             
-            // Загружаем заказы
             loadOrders();
         });
 
-        // Функция переключения вкладок
         function showTab(tabName) {
-            console.log('Переключаемся на:', tabName);
-            
-            // Убираем активный класс у всех
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
-            // Активируем нужную вкладку
             document.getElementById(`tab-${tabName}`).classList.add('active');
             document.getElementById(tabName).classList.add('active');
             
-            // Если открыли вкладку заказов - обновляем список
-            if (tabName === 'orders') {
-                loadOrders();
-            }
+            if (tabName === 'orders') loadOrders();
         }
 
-        // Функция быстрого заказа
-        function quickOrder(productName) {
-            document.getElementById('product-link').value = `Поиск: ${productName} на POIZON`;
-            showTab('request');
-        }
-
-        // Функция отправки заказа
         async function handleOrderSubmit(e) {
             e.preventDefault();
             
@@ -400,61 +358,56 @@ const API_URL = isLocalFile || isLocalhost
             }
             
             try {
+                // Добавляем заголовки для CORS
                 let response = await fetch(`${API_URL}/create-order`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Origin': window.location.origin
+                    },
                     body: JSON.stringify(orderData)
                 });
                 
                 let result = await response.json();
                 
                 if (result.success) {
-                    tg.showAlert(`✅ Заказ №${result.orderId} отправлен! Админ получил уведомление.`);
+                    tg.showAlert(`✅ Заказ №${result.orderId} отправлен!`);
                     document.getElementById('order-form').reset();
                     loadOrders();
                     showTab('orders');
-                } else {
-                    tg.showAlert('❌ Ошибка при отправке');
                 }
             } catch (error) {
                 console.error(error);
-                tg.showAlert('❌ Сервер не отвечает. Проверь, запущен ли сервер!');
+                tg.showAlert('❌ Ошибка. Проверь сервер!');
             }
         }
 
-        // Функция загрузки заказов
         async function loadOrders() {
             const ordersList = document.getElementById('orders-list');
             
             try {
-                let response = await fetch(`${API_URL}/user-orders?userId=${user.id}`);
+                let response = await fetch(`${API_URL}/user-orders?userId=${user.id}`, {
+                    headers: { 'Origin': window.location.origin }
+                });
                 let orders = await response.json();
                 
-                if (orders.length === 0) {
+                if (!orders.length) {
                     ordersList.innerHTML = '<p class="loading">У вас пока нет заказов</p>';
                     return;
                 }
                 
                 let html = '';
                 orders.forEach(order => {
-                    let statusText = {
-                        'pending': '⏳ Ожидание',
-                        'processing': '🔄 В обработке',
-                        'completed': '✅ Выполнен',
-                        'cancelled': '❌ Отменен'
-                    }[order.status] || '⏳ Ожидание';
-                    
                     html += `
                         <div class="order-card">
                             <div class="order-header">
                                 <span class="order-id">Заказ #${order.id}</span>
-                                <span class="order-status">${statusText}</span>
+                                <span class="order-status">⏳ ${order.status}</span>
                             </div>
                             <div class="order-details">
-                                <p><strong>Товар:</strong> <a href="${order.productLink}" target="_blank" class="order-link">Ссылка на POIZON</a></p>
+                                <p><strong>Товар:</strong> ${order.productLink.substring(0, 50)}...</p>
                                 ${order.size ? `<p><strong>Размер:</strong> ${order.size}</p>` : ''}
-                                ${order.color ? `<p><strong>Цвет:</strong> ${order.color}</p>` : ''}
-                                <p><strong>Дата:</strong> ${new Date(order.date).toLocaleString('ru-RU')}</p>
+                                <p><strong>Дата:</strong> ${new Date(order.date).toLocaleString()}</p>
                             </div>
                         </div>
                     `;
@@ -462,11 +415,9 @@ const API_URL = isLocalFile || isLocalhost
                 
                 ordersList.innerHTML = html;
             } catch (error) {
-                ordersList.innerHTML = '<p class="loading">❌ Ошибка загрузки заказов</p>';
+                ordersList.innerHTML = '<p class="loading">❌ Ошибка загрузки</p>';
             }
         }
     </script>
 </body>
 </html>
-
-
