@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLOSERS | Магазин одежды</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>CLOSERS</h1>
+            <p class="subtitle">Оригинальные вещи с POIZON</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" onclick="showTab('catalog')">Каталог</button>
+            <button class="tab" onclick="showTab('request')">Заявка по ссылке</button>
+            <button class="tab" onclick="showTab('orders')">Мои заказы</button>
+        </nav>
+
+        <!-- Вкладка Каталог -->
+        <div id="catalog" class="tab-content active">
+            <div class="catalog-grid">
+                <div class="product-card" data-id="1">
+                    <img src="https://via.placeholder.com/200" alt="Nike Air Jordan 1">
+                    <h3>Nike Air Jordan 1 Retro High</h3>
+                    <p class="price">от 15 990 ₽</p>
+                    <p class="vendor">POIZON</p>
+                    <button class="btn-order" onclick="quickOrder('Nike Air Jordan 1')">Быстрый заказ</button>
+                </div>
+                <div class="product-card" data-id="2">
+                    <img src="https://via.placeholder.com/200" alt="Essentials Hoodie">
+                    <h3>Essentials Fear of God Hoodie</h3>
+                    <p class="price">от 8 490 ₽</p>
+                    <p class="vendor">POIZON</p>
+                    <button class="btn-order" onclick="quickOrder('Essentials Hoodie')">Быстрый заказ</button>
+                </div>
+                <div class="product-card" data-id="3">
+                    <img src="https://via.placeholder.com/200" alt="Stussy Zip Hoodie">
+                    <h3>Stussy 8 Ball Zip Hoodie</h3>
+                    <p class="price">от 11 990 ₽</p>
+                    <p class="vendor">POIZON</p>
+                    <button class="btn-order" onclick="quickOrder('Stussy Hoodie')">Быстрый заказ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Заявка по ссылке -->
+        <div id="request" class="tab-content">
+            <div class="request-form">
+                <h2>Заказ с POIZON</h2>
+                <p>Нашли что-то на POIZON? Отправьте ссылку, и мы привезем!</p>
+                
+                <form id="poizon-order-form">
+                    <div class="form-group">
+                        <label for="product-link">Ссылка на товар с POIZON:</label>
+                        <input type="url" id="product-link" placeholder="https://www.poizon.com/product/..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="size">Размер (EU/US):</label>
+                        <input type="text" id="size" placeholder="Например: 42 (US 8.5)">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="color">Цвет:</label>
+                        <input type="text" id="color" placeholder="Укажите желаемый цвет">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Дополнительные пожелания:</label>
+                        <textarea id="notes" rows="3" placeholder="Особые требования к товару..."></textarea>
+                    </div>
+                    
+                    <div class="price-info">
+                        <p>💰 Предварительная стоимость: <span id="est-price">от 1000 ₽</span></p>
+                        <small>Точная цена после проверки админом</small>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">Отправить заявку</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Вкладка Мои заказы -->
+        <div id="orders" class="tab-content">
+            <div class="orders-list" id="orders-list">
+                <p class="loading">Загрузка заказов...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ВЕСЬ СКРИПТ ВСТАВЬ СЮДА -->
+    <script>
+        // Telegram Web App инициализация
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        
+        // Данные пользователя
+        let user = tg.initDataUnsafe?.user || {
+            id: Math.floor(Math.random() * 1000000),
+            first_name: 'Пользователь',
+            username: 'guest'
+        };
+
+        // Адрес твоего сервера (локальный)
+        const API_URL = 'http://localhost:5000/api';
+
+        // Переключение вкладок
+        window.showTab = function(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'orders') {
+                loadOrders();
+            }
+        };
+
+        // Быстрый заказ из каталога
+        window.quickOrder = function(productName) {
+            document.getElementById('product-link').value = `Поиск: ${productName} на POIZON`;
+            document.getElementById('size').focus();
+            showTab('request');
+        };
+
+        // Отправка заказа
+        document.getElementById('poizon-order-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const orderData = {
+                userId: user.id,
+                userName: user.first_name || 'Аноним',
+                productLink: document.getElementById('product-link').value,
+                size: document.getElementById('size').value,
+                color: document.getElementById('color').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            // Проверка
+            if (!orderData.productLink) {
+                tg.showAlert('Введите ссылку на товар');
+                return;
+            }
+            
+            try {
+                // Отправка на сервер
+                let response = await fetch(`${API_URL}/create-order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+                
+                let result = await response.json();
+                
+                if (result.success) {
+                    tg.showAlert(`✅ Заказ №${result.orderId} отправлен! Админ получил уведомление.`);
+                    this.reset();
+                    loadOrders();
+                    showTab('orders');
+                } else {
+                    tg.showAlert('❌ Ошибка при отправке');
+                }
+            } catch (error) {
+                console.error(error);
+                tg.showAlert('❌ Сервер не отвечает. Убедись, что server.py запущен!');
+            }
+        });
+
+        // Загрузка заказов
+        async function loadOrders() {
+            const ordersList = document.getElementById('orders-list');
+            
+            try {
+                let response = await fetch(`${API_URL}/user-orders?userId=${user.id}`);
+                let orders = await response.json();
+                
+                if (orders.length === 0) {
+                    ordersList.innerHTML = '<p class="loading">У вас пока нет заказов</p>';
+                    return;
+                }
+                
+                let html = '';
+                orders.forEach(order => {
+                    let statusText = {
+                        'pending': '⏳ Ожидание',
+                        'processing': '🔄 В обработке',
+                        'completed': '✅ Выполнен',
+                        'cancelled': '❌ Отменен'
+                    }[order.status] || '⏳ Ожидание';
+                    
+                    html += `
+                        <div class="order-card">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span class="order-id">Заказ #${order.id}</span>
+                                <span class="order-status status-pending">${statusText}</span>
+                            </div>
+                            <div class="order-details">
+                                <p><strong>Товар:</strong> <a href="${order.productLink}" target="_blank">Ссылка</a></p>
+                                ${order.size ? `<p><strong>Размер:</strong> ${order.size}</p>` : ''}
+                                ${order.color ? `<p><strong>Цвет:</strong> ${order.color}</p>` : ''}
+                                <p><strong>Дата:</strong> ${new Date(order.date).toLocaleString()}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                ordersList.innerHTML = html;
+            } catch (error) {
+                ordersList.innerHTML = '<p class="loading">❌ Ошибка загрузки заказов. Проверь сервер.</p>';
+            }
+        }
+
+        // Загружаем заказы при старте
+        loadOrders();
+    </script>
+</body>
+</html>
