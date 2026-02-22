@@ -1,432 +1,112 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLOSERS | Магазин одежды</title>
+    <title>CLOSERS Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-        body {
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            padding: 16px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            font-size: 32px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-        }
-        .subtitle {
-            color: var(--tg-theme-hint-color, #999999);
-            font-size: 14px;
-        }
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--tg-theme-secondary-bg-color, #f0f0f0);
-            padding-bottom: 8px;
-        }
-        .tab {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            background: none;
-            color: var(--tg-theme-hint-color, #999999);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .tab.active {
-            color: var(--tg-theme-button-color, #40a7e3);
-            border-bottom: 2px solid var(--tg-theme-button-color, #40a7e3);
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        
-        .catalog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 16px;
-        }
-        .product-card {
-            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
-            border-radius: 12px;
-            padding: 12px;
-        }
-        .product-card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-        .product-card h3 {
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-        .price {
-            font-weight: 600;
-            color: var(--tg-theme-button-color, #40a7e3);
-            font-size: 16px;
-        }
-        .vendor {
-            font-size: 12px;
-            color: var(--tg-theme-hint-color, #999);
-            margin-bottom: 8px;
-        }
-        .btn-order {
-            width: 100%;
-            padding: 8px;
-            background: var(--tg-theme-button-color, #40a7e3);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        
-        .request-form {
-            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
-            border-radius: 12px;
-            padding: 20px;
-        }
-        .request-form h2 {
-            margin-bottom: 8px;
-            font-size: 20px;
-        }
-        .request-form p {
-            color: var(--tg-theme-hint-color, #666);
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        .form-group {
-            margin-bottom: 16px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--tg-theme-hint-color, #ddd);
-            border-radius: 8px;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            font-size: 14px;
-        }
-        .form-group textarea {
-            resize: vertical;
-        }
-        .price-info {
-            background: rgba(64, 167, 227, 0.1);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .price-info p {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--tg-theme-button-color, #40a7e3);
-            margin-bottom: 4px;
-        }
-        .price-info small {
-            color: var(--tg-theme-hint-color, #999);
-        }
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: var(--tg-theme-button-color, #40a7e3);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .orders-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .order-card {
-            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
-            border-radius: 12px;
-            padding: 16px;
-        }
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-        .order-id {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .order-status {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            background: #ffd700;
-        }
-        .order-details {
-            font-size: 14px;
-        }
-        .order-details p {
-            margin-bottom: 4px;
-        }
-        .order-link {
-            color: var(--tg-theme-link-color, #40a7e3);
-            text-decoration: none;
-            word-break: break-all;
-        }
-        .loading {
-            text-align: center;
-            color: var(--tg-theme-hint-color, #999);
-            padding: 40px;
-        }
+        body { font-family: sans-serif; padding: 15px; background: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); }
+        .tab { display: inline-block; padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .tab.active { border-bottom: 2px solid var(--tg-theme-button-color); }
+        .tab-content { display: none; padding: 15px; }
+        .tab-content.active { display: block; }
+        .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; margin: 5px 0; }
+        input, textarea { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; }
+        .order-card { background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <div class="app">
-        <header class="header">
-            <h1>CLOSERS</h1>
-            <p class="subtitle">Оригинальные вещи с POIZON</p>
-        </header>
+    <h1 style="text-align:center">CLOSERS</h1>
+    
+    <div style="display:flex; justify-content:center">
+        <button class="tab active" onclick="showTab('catalog')">Каталог</button>
+        <button class="tab" onclick="showTab('request')">Заказ</button>
+        <button class="tab" onclick="showTab('orders')">Мои заказы</button>
+    </div>
 
-        <nav class="tabs">
-            <button class="tab active" id="tab-catalog">Каталог</button>
-            <button class="tab" id="tab-request">Заявка по ссылке</button>
-            <button class="tab" id="tab-orders">Мои заказы</button>
-        </nav>
-
-        <div id="catalog" class="tab-content active">
-            <div class="catalog-grid">
-                <div class="product-card">
-                    <img src="https://via.placeholder.com/200" alt="Nike Air Jordan 1">
-                    <h3>Nike Air Jordan 1 Retro High</h3>
-                    <p class="price">от 15 990 ₽</p>
-                    <p class="vendor">POIZON</p>
-                    <button class="btn-order" data-product="Nike Air Jordan 1">Быстрый заказ</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://via.placeholder.com/200" alt="Essentials Hoodie">
-                    <h3>Essentials Fear of God Hoodie</h3>
-                    <p class="price">от 8 490 ₽</p>
-                    <p class="vendor">POIZON</p>
-                    <button class="btn-order" data-product="Essentials Hoodie">Быстрый заказ</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://via.placeholder.com/200" alt="Stussy Zip Hoodie">
-                    <h3>Stussy 8 Ball Zip Hoodie</h3>
-                    <p class="price">от 11 990 ₽</p>
-                    <p class="vendor">POIZON</p>
-                    <button class="btn-order" data-product="Stussy Hoodie">Быстрый заказ</button>
-                </div>
-            </div>
+    <div id="catalog" class="tab-content active">
+        <div class="product-card">
+            <h3>Nike Air Jordan 1</h3>
+            <p>от 15 990 ₽</p>
+            <button class="btn" onclick="quickOrder('Nike Air Jordan 1')">Заказать</button>
         </div>
-
-        <div id="request" class="tab-content">
-            <div class="request-form">
-                <h2>Заказ с POIZON</h2>
-                <p>Нашли что-то на POIZON? Отправьте ссылку, и мы привезем!</p>
-                
-                <form id="order-form">
-                    <div class="form-group">
-                        <label for="product-link">Ссылка на товар с POIZON:</label>
-                        <input type="url" id="product-link" placeholder="https://www.poizon.com/product/..." required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="size">Размер (EU/US):</label>
-                        <input type="text" id="size" placeholder="Например: 42 (US 8.5)">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="color">Цвет:</label>
-                        <input type="text" id="color" placeholder="Укажите желаемый цвет">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="notes">Дополнительные пожелания:</label>
-                        <textarea id="notes" rows="3" placeholder="Особые требования к товару..."></textarea>
-                    </div>
-                    
-                    <div class="price-info">
-                        <p>💰 Предварительная стоимость: <span>от 1000 ₽</span></p>
-                        <small>Точная цена после проверки админом</small>
-                    </div>
-                    
-                    <button type="submit" class="btn-submit">Отправить заявку</button>
-                </form>
-            </div>
-        </div>
-
-        <div id="orders" class="tab-content">
-            <div class="orders-list" id="orders-list">
-                <p class="loading">Загрузка заказов...</p>
-            </div>
+        <div class="product-card">
+            <h3>Essentials Hoodie</h3>
+            <p>от 8 490 ₽</p>
+            <button class="btn" onclick="quickOrder('Essentials Hoodie')">Заказать</button>
         </div>
     </div>
 
+    <div id="request" class="tab-content">
+        <form id="orderForm">
+            <input type="url" id="link" placeholder="Ссылка с POIZON" required>
+            <input type="text" id="size" placeholder="Размер">
+            <input type="text" id="color" placeholder="Цвет">
+            <textarea id="notes" placeholder="Пожелания"></textarea>
+            <button type="submit" class="btn">Отправить заказ</button>
+        </form>
+    </div>
+
+    <div id="orders" class="tab-content">
+        <div id="ordersList"></div>
+    </div>
+
     <script>
-        // Telegram Web App
-        let tg = window.Telegram.WebApp;
+        let tg = Telegram.WebApp;
         tg.expand();
         
-        let user = tg.initDataUnsafe?.user || {
-            id: Math.floor(Math.random() * 1000000),
-            first_name: 'Пользователь'
-        };
+        let user = tg.initDataUnsafe?.user || { id: 123, first_name: 'User' };
+        const API_URL = 'http://10.70.22.82:5000/api';
 
-        // ТВОЙ IP АДРЕС (поменяй если нужно)
-        const SERVER_IP = '10.70.22.82';
-        
-        // Используем прокси для обхода блокировки HTTPS → HTTP
-        const API_URL = `https://corsproxy.io/?http://10.70.22.82:5000/api`;
-        // Добавь сразу после объявления API_URL
-        fetch(API_URL + '/user-orders?userId=' + user.id, { mode: 'no-cors' }).catch(() => {});
-
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Табы
-            document.getElementById('tab-catalog').addEventListener('click', () => showTab('catalog'));
-            document.getElementById('tab-request').addEventListener('click', () => showTab('request'));
-            document.getElementById('tab-orders').addEventListener('click', () => showTab('orders'));
-            
-            // Кнопки быстрого заказа
-            document.querySelectorAll('.btn-order').forEach(button => {
-                button.addEventListener('click', function() {
-                    document.getElementById('product-link').value = `Поиск: ${this.dataset.product} на POIZON`;
-                    showTab('request');
-                });
-            });
-            
-            // Форма
-            document.getElementById('order-form').addEventListener('submit', handleOrderSubmit);
-            
-            loadOrders();
-        });
-
-        function showTab(tabName) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            document.getElementById(tabName).classList.add('active');
-            
-            if (tabName === 'orders') loadOrders();
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+            if (tab === 'orders') loadOrders();
         }
 
-        async function handleOrderSubmit(e) {
+        function quickOrder(product) {
+            document.getElementById('link').value = `Поиск: ${product}`;
+            showTab('request');
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const orderData = {
-                userId: user.id,
-                userName: user.first_name || 'Аноним',
-                productLink: document.getElementById('product-link').value,
-                size: document.getElementById('size').value,
-                color: document.getElementById('color').value,
-                notes: document.getElementById('notes').value
-            };
-            
-            if (!orderData.productLink) {
-                tg.showAlert('Введите ссылку на товар');
-                return;
-            }
-            
             try {
-                // Добавляем заголовки для CORS
-                let response = await fetch(`${API_URL}/create-order`, {
+                let res = await fetch(API_URL + '/create-order', {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Origin': window.location.origin
-                    },
-                    body: JSON.stringify(orderData)
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        userId: user.id,
+                        userName: user.first_name,
+                        productLink: document.getElementById('link').value,
+                        size: document.getElementById('size').value,
+                        color: document.getElementById('color').value,
+                        notes: document.getElementById('notes').value
+                    })
                 });
-                
-                let result = await response.json();
-                
-                if (result.success) {
-                    tg.showAlert(`✅ Заказ №${result.orderId} отправлен!`);
-                    document.getElementById('order-form').reset();
-                    loadOrders();
+                let data = await res.json();
+                if (data.success) {
+                    alert('✅ Заказ отправлен!');
+                    document.getElementById('orderForm').reset();
                     showTab('orders');
                 }
-            } catch (error) {
-                console.error(error);
-                tg.showAlert('❌ Ошибка. Проверь сервер!');
+            } catch (err) {
+                alert('❌ Ошибка! Сервер запущен?');
             }
-        }
+        });
 
         async function loadOrders() {
-            const ordersList = document.getElementById('orders-list');
-            
-            try {
-                let response = await fetch(`${API_URL}/user-orders?userId=${user.id}`, {
-                    headers: { 'Origin': window.location.origin }
-                });
-                let orders = await response.json();
-                
-                if (!orders.length) {
-                    ordersList.innerHTML = '<p class="loading">У вас пока нет заказов</p>';
-                    return;
-                }
-                
-                let html = '';
-                orders.forEach(order => {
-                    html += `
-                        <div class="order-card">
-                            <div class="order-header">
-                                <span class="order-id">Заказ #${order.id}</span>
-                                <span class="order-status">⏳ ${order.status}</span>
-                            </div>
-                            <div class="order-details">
-                                <p><strong>Товар:</strong> ${order.productLink.substring(0, 50)}...</p>
-                                ${order.size ? `<p><strong>Размер:</strong> ${order.size}</p>` : ''}
-                                <p><strong>Дата:</strong> ${new Date(order.date).toLocaleString()}</p>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                ordersList.innerHTML = html;
-            } catch (error) {
-                ordersList.innerHTML = '<p class="loading">❌ Ошибка загрузки</p>';
-            }
+            let res = await fetch(API_URL + '/user-orders?userId=' + user.id);
+            let orders = await res.json();
+            let html = '';
+            orders.forEach(o => {
+                html += `<div class="order-card">Заказ #${o.id} - ${o.status}</div>`;
+            });
+            document.getElementById('ordersList').innerHTML = html || '<p>Нет заказов</p>';
         }
+        loadOrders();
     </script>
 </body>
 </html>
-
-
-
-
-
-
