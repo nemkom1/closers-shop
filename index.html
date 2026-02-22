@@ -304,6 +304,10 @@
         id: Math.floor(Math.random() * 1000000), 
         first_name: 'Пользователь' 
     };
+        // Принудительный HTTPS для всех запросов
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+    window.location.href = 'https://' + window.location.hostname + window.location.pathname;
+    }
 
     // HTTPS ссылка на сервер
     const API_URL = 'https://maxkom.pythonanywhere.com/api';
@@ -389,6 +393,7 @@
 </script>
 </body>
 </html>
+
 
 
 
