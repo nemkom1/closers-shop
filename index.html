@@ -296,115 +296,100 @@
     </div>
 
     <script>
-        // Telegram Web App
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+    // Telegram Web App
+    let tg = window.Telegram.WebApp;
+    tg.expand();
+    
+    let user = tg.initDataUnsafe?.user || { 
+        id: Math.floor(Math.random() * 1000000), 
+        first_name: 'Пользователь' 
+    };
+
+    // HTTPS ссылка на сервер
+    const API_URL = 'https://maxkom.pythonanywhere.com/api';
+
+    function showTab(tabName) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById(tabName).classList.add('active');
+        if (tabName === 'orders') loadOrders();
+    }
+
+    function quickOrder(productName) {
+        document.getElementById('product-link').value = `Поиск: ${productName} на POIZON`;
+        showTab('request');
+    }
+
+    document.getElementById('order-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        let user = tg.initDataUnsafe?.user || {
-            id: Math.floor(Math.random() * 1000000),
-            first_name: 'Пользователь'
+        const orderData = {
+            userId: user.id,
+            userName: user.first_name || 'Аноним',
+            productLink: document.getElementById('product-link').value,
+            size: document.getElementById('size').value,
+            color: document.getElementById('color').value,
+            notes: document.getElementById('notes').value
         };
-
-        // IP твоего сервера (тот же, что в PyCharm)
-        const API_URL = 'https://maxkom.pythonanywhere.com/api';
-
-        function showTab(tabName) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        try {
+            let response = await fetch(`${API_URL}/create-order`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            });
             
-            event.target.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
+            let result = await response.json();
             
-            if (tabName === 'orders') {
+            if (result.success) {
+                tg.showAlert(`✅ Заказ №${result.orderId} отправлен!`);
+                document.getElementById('order-form').reset();
                 loadOrders();
+                showTab('orders');
             }
+        } catch (error) {
+            console.error(error);
+            document.getElementById('orders-list').innerHTML = '<p class="loading">❌ Ошибка: ' + error.message + '</p>';
         }
+    });
 
-        function quickOrder(productName) {
-            document.getElementById('product-link').value = `Поиск: ${productName} на POIZON`;
-            showTab('request');
-        }
-
-        // Отправка заказа
-        document.getElementById('order-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
+    async function loadOrders() {
+        try {
+            let response = await fetch(`${API_URL}/user-orders?userId=${user.id}`);
+            let orders = await response.json();
             
-            const orderData = {
-                userId: user.id,
-                userName: user.first_name || 'Аноним',
-                productLink: document.getElementById('product-link').value,
-                size: document.getElementById('size').value,
-                color: document.getElementById('color').value,
-                notes: document.getElementById('notes').value
-            };
-            
-            if (!orderData.productLink) {
-                tg.showAlert('Введите ссылку на товар');
+            if (orders.length === 0) {
+                document.getElementById('orders-list').innerHTML = '<p class="loading">У вас пока нет заказов</p>';
                 return;
             }
             
-            try {
-                let response = await fetch(`${API_URL}/create-order`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
-                });
-                
-                let result = await response.json();
-                
-                if (result.success) {
-                    tg.showAlert(`✅ Заказ №${result.orderId} отправлен!`);
-                    document.getElementById('order-form').reset();
-                    loadOrders();
-                    showTab('orders');
-                } else {
-                    tg.showAlert('❌ Ошибка при отправке');
-                }
-            } catch (error) {
-                console.error(error);
-                tg.showAlert('❌ Сервер не отвечает. Разреши небезопасный контент!');
-            }
-        });
-
-        // Загрузка заказов
-        async function loadOrders() {
-            const ordersList = document.getElementById('orders-list');
-            
-            try {
-                let response = await fetch(`${API_URL}/user-orders?userId=${user.id}`);
-                let orders = await response.json();
-                
-                if (orders.length === 0) {
-                    ordersList.innerHTML = '<p class="loading">У вас пока нет заказов</p>';
-                    return;
-                }
-                
-                let html = '';
-                orders.forEach(order => {
-                    html += `
-                        <div class="order-card">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                <span>Заказ #${order.id}</span>
-                                <span class="order-status status-pending">⏳ ${order.status}</span>
-                            </div>
-                            <p><strong>Товар:</strong> ${order.productLink}</p>
-                            ${order.size ? `<p><strong>Размер:</strong> ${order.size}</p>` : ''}
-                            ${order.color ? `<p><strong>Цвет:</strong> ${order.color}</p>` : ''}
-                            <p><strong>Дата:</strong> ${order.date}</p>
+            let html = '';
+            orders.forEach(order => {
+                html += `
+                    <div class="order-card">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Заказ #${order.id}</span>
+                            <span>⏳ ${order.status}</span>
                         </div>
-                    `;
-                });
-                
-                ordersList.innerHTML = html;
-            } catch (error) {
-                ordersList.innerHTML = '<p class="loading">❌ Ошибка загрузки. Разреши небезопасный контент!</p>';
-            }
+                        <p>🔗 ${order.productLink}</p>
+                        ${order.size ? `<p>📏 ${order.size}</p>` : ''}
+                        ${order.color ? `<p>🎨 ${order.color}</p>` : ''}
+                        <p>📅 ${order.date}</p>
+                    </div>
+                `;
+            });
+            document.getElementById('orders-list').innerHTML = html;
+        } catch (error) {
+            document.getElementById('orders-list').innerHTML = '<p class="loading">❌ Ошибка: ' + error.message + '</p>';
         }
+    }
 
-        loadOrders();
-    </script>
+    loadOrders();
+</script>
 </body>
 </html>
+
 
 
 
