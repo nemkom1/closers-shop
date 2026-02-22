@@ -308,7 +308,8 @@
         const SERVER_IP = '10.70.22.82';
         
         // Используем прокси для обхода блокировки HTTPS → HTTP
-        const API_URL = `https://api.allorigins.win/raw?url=http://${SERVER_IP}:5000/api`;
+        const API_URL = `https://thingproxy.freeboard.io/fetch/http://${SERVER_IP}:5000/api`;
+
 
         document.addEventListener('DOMContentLoaded', function() {
             // Табы
@@ -421,4 +422,5 @@
     </script>
 </body>
 </html>
+
 
