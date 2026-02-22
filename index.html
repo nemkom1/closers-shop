@@ -5,7 +5,215 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLOSERS | Магазин одежды</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 16px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+        .subtitle {
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 14px;
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--tg-theme-secondary-bg-color, #f0f0f0);
+            padding-bottom: 8px;
+        }
+        .tab {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: none;
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .tab.active {
+            color: var(--tg-theme-button-color, #40a7e3);
+            border-bottom: 2px solid var(--tg-theme-button-color, #40a7e3);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Каталог */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+        }
+        .product-card {
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            border-radius: 12px;
+            padding: 12px;
+        }
+        .product-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .product-card h3 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .price {
+            font-weight: 600;
+            color: var(--tg-theme-button-color, #40a7e3);
+            font-size: 16px;
+        }
+        .vendor {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999);
+            margin-bottom: 8px;
+        }
+        .btn-order {
+            width: 100%;
+            padding: 8px;
+            background: var(--tg-theme-button-color, #40a7e3);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        /* Форма */
+        .request-form {
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .request-form h2 {
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+        .request-form p {
+            color: var(--tg-theme-hint-color, #666);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--tg-theme-hint-color, #ddd);
+            border-radius: 8px;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            font-size: 14px;
+        }
+        .form-group textarea {
+            resize: vertical;
+        }
+        .price-info {
+            background: rgba(64, 167, 227, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .price-info p {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--tg-theme-button-color, #40a7e3);
+            margin-bottom: 4px;
+        }
+        .price-info small {
+            color: var(--tg-theme-hint-color, #999);
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--tg-theme-button-color, #40a7e3);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Заказы */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .order-card {
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .order-id {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .order-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            background: #ffd700;
+        }
+        .order-details {
+            font-size: 14px;
+        }
+        .order-details p {
+            margin-bottom: 4px;
+        }
+        .order-link {
+            color: var(--tg-theme-link-color, #40a7e3);
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .loading {
+            text-align: center;
+            color: var(--tg-theme-hint-color, #999);
+            padding: 40px;
+        }
+    </style>
 </head>
 <body>
     <div class="app">
@@ -23,21 +231,21 @@
         <!-- Вкладка Каталог -->
         <div id="catalog" class="tab-content active">
             <div class="catalog-grid">
-                <div class="product-card" data-id="1">
+                <div class="product-card">
                     <img src="https://via.placeholder.com/200" alt="Nike Air Jordan 1">
                     <h3>Nike Air Jordan 1 Retro High</h3>
                     <p class="price">от 15 990 ₽</p>
                     <p class="vendor">POIZON</p>
                     <button class="btn-order" onclick="quickOrder('Nike Air Jordan 1')">Быстрый заказ</button>
                 </div>
-                <div class="product-card" data-id="2">
+                <div class="product-card">
                     <img src="https://via.placeholder.com/200" alt="Essentials Hoodie">
                     <h3>Essentials Fear of God Hoodie</h3>
                     <p class="price">от 8 490 ₽</p>
                     <p class="vendor">POIZON</p>
                     <button class="btn-order" onclick="quickOrder('Essentials Hoodie')">Быстрый заказ</button>
                 </div>
-                <div class="product-card" data-id="3">
+                <div class="product-card">
                     <img src="https://via.placeholder.com/200" alt="Stussy Zip Hoodie">
                     <h3>Stussy 8 Ball Zip Hoodie</h3>
                     <p class="price">от 11 990 ₽</p>
@@ -53,7 +261,7 @@
                 <h2>Заказ с POIZON</h2>
                 <p>Нашли что-то на POIZON? Отправьте ссылку, и мы привезем!</p>
                 
-                <form id="poizon-order-form">
+                <form id="order-form">
                     <div class="form-group">
                         <label for="product-link">Ссылка на товар с POIZON:</label>
                         <input type="url" id="product-link" placeholder="https://www.poizon.com/product/..." required>
@@ -75,7 +283,7 @@
                     </div>
                     
                     <div class="price-info">
-                        <p>💰 Предварительная стоимость: <span id="est-price">от 1000 ₽</span></p>
+                        <p>💰 Предварительная стоимость: <span>от 1000 ₽</span></p>
                         <small>Точная цена после проверки админом</small>
                     </div>
                     
@@ -92,7 +300,6 @@
         </div>
     </div>
 
-    <!-- ВЕСЬ СКРИПТ ВСТАВЬ СЮДА -->
     <script>
         // Telegram Web App инициализация
         let tg = window.Telegram.WebApp;
@@ -101,12 +308,11 @@
         // Данные пользователя
         let user = tg.initDataUnsafe?.user || {
             id: Math.floor(Math.random() * 1000000),
-            first_name: 'Пользователь',
-            username: 'guest'
+            first_name: 'Пользователь'
         };
 
-        // Адрес твоего сервера (локальный)
-        const API_URL = 'http://localhost:5000/api';
+        // Адрес твоего сервера (ЗАМЕНИ НА СВОЙ IP)
+        const API_URL = 'http://192.168.2.138:5000/api';
 
         // Переключение вкладок
         window.showTab = function(tabName) {
@@ -121,40 +327,31 @@
             }
         };
 
-        // Быстрый заказ из каталога
+        // Быстрый заказ
         window.quickOrder = function(productName) {
             document.getElementById('product-link').value = `Поиск: ${productName} на POIZON`;
-            document.getElementById('size').focus();
-            showTab('request');
+            document.querySelector('.tab[onclick="showTab(\'request\')"]').click();
         };
 
         // Отправка заказа
-        document.getElementById('poizon-order-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-    
-        const orderData = {
-        userId: user.id,
-        userName: user.first_name || 'Аноним',
-        username: user.username || '',
-        language: user.language_code || 'ru',
-        isPremium: user.is_premium || false,
-        productLink: document.getElementById('product-link').value,
-        size: document.getElementById('size').value,
-        color: document.getElementById('color').value,
-        notes: document.getElementById('notes').value
-        };
-    
-    // остальной код...
-});
+        document.getElementById('order-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            // Проверка
+            const orderData = {
+                userId: user.id,
+                userName: user.first_name || 'Аноним',
+                productLink: document.getElementById('product-link').value,
+                size: document.getElementById('size').value,
+                color: document.getElementById('color').value,
+                notes: document.getElementById('notes').value
+            };
+            
             if (!orderData.productLink) {
                 tg.showAlert('Введите ссылку на товар');
                 return;
             }
             
             try {
-                // Отправка на сервер
                 let response = await fetch(`${API_URL}/create-order`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -167,13 +364,13 @@
                     tg.showAlert(`✅ Заказ №${result.orderId} отправлен! Админ получил уведомление.`);
                     this.reset();
                     loadOrders();
-                    showTab('orders');
+                    document.querySelector('.tab[onclick="showTab(\'orders\')"]').click();
                 } else {
                     tg.showAlert('❌ Ошибка при отправке');
                 }
             } catch (error) {
                 console.error(error);
-                tg.showAlert('❌ Сервер не отвечает. Убедись, что server.py запущен!');
+                tg.showAlert('❌ Сервер не отвечает. Проверь, запущен ли сервер!');
             }
         });
 
@@ -201,15 +398,15 @@
                     
                     html += `
                         <div class="order-card">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div class="order-header">
                                 <span class="order-id">Заказ #${order.id}</span>
-                                <span class="order-status status-pending">${statusText}</span>
+                                <span class="order-status">${statusText}</span>
                             </div>
                             <div class="order-details">
-                                <p><strong>Товар:</strong> <a href="${order.productLink}" target="_blank">Ссылка</a></p>
+                                <p><strong>Товар:</strong> <a href="${order.productLink}" target="_blank" class="order-link">Ссылка на POIZON</a></p>
                                 ${order.size ? `<p><strong>Размер:</strong> ${order.size}</p>` : ''}
                                 ${order.color ? `<p><strong>Цвет:</strong> ${order.color}</p>` : ''}
-                                <p><strong>Дата:</strong> ${new Date(order.date).toLocaleString()}</p>
+                                <p><strong>Дата:</strong> ${new Date(order.date).toLocaleString('ru-RU')}</p>
                             </div>
                         </div>
                     `;
@@ -217,7 +414,7 @@
                 
                 ordersList.innerHTML = html;
             } catch (error) {
-                ordersList.innerHTML = '<p class="loading">❌ Ошибка загрузки заказов. Проверь сервер.</p>';
+                ordersList.innerHTML = '<p class="loading">❌ Ошибка загрузки заказов</p>';
             }
         }
 
@@ -225,6 +422,4 @@
         loadOrders();
     </script>
 </body>
-
 </html>
-
