@@ -106,8 +106,7 @@
         };
 
         // Адрес твоего сервера (локальный)
-        const API_URL = 'http://localhost:5000/api';
-
+        const API_URL = 'http://192.168.2.138:5000/api';  // твой IP
         // Переключение вкладок
         window.showTab = function(tabName) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -219,4 +218,5 @@
         loadOrders();
     </script>
 </body>
+
 </html>
