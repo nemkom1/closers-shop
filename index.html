@@ -819,13 +819,20 @@
                     lastOrderTime = Date.now();
                     
                     tg.showPopup({
-                        title: '✅ ЗАКАЗ ОФОРМЛЕН',
-                        message: `Заказ #${result.orderId}\nПо вопросам: @closersmanager`,
-                        buttons: [
-                            { type: 'default', text: 'НАПИСАТЬ АДМИНУ', url: ADMIN_CONTACT },
-                            { type: 'ok' }
-                        ]
-                    });
+    title: '✅ ЗАКАЗ ОФОРМЛЕН',
+    message: `Заказ #${result.orderId}\n\nПо всем вопросам:\n@closersmanager`,
+    buttons: [
+        { 
+            type: 'default', 
+            text: '✉️ НАПИСАТЬ АДМИНУ',
+            url: 'https://t.me/closersmanager'  // ← ЭТО ВАЖНО
+        },
+        { 
+            type: 'ok', 
+            text: 'ОК' 
+        }
+    ]
+});
                     
                     cart = [];
                     localStorage.removeItem('cart');
@@ -928,4 +935,5 @@
     </script>
 </body>
 </html>
+
 
