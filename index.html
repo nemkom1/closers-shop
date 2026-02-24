@@ -25,7 +25,31 @@
             margin: 0 auto;
         }
         
-        /* ========== УВЕДОМЛЕНИЕ О VPN ========== */
+        /* ========== ХЕДЕР (КАК БЫЛО РАНЬШЕ) ========== */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #333333;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        
+        .subtitle {
+            color: #999999;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* ========== УВЕДОМЛЕНИЕ О VPN (ПОКАЗЫВАЕТСЯ ВСЕГДА) ========== */
         .vpn-notification {
             background-color: #2a2a2a;
             border-left: 4px solid #ffffff;
@@ -73,26 +97,6 @@
             font-size: 20px;
             cursor: pointer;
             padding: 0 4px;
-        }
-        
-        /* ========== ХЕДЕР ========== */
-        .header {
-            padding: 20px 0 12px 0;
-            margin-bottom: 16px;
-        }
-        
-        .header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-            margin-bottom: 4px;
-        }
-        
-        .subtitle {
-            color: #999999;
-            font-size: 14px;
-            font-weight: 400;
         }
         
         /* ========== НИЖНЕЕ МЕНЮ ========== */
@@ -253,7 +257,7 @@
             margin-left: 12px;
         }
         
-        /* ========== МОДАЛЬНОЕ ОКНО ДЛЯ ТОВАРА ИЗ КАТАЛОГА ========== */
+        /* ========== МОДАЛЬНОЕ ОКНО ========== */
         .modal {
             display: none;
             position: fixed;
@@ -657,23 +661,23 @@
 </head>
 <body>
     <div class="app">
-        <!-- УВЕДОМЛЕНИЕ О VPN -->
-        <div id="vpn-notification" class="vpn-notification" style="display: none;">
+        <!-- ХЕДЕР (ПО ЦЕНТРУ) -->
+        <header class="header">
+            <h1>CLOSERS</h1>
+            <div class="subtitle">ПОИСК И ЗАКАЗ С POIZON</div>
+        </header>
+
+        <!-- УВЕДОМЛЕНИЕ О VPN (ПОКАЗЫВАЕТСЯ ВСЕГДА) -->
+        <div id="vpn-notification" class="vpn-notification">
             <div class="vpn-content">
                 <div class="vpn-icon">🛡️</div>
                 <div class="vpn-text">
                     <strong>Для стабильной работы</strong>
                     Если приложение не загружается, попробуйте включить VPN. Это связано с особенностями работы в вашем регионе.
                 </div>
-                <button class="vpn-close" onclick="dismissVpnNotification()">×</button>
+                <button class="vpn-close" onclick="this.parentElement.parentElement.style.display='none'">×</button>
             </div>
         </div>
-
-        <!-- ХЕДЕР -->
-        <header class="header">
-            <h1>CLOSERS</h1>
-            <div class="subtitle">ПОИСК И ЗАКАЗ С POIZON</div>
-        </header>
 
         <!-- КАТАЛОГ (основная вкладка) -->
         <div id="catalog-view">
@@ -840,19 +844,6 @@
 
         const API_URL = 'https://maxkom.pythonanywhere.com/api';
         const ADMIN_CONTACT = 'https://t.me/closersmanager';
-
-        // ========== VPN УВЕДОМЛЕНИЕ ==========
-        function dismissVpnNotification() {
-            document.getElementById('vpn-notification').style.display = 'none';
-            localStorage.setItem('vpn-notification-dismissed', 'true');
-        }
-
-        // Показываем уведомление при загрузке
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!localStorage.getItem('vpn-notification-dismissed')) {
-                document.getElementById('vpn-notification').style.display = 'block';
-            }
-        });
 
         // ========== КАТАЛОГ ==========
         const CATALOG = [
