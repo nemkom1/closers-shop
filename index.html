@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLOSERS | Поиск и заказ с POIZON</title>
+    <title>CLOSERS | Оригинальные вещи с POIZON</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -146,6 +146,87 @@
             font-size: 10px;
             margin-left: 2px;
             font-weight: 600;
+        }
+        
+        /* ========== ПЛАВАЮЩАЯ КНОПКА ========== */
+        .floating-request-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            z-index: 99;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 20px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .floating-request-btn:hover {
+            transform: scale(1.05);
+            background-color: #f0f0f0;
+        }
+
+        /* ========== БЫСТРАЯ ПЛАШКА В КАТАЛОГЕ ========== */
+        .quick-request-banner {
+            background: linear-gradient(145deg, #2a2a2a, #222222);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #3a3a3a;
+        }
+
+        .quick-request-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quick-request-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .quick-request-text {
+            flex: 1;
+        }
+
+        .quick-request-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .quick-request-subtitle {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .quick-request-button {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-request-button:hover {
+            background-color: #f0f0f0;
         }
         
         /* ========== КАТАЛОГ (3 КОЛОНКИ) ========== */
@@ -472,31 +553,6 @@
             cursor: pointer;
         }
         
-        /* ========== СВОБОДНЫЙ ЗАПРОС ========== */
-        .free-request-section {
-            background-color: #2a2a2a;
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 16px;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .free-request-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #ffffff;
-        }
-        
-        .free-request-hint {
-            font-size: 13px;
-            color: #cccccc;
-            margin-bottom: 20px;
-            padding: 12px;
-            background-color: #1a1a1a;
-            border-radius: 8px;
-        }
-        
         /* ========== КОРЗИНА ========== */
         .cart-container {
             background-color: #2a2a2a;
@@ -728,74 +784,23 @@
             </div>
         </div>
 
-        <!-- КАТАЛОГ (основная вкладка) -->
+        <!-- КАТАЛОГ -->
         <div id="catalog-view">
+            <!-- Быстрая плашка для свободного запроса -->
+            <div class="quick-request-banner">
+                <div class="quick-request-content">
+                    <div class="quick-request-icon">🔍</div>
+                    <div class="quick-request-text">
+                        <div class="quick-request-title">Ищете что-то конкретное?</div>
+                        <div class="quick-request-subtitle">Отправьте запрос — мы найдем на POIZON</div>
+                    </div>
+                    <button class="quick-request-button" onclick="showFreeRequestModal()">Запросить</button>
+                </div>
+            </div>
+            
             <!-- Каталог товаров -->
             <div class="section-title">Популярное</div>
             <div class="catalog-grid" id="catalog-grid"></div>
-            
-            <!-- Разделитель -->
-            <div class="divider">ИЛИ</div>
-            
-            <!-- Свободный запрос -->
-            <div class="free-request-section">
-                <div class="free-request-title">Не нашли нужную вещь?</div>
-                <div class="free-request-hint">
-                    Отправьте свой запрос — мы найдем и привезем любой товар с POIZON
-                </div>
-                
-                <div class="form-group">
-                    <label>ЧТО ИЩЕТЕ? *</label>
-                    <input type="text" id="free-query" placeholder="Ссылка, артикул или название товара">
-                </div>
-                
-                <div class="form-group">
-                    <label>РАЗМЕР (необязательно)</label>
-                    <select id="free-size">
-                        <option value="">Выберите размер</option>
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                        <option value="36">36 EU</option>
-                        <option value="37">37 EU</option>
-                        <option value="38">38 EU</option>
-                        <option value="39">39 EU</option>
-                        <option value="40">40 EU</option>
-                        <option value="41">41 EU</option>
-                        <option value="42">42 EU</option>
-                        <option value="43">43 EU</option>
-                        <option value="44">44 EU</option>
-                        <option value="45">45 EU</option>
-                        <option value="46">46 EU</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>ЦВЕТ (необязательно)</label>
-                    <input type="text" id="free-color" placeholder="Например: Black/White">
-                </div>
-                
-                <div class="form-group">
-                    <label>ПОЖЕЛАНИЯ (необязательно)</label>
-                    <textarea id="free-notes" rows="2" placeholder="Особые требования, состояние, бюджет..."></textarea>
-                </div>
-                
-                <!-- Загрузка фото -->
-                <div class="form-group">
-                    <label>ФОТО (до 5 шт, необязательно)</label>
-                    <div class="photo-upload-area" onclick="document.getElementById('free-file-input').click()">
-                        <span style="font-size: 24px;">📷</span>
-                        <div style="font-size: 12px; color: #999;">Нажмите, чтобы загрузить фото</div>
-                    </div>
-                    <input type="file" id="free-file-input" accept="image/*" multiple style="display: none;" onchange="handleFreePhotos(event)">
-                    <div id="free-photo-preview" class="photo-preview-grid"></div>
-                </div>
-                
-                <button class="btn btn-secondary" onclick="addFreeRequest()">➕ ДОБАВИТЬ ЗАПРОС</button>
-            </div>
         </div>
         
         <!-- КОРЗИНА -->
@@ -816,7 +821,7 @@
             <div id="orders-list" class="orders-list"></div>
         </div>
         
-        <!-- FAQ (НОВАЯ ВКЛАДКА) -->
+        <!-- FAQ -->
         <div id="faq-view" style="display: none;">
             <div class="faq-section">
                 <div class="faq-title">Часто задаваемые вопросы</div>
@@ -920,8 +925,79 @@
                 <button class="btn" onclick="addToCartFromModal()">ДОБАВИТЬ В КОРЗИНУ</button>
             </div>
         </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ДЛЯ СВОБОДНОГО ЗАПРОСА -->
+        <div id="free-request-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Свободный запрос</div>
+                    <button class="modal-close" onclick="closeFreeRequestModal()">×</button>
+                </div>
+                
+                <div style="background-color: #1a1a1a; border-radius: 8px; padding: 12px; margin-bottom: 20px; color: #cccccc; font-size: 13px;">
+                    Мы найдем и привезем любой товар с POIZON
+                </div>
+                
+                <div class="form-group">
+                    <label>ЧТО ИЩЕТЕ? *</label>
+                    <input type="text" id="modal-free-query" placeholder="Ссылка, артикул или название товара">
+                </div>
+                
+                <div class="form-group">
+                    <label>РАЗМЕР (необязательно)</label>
+                    <select id="modal-free-size">
+                        <option value="">Выберите размер</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                        <option value="36">36 EU</option>
+                        <option value="37">37 EU</option>
+                        <option value="38">38 EU</option>
+                        <option value="39">39 EU</option>
+                        <option value="40">40 EU</option>
+                        <option value="41">41 EU</option>
+                        <option value="42">42 EU</option>
+                        <option value="43">43 EU</option>
+                        <option value="44">44 EU</option>
+                        <option value="45">45 EU</option>
+                        <option value="46">46 EU</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>ЦВЕТ (необязательно)</label>
+                    <input type="text" id="modal-free-color" placeholder="Например: Black/White">
+                </div>
+                
+                <div class="form-group">
+                    <label>ПОЖЕЛАНИЯ (необязательно)</label>
+                    <textarea id="modal-free-notes" rows="2" placeholder="Особые требования, состояние, бюджет..."></textarea>
+                </div>
+                
+                <!-- Загрузка фото -->
+                <div class="form-group">
+                    <label>ФОТО (до 5 шт, необязательно)</label>
+                    <div class="photo-upload-area" onclick="document.getElementById('modal-free-file-input').click()">
+                        <span style="font-size: 24px;">📷</span>
+                        <div style="font-size: 12px; color: #999;">Нажмите, чтобы загрузить фото</div>
+                    </div>
+                    <input type="file" id="modal-free-file-input" accept="image/*" multiple style="display: none;" onchange="handleModalFreePhotos(event)">
+                    <div id="modal-free-photo-preview" class="photo-preview-grid"></div>
+                </div>
+                
+                <button class="btn" onclick="addFreeRequestFromModal()">➕ ОТПРАВИТЬ ЗАПРОС</button>
+            </div>
+        </div>
         
-        <!-- НИЖНЕЕ МЕНЮ (ТЕПЕРЬ 4 КНОПКИ) -->
+        <!-- ПЛАВАЮЩАЯ КНОПКА -->
+        <button class="floating-request-btn" onclick="showFreeRequestModal()">
+            <span style="font-size: 18px;">🔍</span> Свой запрос
+        </button>
+        
+        <!-- НИЖНЕЕ МЕНЮ -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="showView('catalog')">
                 <span class="nav-icon">🛍️</span>
@@ -968,6 +1044,7 @@
         // ========== КОРЗИНА ==========
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let freePhotos = [];
+        let modalFreePhotos = [];
         let currentModalProduct = null;
         let lastOrderTime = 0;
         const SPAM_DELAY = 30000;
@@ -1041,10 +1118,27 @@
             tg.showAlert(`✅ Товар добавлен в корзину`);
         };
 
-        // ========== ЗАГРУЗКА ФОТО ==========
-        window.handleFreePhotos = function(event) {
+        // ========== ФУНКЦИИ ДЛЯ СВОБОДНОГО ЗАПРОСА ==========
+        window.showFreeRequestModal = function() {
+            // Очищаем предыдущие данные
+            modalFreePhotos = [];
+            document.getElementById('modal-free-query').value = '';
+            document.getElementById('modal-free-size').value = '';
+            document.getElementById('modal-free-color').value = '';
+            document.getElementById('modal-free-notes').value = '';
+            document.getElementById('modal-free-photo-preview').innerHTML = '';
+            
+            document.getElementById('free-request-modal').classList.add('active');
+        };
+
+        window.closeFreeRequestModal = function() {
+            document.getElementById('free-request-modal').classList.remove('active');
+            modalFreePhotos = [];
+        };
+
+        window.handleModalFreePhotos = function(event) {
             const files = Array.from(event.target.files);
-            if (freePhotos.length + files.length > 5) {
+            if (modalFreePhotos.length + files.length > 5) {
                 tg.showAlert('Можно загрузить не более 5 фото');
                 return;
             }
@@ -1052,37 +1146,36 @@
             files.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    freePhotos.push(e.target.result);
-                    renderFreePhotoPreview();
+                    modalFreePhotos.push(e.target.result);
+                    renderModalFreePhotoPreview();
                 };
                 reader.readAsDataURL(file);
             });
         };
 
-        function renderFreePhotoPreview() {
+        function renderModalFreePhotoPreview() {
             let html = '';
-            freePhotos.forEach((photo, index) => {
+            modalFreePhotos.forEach((photo, index) => {
                 html += `
                     <div class="photo-preview-item">
                         <img src="${photo}" alt="preview">
-                        <button class="photo-remove" onclick="removeFreePhoto(${index})">×</button>
+                        <button class="photo-remove" onclick="removeModalFreePhoto(${index})">×</button>
                     </div>
                 `;
             });
-            document.getElementById('free-photo-preview').innerHTML = html;
+            document.getElementById('modal-free-photo-preview').innerHTML = html;
         }
 
-        window.removeFreePhoto = function(index) {
-            freePhotos.splice(index, 1);
-            renderFreePhotoPreview();
+        window.removeModalFreePhoto = function(index) {
+            modalFreePhotos.splice(index, 1);
+            renderModalFreePhotoPreview();
         };
 
-        // ========== ДОБАВЛЕНИЕ СВОБОДНОГО ЗАПРОСА ==========
-        window.addFreeRequest = function() {
-            const query = document.getElementById('free-query').value;
-            const size = document.getElementById('free-size').value;
-            const color = document.getElementById('free-color').value;
-            const notes = document.getElementById('free-notes').value;
+        window.addFreeRequestFromModal = function() {
+            const query = document.getElementById('modal-free-query').value;
+            const size = document.getElementById('modal-free-size').value;
+            const color = document.getElementById('modal-free-color').value;
+            const notes = document.getElementById('modal-free-notes').value;
             
             if (!query) {
                 tg.showAlert('Введите запрос');
@@ -1096,22 +1189,18 @@
                 size: size,
                 color: color,
                 notes: notes,
-                photos: freePhotos.slice(),
+                photos: modalFreePhotos.slice(),
                 addedAt: new Date().toISOString()
             });
             
             localStorage.setItem('cart', JSON.stringify(cart));
             
-            // Очищаем поля
-            document.getElementById('free-query').value = '';
-            document.getElementById('free-size').value = '';
-            document.getElementById('free-color').value = '';
-            document.getElementById('free-notes').value = '';
-            freePhotos = [];
-            renderFreePhotoPreview();
-            
+            closeFreeRequestModal();
             updateCartBadge();
             tg.showAlert(`✅ Запрос добавлен в корзину`);
+            
+            // Переключаемся на корзину
+            showView('cart');
         };
 
         // ========== КОРЗИНА ==========
@@ -1300,7 +1389,7 @@
             }
         }
 
-        // ========== НАВИГАЦИЯ (ТЕПЕРЬ 4 ВКЛАДКИ) ==========
+        // ========== НАВИГАЦИЯ ==========
         function showView(view) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.getElementById('catalog-view').style.display = 'none';
