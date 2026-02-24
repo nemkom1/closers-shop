@@ -25,7 +25,7 @@
             margin: 0 auto;
         }
         
-        /* ========== ХЕДЕР (КАК БЫЛО РАНЬШЕ) ========== */
+        /* ========== ХЕДЕР ========== */
         .header {
             text-align: center;
             margin-bottom: 24px;
@@ -49,7 +49,7 @@
             letter-spacing: 2px;
         }
         
-        /* ========== УВЕДОМЛЕНИЕ О VPN (ПОКАЗЫВАЕТСЯ ВСЕГДА) ========== */
+        /* ========== УВЕДОМЛЕНИЕ О VPN ========== */
         .vpn-notification {
             background-color: #2a2a2a;
             border-left: 4px solid #ffffff;
@@ -255,6 +255,55 @@
         
         .divider::after {
             margin-left: 12px;
+        }
+        
+        /* ========== FAQ ========== */
+        .faq-section {
+            background-color: #2a2a2a;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 16px;
+            border: 1px solid #3a3a3a;
+        }
+        
+        .faq-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+        
+        .faq-item {
+            margin-bottom: 16px;
+            border-bottom: 1px solid #3a3a3a;
+            padding-bottom: 16px;
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .faq-question span {
+            font-size: 18px;
+        }
+        
+        .faq-answer {
+            font-size: 14px;
+            color: #cccccc;
+            line-height: 1.5;
+            padding-left: 26px;
         }
         
         /* ========== МОДАЛЬНОЕ ОКНО ========== */
@@ -661,13 +710,13 @@
 </head>
 <body>
     <div class="app">
-        <!-- ХЕДЕР (ПО ЦЕНТРУ) -->
+        <!-- ХЕДЕР -->
         <header class="header">
             <h1>CLOSERS</h1>
             <div class="subtitle">ПОИСК И ЗАКАЗ С POIZON</div>
         </header>
 
-        <!-- УВЕДОМЛЕНИЕ О VPN (ПОКАЗЫВАЕТСЯ ВСЕГДА) -->
+        <!-- УВЕДОМЛЕНИЕ О VPN -->
         <div id="vpn-notification" class="vpn-notification">
             <div class="vpn-content">
                 <div class="vpn-icon">🛡️</div>
@@ -767,6 +816,63 @@
             <div id="orders-list" class="orders-list"></div>
         </div>
         
+        <!-- FAQ (НОВАЯ ВКЛАДКА) -->
+        <div id="faq-view" style="display: none;">
+            <div class="faq-section">
+                <div class="faq-title">Часто задаваемые вопросы</div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>⏱️</span> Сколько ждать доставку?
+                    </div>
+                    <div class="faq-answer">
+                        Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON и выбранного способа доставки.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>💰</span> Как узнать цену?
+                    </div>
+                    <div class="faq-answer">
+                        После того как вы оформите заказ, администратор проверит актуальную цену на POIZON, добавит комиссию магазина и стоимость доставки. Итоговая цена придет вам в уведомлении.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>🔄</span> Можно вернуть товар?
+                    </div>
+                    <div class="faq-answer">
+                        Возврат возможен только в случае брака. Мы тщательно проверяем все товары перед отправкой, но если возникла проблема — напишите администратору, и мы решим вопрос.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>📦</span> Откуда вы привозите?
+                    </div>
+                    <div class="faq-answer">
+                        Мы заказываем товары с площадки POIZON — это крупнейшая платформа с оригинальными вещами из Китая, Японии, Кореи и США.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>🔍</span> Что делать, если не нашел вещь в каталоге?
+                    </div>
+                    <div class="faq-answer">
+                        Используйте форму "Свободный запрос" — просто вставьте ссылку с POIZON, артикул или название, и мы найдем нужный товар.
+                    </div>
+                </div>
+                
+                <div class="support-contact" style="margin-top: 20px; text-align: center;">
+                    <p style="color: #999999; margin-bottom: 10px;">Остались вопросы?</p>
+                    <a href="https://t.me/closersmanager" class="support-link" target="_blank">НАПИСАТЬ АДМИНУ</a>
+                </div>
+            </div>
+        </div>
+        
         <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ТОВАРА ИЗ КАТАЛОГА -->
         <div id="product-modal" class="modal">
             <div class="modal-content">
@@ -815,7 +921,7 @@
             </div>
         </div>
         
-        <!-- НИЖНЕЕ МЕНЮ -->
+        <!-- НИЖНЕЕ МЕНЮ (ТЕПЕРЬ 4 КНОПКИ) -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="showView('catalog')">
                 <span class="nav-icon">🛍️</span>
@@ -828,6 +934,10 @@
             <button class="nav-item" onclick="showView('orders')">
                 <span class="nav-icon">📦</span>
                 <span>Заказы</span>
+            </button>
+            <button class="nav-item" onclick="showView('faq')">
+                <span class="nav-icon">❓</span>
+                <span>FAQ</span>
             </button>
         </div>
     </div>
@@ -1190,12 +1300,13 @@
             }
         }
 
-        // ========== НАВИГАЦИЯ ==========
+        // ========== НАВИГАЦИЯ (ТЕПЕРЬ 4 ВКЛАДКИ) ==========
         function showView(view) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.getElementById('catalog-view').style.display = 'none';
             document.getElementById('cart-view').style.display = 'none';
             document.getElementById('orders-view').style.display = 'none';
+            document.getElementById('faq-view').style.display = 'none';
             
             if (view === 'catalog') {
                 document.querySelectorAll('.nav-item')[0].classList.add('active');
@@ -1209,6 +1320,9 @@
                 document.querySelectorAll('.nav-item')[2].classList.add('active');
                 document.getElementById('orders-view').style.display = 'block';
                 loadOrders();
+            } else if (view === 'faq') {
+                document.querySelectorAll('.nav-item')[3].classList.add('active');
+                document.getElementById('faq-view').style.display = 'block';
             }
         }
 
