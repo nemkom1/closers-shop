@@ -620,6 +620,32 @@
     </style>
 </head>
 <body>
+<div id="vpn-notification" style="display: none; background-color: #f8f8f8; border-radius: 12px; padding: 16px; margin-bottom: 20px; border: 1px solid #eaeaea; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+    <div style="display: flex; align-items: flex-start; gap: 12px;">
+        <div style="width: 40px; height: 40px; background-color: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">🛡️</div>
+        <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 4px;">Рекомендация по доступу</div>
+            <div style="color: #666666; font-size: 13px; line-height: 1.4;">
+                Если магазин не загружается или возникают ошибки, попробуйте включить VPN. 
+                Это временное решение, связанное с особенностями работы в вашем регионе.
+            </div>
+        </div>
+        <button onclick="dismissVpnNotification()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #999999; padding: 0 4px; line-height: 1;">×</button>
+    </div>
+</div>
+
+<script>
+function dismissVpnNotification() {
+    document.getElementById('vpn-notification').style.display = 'none';
+    localStorage.setItem('vpn-notification-dismissed', 'true');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (!localStorage.getItem('vpn-notification-dismissed')) {
+        document.getElementById('vpn-notification').style.display = 'block';
+    }
+});
+</script>
     <div class="app">
         <header class="header">
             <h1>CLOSERS</h1>
@@ -1185,3 +1211,4 @@
     </script>
 </body>
 </html>
+
