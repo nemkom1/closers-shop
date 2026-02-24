@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLOSERS | Оригинальные вещи с POIZON</title>
+    <title>CLOSERS | Поиск и заказ с POIZON</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -148,10 +148,10 @@
             font-weight: 600;
         }
         
-        /* ========== ПЛАВАЮЩАЯ КНОПКА ========== */
+        /* ========== ПЛАВАЮЩИЕ КНОПКИ ========== */
         .floating-request-btn {
             position: fixed;
-            bottom: 90px;
+            bottom: 80px;
             right: 16px;
             z-index: 99;
             background-color: #ffffff;
@@ -171,6 +171,46 @@
         .floating-request-btn:hover {
             transform: scale(1.05);
             background-color: #f0f0f0;
+        }
+
+        .floating-admin-btn {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            z-index: 99;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #3a3a3a;
+            border-radius: 30px;
+            padding: 12px 20px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .floating-admin-btn:hover {
+            transform: scale(1.05);
+            background-color: #333333;
+            border-color: #ffffff;
+        }
+
+        @media (max-width: 480px) {
+            .floating-request-btn {
+                bottom: 80px;
+                right: 8px;
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+            .floating-admin-btn {
+                bottom: 80px;
+                left: 8px;
+                padding: 10px 16px;
+                font-size: 13px;
+            }
         }
 
         /* ========== БЫСТРАЯ ПЛАШКА В КАТАЛОГЕ ========== */
@@ -338,8 +378,8 @@
             margin-left: 12px;
         }
         
-        /* ========== FAQ ========== */
-        .faq-section {
+        /* ========== НОВЫЙ РАЗДЕЛ ПОДДЕРЖКИ ========== */
+        .support-section {
             background-color: #2a2a2a;
             border-radius: 16px;
             padding: 20px;
@@ -347,47 +387,126 @@
             border: 1px solid #3a3a3a;
         }
         
-        .faq-title {
-            font-size: 18px;
+        .support-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .support-header h2 {
+            font-size: 22px;
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             color: #ffffff;
+        }
+        
+        .support-header p {
+            color: #999999;
+            font-size: 14px;
+        }
+        
+        .admin-card {
+            background: linear-gradient(145deg, #1a1a1a, #222222);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid #3a3a3a;
+        }
+        
+        .admin-avatar {
+            width: 60px;
+            height: 60px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        
+        .admin-info {
+            flex: 1;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+        
+        .admin-username {
+            color: #999999;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .admin-chat-btn {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        
+        .admin-chat-btn:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.02);
+        }
+        
+        .faq-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
         
         .faq-item {
-            margin-bottom: 16px;
-            border-bottom: 1px solid #3a3a3a;
-            padding-bottom: 16px;
-        }
-        
-        .faq-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #3a3a3a;
         }
         
         .faq-question {
-            font-weight: 600;
-            font-size: 15px;
-            margin-bottom: 8px;
-            color: #ffffff;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            margin-bottom: 8px;
         }
         
-        .faq-question span {
-            font-size: 18px;
+        .faq-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #2a2a2a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .faq-question-text {
+            font-weight: 600;
+            font-size: 15px;
+            color: #ffffff;
         }
         
         .faq-answer {
-            font-size: 14px;
+            padding-left: 44px;
             color: #cccccc;
+            font-size: 13px;
             line-height: 1.5;
-            padding-left: 26px;
         }
         
-        /* ========== МОДАЛЬНОЕ ОКНО ========== */
+        /* ========== МОДАЛЬНЫЕ ОКНА ========== */
         .modal {
             display: none;
             position: fixed;
@@ -746,17 +865,6 @@
             color: #999999;
         }
         
-        .support-link {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: #ffffff;
-            color: #1a1a1a;
-            text-decoration: none;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-        
         .loading {
             text-align: center;
             color: #999999;
@@ -769,7 +877,7 @@
         <!-- ХЕДЕР -->
         <header class="header">
             <h1>CLOSERS</h1>
-            <div class="subtitle">ОРИГИНАЛЬНЫЕ ВЕЩИ С POIZON</div>
+            <div class="subtitle">ПОИСК И ЗАКАЗ С POIZON</div>
         </header>
 
         <!-- УВЕДОМЛЕНИЕ О VPN -->
@@ -821,59 +929,71 @@
             <div id="orders-list" class="orders-list"></div>
         </div>
         
-        <!-- FAQ -->
-        <div id="faq-view" style="display: none;">
-            <div class="faq-section">
-                <div class="faq-title">Часто задаваемые вопросы</div>
+        <!-- НОВЫЙ РАЗДЕЛ ПОДДЕРЖКИ -->
+        <div id="support-view" style="display: none;">
+            <div class="support-section">
+                <div class="support-header">
+                    <h2>Поддержка</h2>
+                    <p>Мы всегда на связи и готовы помочь</p>
+                </div>
                 
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>⏱️</span> Сколько ждать доставку?
-                    </div>
-                    <div class="faq-answer">
-                        Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON и выбранного способа доставки.
+                <!-- Карточка админа -->
+                <div class="admin-card">
+                    <div class="admin-avatar">👤</div>
+                    <div class="admin-info">
+                        <div class="admin-name">closersmanager</div>
+                        <div class="admin-username">@closersmanager</div>
+                        <button class="admin-chat-btn" onclick="window.open('https://t.me/closersmanager', '_blank')">
+                            <span>💬</span> Написать админу
+                        </button>
                     </div>
                 </div>
                 
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>💰</span> Как узнать цену?
+                <!-- Часто задаваемые вопросы -->
+                <div style="margin-top: 24px;">
+                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Часто задаваемые вопросы</h3>
+                    
+                    <div class="faq-grid">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <div class="faq-icon">⏱️</div>
+                                <div class="faq-question-text">Сколько ждать доставку?</div>
+                            </div>
+                            <div class="faq-answer">
+                                Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON и выбранного способа доставки.
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <div class="faq-icon">💰</div>
+                                <div class="faq-question-text">Как узнать цену?</div>
+                            </div>
+                            <div class="faq-answer">
+                                После того как вы оформите заказ, администратор проверит актуальную цену на POIZON, добавит комиссию магазина и стоимость доставки. Итоговая цена придет вам в уведомлении.
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <div class="faq-icon">🔄</div>
+                                <div class="faq-question-text">Можно вернуть товар?</div>
+                            </div>
+                            <div class="faq-answer">
+                                Возврат возможен только в случае брака. Мы тщательно проверяем все товары перед отправкой, но если возникла проблема — напишите администратору.
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <div class="faq-icon">📦</div>
+                                <div class="faq-question-text">Откуда вы привозите?</div>
+                            </div>
+                            <div class="faq-answer">
+                                Мы заказываем товары с площадки POIZON — крупнейшая платформа с оригинальными вещами из Китая, Японии, Кореи и США.
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        После того как вы оформите заказ, администратор проверит актуальную цену на POIZON, добавит комиссию магазина и стоимость доставки. Итоговая цена придет вам в уведомлении.
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>🔄</span> Можно вернуть товар?
-                    </div>
-                    <div class="faq-answer">
-                        Возврат возможен только в случае брака. Мы тщательно проверяем все товары перед отправкой, но если возникла проблема — напишите администратору, и мы решим вопрос.
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>📦</span> Откуда вы привозите?
-                    </div>
-                    <div class="faq-answer">
-                        Мы заказываем товары с площадки POIZON — это крупнейшая платформа с оригинальными вещами из Китая, Японии, Кореи и США.
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>🔍</span> Что делать, если не нашел вещь в каталоге?
-                    </div>
-                    <div class="faq-answer">
-                        Используйте форму "Свободный запрос" — просто вставьте ссылку с POIZON, артикул или название, и мы найдем нужный товар.
-                    </div>
-                </div>
-                
-                <div class="support-contact" style="margin-top: 20px; text-align: center;">
-                    <p style="color: #999999; margin-bottom: 10px;">Остались вопросы?</p>
-                    <a href="https://t.me/closersmanager" class="support-link" target="_blank">НАПИСАТЬ АДМИНУ</a>
                 </div>
             </div>
         </div>
@@ -992,9 +1112,13 @@
             </div>
         </div>
         
-        <!-- ПЛАВАЮЩАЯ КНОПКА -->
+        <!-- ПЛАВАЮЩИЕ КНОПКИ -->
         <button class="floating-request-btn" onclick="showFreeRequestModal()">
             <span style="font-size: 18px;">🔍</span> Свой запрос
+        </button>
+        
+        <button class="floating-admin-btn" onclick="window.open('https://t.me/closersmanager', '_blank')">
+            <span style="font-size: 18px;">💬</span> Админ
         </button>
         
         <!-- НИЖНЕЕ МЕНЮ -->
@@ -1011,9 +1135,9 @@
                 <span class="nav-icon">📦</span>
                 <span>Заказы</span>
             </button>
-            <button class="nav-item" onclick="showView('faq')">
-                <span class="nav-icon">❓</span>
-                <span>FAQ</span>
+            <button class="nav-item" onclick="showView('support')">
+                <span class="nav-icon">💬</span>
+                <span>Поддержка</span>
             </button>
         </div>
     </div>
@@ -1043,7 +1167,6 @@
 
         // ========== КОРЗИНА ==========
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let freePhotos = [];
         let modalFreePhotos = [];
         let currentModalProduct = null;
         let lastOrderTime = 0;
@@ -1120,7 +1243,6 @@
 
         // ========== ФУНКЦИИ ДЛЯ СВОБОДНОГО ЗАПРОСА ==========
         window.showFreeRequestModal = function() {
-            // Очищаем предыдущие данные
             modalFreePhotos = [];
             document.getElementById('modal-free-query').value = '';
             document.getElementById('modal-free-size').value = '';
@@ -1198,8 +1320,6 @@
             closeFreeRequestModal();
             updateCartBadge();
             tg.showAlert(`✅ Запрос добавлен в корзину`);
-            
-            // Переключаемся на корзину
             showView('cart');
         };
 
@@ -1395,7 +1515,7 @@
             document.getElementById('catalog-view').style.display = 'none';
             document.getElementById('cart-view').style.display = 'none';
             document.getElementById('orders-view').style.display = 'none';
-            document.getElementById('faq-view').style.display = 'none';
+            document.getElementById('support-view').style.display = 'none';
             
             if (view === 'catalog') {
                 document.querySelectorAll('.nav-item')[0].classList.add('active');
@@ -1409,9 +1529,9 @@
                 document.querySelectorAll('.nav-item')[2].classList.add('active');
                 document.getElementById('orders-view').style.display = 'block';
                 loadOrders();
-            } else if (view === 'faq') {
+            } else if (view === 'support') {
                 document.querySelectorAll('.nav-item')[3].classList.add('active');
-                document.getElementById('faq-view').style.display = 'block';
+                document.getElementById('support-view').style.display = 'block';
             }
         }
 
@@ -1422,5 +1542,3 @@
     </script>
 </body>
 </html>
-
-
