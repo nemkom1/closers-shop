@@ -98,6 +98,7 @@
             cursor: pointer;
             border-radius: 6px;
             transition: all 0.2s;
+            text-align: center;
         }
         
         .tab.active {
@@ -121,31 +122,40 @@
             display: block;
         }
         
-        /* Каталог - сетка */
+        /* Каталог - 3 колонки */
         .catalog-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
         }
         
         .product-card {
             background-color: #f8f8f8;
             border-radius: 12px;
-            padding: 12px;
+            padding: 8px;
             cursor: pointer;
             transition: all 0.2s;
-            border: 1px solid #eaeaea;
+            border: 2px solid transparent;
+            position: relative;
         }
         
         .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .product-card.in-cart {
+            border-color: #000000;
+            background-color: #f0f0f0;
         }
         
         @media (prefers-color-scheme: dark) {
             .product-card {
                 background-color: #2a2a2a;
-                border-color: #3a3a3a;
+            }
+            .product-card.in-cart {
+                border-color: #ffffff;
+                background-color: #333333;
             }
         }
         
@@ -154,12 +164,13 @@
             aspect-ratio: 1/1;
             background-color: #e0e0e0;
             border-radius: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #999999;
-            font-size: 12px;
+            font-size: 10px;
+            font-weight: 500;
         }
         
         @media (prefers-color-scheme: dark) {
@@ -169,14 +180,19 @@
         }
         
         .product-title {
-            font-size: 14px;
+            font-size: 11px;
             font-weight: 600;
-            margin-bottom: 4px;
-            line-height: 1.3;
+            margin-bottom: 2px;
+            line-height: 1.2;
+            height: 26px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
         
         .product-price {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 700;
             color: #000000;
         }
@@ -187,12 +203,98 @@
             }
         }
         
-        .product-vendor {
-            font-size: 11px;
+        .cart-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background-color: #000000;
+            color: #ffffff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .modal-content {
+                background-color: #1a1a1a;
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
             color: #999999;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 4px;
+        }
+        
+        .modal-product {
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #f5f5f5;
+            border-radius: 12px;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .modal-product {
+                background-color: #2a2a2a;
+            }
+        }
+        
+        .modal-product-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .modal-product-price {
+            color: #666666;
+            font-size: 14px;
         }
         
         /* Корзина */
@@ -244,13 +346,6 @@
             margin-bottom: 4px;
         }
         
-        .cart-item-link {
-            font-size: 11px;
-            color: #999999;
-            word-break: break-all;
-            margin-bottom: 6px;
-        }
-        
         .cart-item-details {
             font-size: 12px;
             color: #666666;
@@ -295,6 +390,7 @@
         }
         
         .form-group input,
+        .form-group select,
         .form-group textarea {
             width: 100%;
             padding: 12px;
@@ -307,6 +403,7 @@
         }
         
         .form-group input:focus,
+        .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: #000000;
@@ -314,12 +411,14 @@
         
         @media (prefers-color-scheme: dark) {
             .form-group input,
+            .form-group select,
             .form-group textarea {
                 background-color: #2a2a2a;
                 border-color: #3a3a3a;
                 color: #ffffff;
             }
             .form-group input:focus,
+            .form-group select:focus,
             .form-group textarea:focus {
                 border-color: #ffffff;
             }
@@ -486,7 +585,6 @@
         }
         
         #cart-counter {
-            display: none;
             background-color: #000000;
             color: #ffffff;
             border-radius: 20px;
@@ -501,13 +599,30 @@
             color: #999999;
             margin: 10px 0;
         }
+        
+        /* Поиск/ввод */
+        .search-hint {
+            font-size: 12px;
+            color: #666666;
+            margin-top: 4px;
+            padding: 8px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .search-hint {
+                background-color: #2a2a2a;
+                color: #999999;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="app">
         <header class="header">
             <h1>CLOSERS</h1>
-            <p class="subtitle">ОРИГИНАЛЬНЫЕ ВЕЩИ С POIZON</p>
+            <p class="subtitle">ПОИСК И ЗАКАЗ С POIZON</p>
         </header>
 
         <nav class="tabs">
@@ -516,93 +631,68 @@
             <button class="tab" onclick="showTab('orders')">ЗАКАЗЫ</button>
         </nav>
 
-        <!-- Вкладка Каталог (10 товаров) -->
+        <!-- Вкладка Каталог (3 колонки) -->
         <div id="catalog" class="tab-content active">
-            <div class="catalog-grid">
-                <!-- Товар 1 -->
-                <div class="product-card" onclick="addToCart('Nike Air Jordan 1 High OG', 'https://poizon.com/product/123')">
-                    <div class="product-image">AJ1</div>
-                    <div class="product-title">Nike Air Jordan 1 High OG</div>
-                    <div class="product-price">195$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
-                
-                <!-- Товар 2 -->
-                <div class="product-card" onclick="addToCart('Essentials Fear of God Hoodie', 'https://poizon.com/product/124')">
-                    <div class="product-image">FOG</div>
-                    <div class="product-title">Essentials Fear of God Hoodie</div>
-                    <div class="product-price">110$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
-                
-                <!-- Товар 3 -->
-                <div class="product-card" onclick="addToCart('Stussy 8 Ball Zip Hoodie', 'https://poizon.com/product/125')">
-                    <div class="product-image">STUSSY</div>
-                    <div class="product-title">Stussy 8 Ball Zip Hoodie</div>
-                    <div class="product-price">145$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
-                
-                <!-- Товар 4 -->
-                <div class="product-card" onclick="addToCart('New Balance 990v6 Grey', 'https://poizon.com/product/126')">
-                    <div class="product-image">NB990</div>
-                    <div class="product-title">New Balance 990v6 Made in USA</div>
-                    <div class="product-price">200$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
-                
-                <!-- Товар 5 -->
-                <div class="product-card" onclick="addToCart('Adidas Samba OG White', 'https://poizon.com/product/127')">
-                    <div class="product-image">SAMBA</div>
-                    <div class="product-title">Adidas Samba OG</div>
-                    <div class="product-price">100$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
-                
-                <!-- Товар 6 -->
-                <div class="product-card" onclick="addToCart('Supreme Box Logo Hoodie', 'https://poizon.com/product/128')">
-                    <div class="product-image">SUPREME</div>
-                    <div class="product-title">Supreme Box Logo Hoodie</div>
-                    <div class="product-price">398$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
-                
-                <!-- Товар 7 -->
-                <div class="product-card" onclick="addToCart('Palm Angels Track Pants', 'https://poizon.com/product/129')">
-                    <div class="product-image">PALM</div>
-                    <div class="product-title">Palm Angels Track Pants</div>
-                    <div class="product-price">295$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
-                
-                <!-- Товар 8 -->
-                <div class="product-card" onclick="addToCart('Ralph Lauren Bear Sweater', 'https://poizon.com/product/130')">
-                    <div class="product-image">POLO</div>
-                    <div class="product-title">Ralph Lauren Bear Sweater</div>
-                    <div class="product-price">185$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
-                
-                <!-- Товар 9 -->
-                <div class="product-card" onclick="addToCart('Carhartt WIP Detroit Jacket', 'https://poizon.com/product/131')">
-                    <div class="product-image">CARHARTT</div>
-                    <div class="product-title">Carhartt WIP Detroit Jacket</div>
-                    <div class="product-price">260$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
-                
-                <!-- Товар 10 -->
-                <div class="product-card" onclick="addToCart('Gallery Dept. Tee', 'https://poizon.com/product/132')">
-                    <div class="product-image">GALLERY</div>
-                    <div class="product-title">Gallery Dept. Los Angeles Tee</div>
-                    <div class="product-price">175$</div>
-                    <div class="product-vendor">POIZON</div>
-                </div>
+            <div class="catalog-grid" id="catalog-grid">
+                <!-- Товары будут добавлены через JavaScript -->
             </div>
             
             <div class="support-contact">
-                <p>❓ Есть вопросы по товарам?</p>
+                <p>❓ Не нашли нужную вещь?</p>
                 <a href="https://t.me/closersmanager" class="support-link" target="_blank">@closersmanager</a>
+            </div>
+        </div>
+
+        <!-- Модальное окно выбора размера -->
+        <div id="product-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Добавить в корзину</div>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                
+                <div id="modal-product" class="modal-product">
+                    <!-- Данные товара будут подставлены -->
+                </div>
+                
+                <div class="form-group">
+                    <label>РАЗМЕР</label>
+                    <select id="modal-size">
+                        <option value="">Выберите размер</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                        <option value="36">36 EU</option>
+                        <option value="37">37 EU</option>
+                        <option value="38">38 EU</option>
+                        <option value="39">39 EU</option>
+                        <option value="40">40 EU</option>
+                        <option value="41">41 EU</option>
+                        <option value="42">42 EU</option>
+                        <option value="43">43 EU</option>
+                        <option value="44">44 EU</option>
+                        <option value="45">45 EU</option>
+                        <option value="46">46 EU</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>ЦВЕТ (необязательно)</label>
+                    <input type="text" id="modal-color" placeholder="Например: Black/White">
+                </div>
+                
+                <div class="form-group">
+                    <label>ПОИСКОВЫЙ ЗАПРОС ИЛИ ССЫЛКА</label>
+                    <input type="text" id="modal-query" placeholder="Артикул, название или ссылка">
+                    <div class="search-hint">
+                        🔍 Можно ввести: артикул (DH3227-100), название (Air Jordan 1) или ссылку с POIZON
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="addToCartFromModal()">➕ ДОБАВИТЬ В КОРЗИНУ</button>
             </div>
         </div>
 
@@ -614,29 +704,14 @@
                 <div id="cart-items" class="cart-items"></div>
                 
                 <div class="add-item-form">
-                    <h3 style="margin-bottom: 20px; font-weight: 600;">ДОБАВИТЬ ТОВАР</h3>
+                    <h3 style="margin-bottom: 20px; font-weight: 600;">БЫСТРЫЙ ЗАПРОС</h3>
                     
                     <div class="form-group">
-                        <label>ССЫЛКА НА POIZON</label>
-                        <input type="url" id="new-item-link" placeholder="https://www.poizon.com/product/...">
+                        <label>ЧТО ИЩЕТЕ?</label>
+                        <input type="text" id="quick-query" placeholder="Ссылка, артикул или название">
                     </div>
                     
-                    <div class="form-group">
-                        <label>НАЗВАНИЕ ТОВАРА</label>
-                        <input type="text" id="new-item-name" placeholder="Например: Nike Air Jordan 1">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>РАЗМЕР</label>
-                        <input type="text" id="new-item-size" placeholder="EU/US/Буквенный">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>ЦВЕТ</label>
-                        <input type="text" id="new-item-color" placeholder="Желаемый цвет">
-                    </div>
-                    
-                    <button class="btn btn-secondary" onclick="addCustomItem()">+ В КОРЗИНУ</button>
+                    <button class="btn btn-secondary" onclick="quickAdd()">+ ДОБАВИТЬ</button>
                 </div>
                 
                 <div id="cart-summary" class="cart-summary" style="display: none;">
@@ -674,19 +749,196 @@
         const API_URL = 'https://maxkom.pythonanywhere.com/api';
         const ADMIN_CONTACT = 'https://t.me/closersmanager';
 
+        // Каталог товаров (расширенный)
+        const CATALOG = [
+            {
+                id: 1,
+                name: 'Nike Air Jordan 1 High OG',
+                price: '195$',
+                image: 'AJ1',
+                baseQuery: 'Air Jordan 1 High OG'
+            },
+            {
+                id: 2,
+                name: 'Essentials Fear of God Hoodie',
+                price: '110$',
+                image: 'FOG',
+                baseQuery: 'Essentials Fear of God Hoodie'
+            },
+            {
+                id: 3,
+                name: 'Stussy 8 Ball Zip Hoodie',
+                price: '145$',
+                image: 'STUSSY',
+                baseQuery: 'Stussy 8 Ball Zip Hoodie'
+            },
+            {
+                id: 4,
+                name: 'New Balance 990v6 Grey',
+                price: '200$',
+                image: 'NB990',
+                baseQuery: 'New Balance 990v6'
+            },
+            {
+                id: 5,
+                name: 'Adidas Samba OG',
+                price: '100$',
+                image: 'SAMBA',
+                baseQuery: 'Adidas Samba OG'
+            },
+            {
+                id: 6,
+                name: 'Supreme Box Logo Hoodie',
+                price: '398$',
+                image: 'SUPREME',
+                baseQuery: 'Supreme Box Logo Hoodie'
+            },
+            {
+                id: 7,
+                name: 'Palm Angels Track Pants',
+                price: '295$',
+                image: 'PALM',
+                baseQuery: 'Palm Angels Track Pants'
+            },
+            {
+                id: 8,
+                name: 'Ralph Lauren Bear Sweater',
+                price: '185$',
+                image: 'POLO',
+                baseQuery: 'Ralph Lauren Bear Sweater'
+            },
+            {
+                id: 9,
+                name: 'Carhartt WIP Detroit Jacket',
+                price: '260$',
+                image: 'CARHARTT',
+                baseQuery: 'Carhartt WIP Detroit Jacket'
+            },
+            {
+                id: 10,
+                name: 'Gallery Dept. Los Angeles Tee',
+                price: '175$',
+                image: 'GALLERY',
+                baseQuery: 'Gallery Dept. Tee'
+            },
+            {
+                id: 11,
+                name: 'The North Face 1996 Nuptse',
+                price: '320$',
+                image: 'TNF',
+                baseQuery: 'The North Face 1996 Nuptse'
+            },
+            {
+                id: 12,
+                name: 'Arc\'teryx Beta AR Jacket',
+                price: '599$',
+                image: 'ARCTERYX',
+                baseQuery: 'Arc\'teryx Beta AR'
+            }
+        ];
+
         // Корзина
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let lastOrderTime = 0;
         const SPAM_DELAY = 30000;
+        let currentModalProduct = null;
+
+        // Инициализация каталога
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-grid');
+            let html = '';
+            
+            CATALOG.forEach(product => {
+                const inCart = cart.some(item => item.catalogId === product.id);
+                const cartCount = cart.filter(item => item.catalogId === product.id).length;
+                
+                html += `
+                    <div class="product-card ${inCart ? 'in-cart' : ''}" onclick="openProductModal(${product.id})">
+                        <div class="product-image">${product.image}</div>
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-price">${product.price}</div>
+                        ${cartCount > 0 ? `<div class="cart-badge">${cartCount}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = html;
+        }
+
+        // Открыть модальное окно
+        window.openProductModal = function(productId) {
+            const product = CATALOG.find(p => p.id === productId);
+            if (!product) return;
+            
+            currentModalProduct = product;
+            
+            document.getElementById('modal-product').innerHTML = `
+                <div class="modal-product-name">${product.name}</div>
+                <div class="modal-product-price">${product.price}</div>
+            `;
+            
+            document.getElementById('modal-query').value = product.baseQuery;
+            document.getElementById('modal-size').value = '';
+            document.getElementById('modal-color').value = '';
+            
+            document.getElementById('product-modal').classList.add('active');
+        };
+
+        window.closeModal = function() {
+            document.getElementById('product-modal').classList.remove('active');
+            currentModalProduct = null;
+        };
+
+        // Добавить из модального окна
+        window.addToCartFromModal = function() {
+            if (!currentModalProduct) return;
+            
+            const size = document.getElementById('modal-size').value;
+            const color = document.getElementById('modal-color').value;
+            const query = document.getElementById('modal-query').value || currentModalProduct.baseQuery;
+            
+            cart.push({
+                catalogId: currentModalProduct.id,
+                name: currentModalProduct.name,
+                query: query,
+                size: size,
+                color: color,
+                price: currentModalProduct.price
+            });
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCatalog();
+            updateCartCounter();
+            closeModal();
+            tg.showAlert(`✅ Товар добавлен в корзину`);
+        };
+
+        // Быстрое добавление
+        window.quickAdd = function() {
+            const query = document.getElementById('quick-query').value;
+            if (!query) {
+                tg.showAlert('Введите запрос');
+                return;
+            }
+            
+            cart.push({
+                id: Date.now(),
+                name: 'Запрос: ' + query.substring(0, 30),
+                query: query,
+                size: '',
+                color: '',
+                isCustom: true
+            });
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            document.getElementById('quick-query').value = '';
+            renderCart();
+            updateCartCounter();
+            tg.showAlert(`✅ Запрос добавлен в корзину`);
+        };
 
         function updateCartCounter() {
-            const counter = document.getElementById('cart-counter');
-            if (cart.length > 0) {
-                counter.style.display = 'inline';
-                counter.textContent = cart.length;
-            } else {
-                counter.style.display = 'none';
-            }
+            document.getElementById('cart-counter').textContent = cart.length;
         }
 
         function renderCart() {
@@ -705,11 +957,10 @@
                     <div class="cart-item">
                         <div class="cart-item-info">
                             <div class="cart-item-title">${item.name}</div>
-                            <div class="cart-item-link">${item.link}</div>
                             <div class="cart-item-details">
-                                ${item.size ? `РАЗМЕР: ${item.size}` : ''}
-                                ${item.size && item.color ? ' · ' : ''}
-                                ${item.color ? `ЦВЕТ: ${item.color}` : ''}
+                                🔍 ${item.query.substring(0, 50)}${item.query.length > 50 ? '...' : ''}
+                                ${item.size ? ` · РАЗМЕР: ${item.size}` : ''}
+                                ${item.color ? ` · ЦВЕТ: ${item.color}` : ''}
                             </div>
                         </div>
                         <button class="cart-item-remove" onclick="removeFromCart(${index})">×</button>
@@ -721,51 +972,14 @@
             document.getElementById('cart-total').textContent = cart.length;
             summary.style.display = 'block';
             updateCartCounter();
-            localStorage.setItem('cart', JSON.stringify(cart));
         }
-
-        window.addToCart = function(name, link) {
-            cart.push({
-                name: name,
-                link: link,
-                size: '',
-                color: ''
-            });
-            renderCart();
-            showTab('cart');
-            tg.showAlert(`✅ Товар добавлен в корзину`);
-        };
-
-        window.addCustomItem = function() {
-            const link = document.getElementById('new-item-link').value;
-            const name = document.getElementById('new-item-name').value || 'Товар с POIZON';
-            const size = document.getElementById('new-item-size').value;
-            const color = document.getElementById('new-item-color').value;
-            
-            if (!link) {
-                tg.showAlert('Введите ссылку на товар');
-                return;
-            }
-            
-            cart.push({
-                name: name,
-                link: link,
-                size: size,
-                color: color
-            });
-            
-            document.getElementById('new-item-link').value = '';
-            document.getElementById('new-item-name').value = '';
-            document.getElementById('new-item-size').value = '';
-            document.getElementById('new-item-color').value = '';
-            
-            renderCart();
-            tg.showAlert(`✅ Товар добавлен`);
-        };
 
         window.removeFromCart = function(index) {
             cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
             renderCart();
+            renderCatalog();
+            updateCartCounter();
         };
 
         window.submitOrder = async function() {
@@ -792,7 +1006,7 @@
                     username: user.username || 'guest',
                     items: cart.map(item => ({
                         name: item.name,
-                        link: item.link,
+                        query: item.query,
                         size: item.size || '',
                         color: item.color || ''
                     })),
@@ -819,24 +1033,19 @@
                     lastOrderTime = Date.now();
                     
                     tg.showPopup({
-    title: '✅ ЗАКАЗ ОФОРМЛЕН',
-    message: `Заказ #${result.orderId}\n\nПо всем вопросам:\n@closersmanager`,
-    buttons: [
-        { 
-            type: 'default', 
-            text: '✉️ НАПИСАТЬ АДМИНУ',
-            url: 'https://t.me/closersmanager'  // ← ЭТО ВАЖНО
-        },
-        { 
-            type: 'ok', 
-            text: 'ОК' 
-        }
-    ]
-});
+                        title: '✅ ЗАКАЗ ОФОРМЛЕН',
+                        message: `Заказ #${result.orderId}\n\nПо вопросам: @closersmanager`,
+                        buttons: [
+                            { type: 'default', text: '✉️ НАПИСАТЬ АДМИНУ', url: ADMIN_CONTACT },
+                            { type: 'ok', text: 'ОК' }
+                        ]
+                    });
                     
                     cart = [];
                     localStorage.removeItem('cart');
                     renderCart();
+                    renderCatalog();
+                    updateCartCounter();
                     await loadOrders();
                     showTab('orders');
                 } else {
@@ -853,21 +1062,8 @@
 
         async function loadOrders() {
             try {
-                console.log('Загрузка заказов для userId:', user.id);
-                
-                let response = await fetch(API_URL + '/user-orders?userId=' + user.id, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
+                let response = await fetch(API_URL + '/user-orders?userId=' + user.id);
                 let orders = await response.json();
-                console.log('Получены заказы:', orders);
                 
                 if (!orders || orders.length === 0) {
                     document.getElementById('orders-list').innerHTML = '<p class="loading">У ВАС ПОКА НЕТ ЗАКАЗОВ</p>';
@@ -883,7 +1079,7 @@
                             itemsHtml += `
                                 <div class="order-item">
                                     <div style="font-weight: 600;">${item.name || 'Товар'}</div>
-                                    <div style="font-size: 11px; color: #999; word-break: break-all;">${item.link || ''}</div>
+                                    <div style="font-size: 11px; color: #999;">🔍 ${item.query || ''}</div>
                                     ${item.size ? `<div>Размер: ${item.size}</div>` : ''}
                                 </div>
                             `;
@@ -930,10 +1126,10 @@
         }
 
         // Инициализация
+        renderCatalog();
         renderCart();
+        updateCartCounter();
         loadOrders();
     </script>
 </body>
 </html>
-
-
