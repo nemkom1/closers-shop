@@ -148,7 +148,7 @@
             font-weight: 600;
         }
         
-        /* ========== ПЛАВАЮЩИЕ КНОПКИ ========== */
+        /* ========== ПЛАВАЮЩАЯ КНОПКА (ТОЛЬКО СВОЙ ЗАПРОС) ========== */
         .floating-request-btn {
             position: fixed;
             bottom: 80px;
@@ -173,41 +173,10 @@
             background-color: #f0f0f0;
         }
 
-        .floating-admin-btn {
-            position: fixed;
-            bottom: 80px;
-            left: 16px;
-            z-index: 99;
-            background-color: #2a2a2a;
-            color: #ffffff;
-            border: 1px solid #3a3a3a;
-            border-radius: 30px;
-            padding: 12px 20px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .floating-admin-btn:hover {
-            transform: scale(1.05);
-            background-color: #333333;
-            border-color: #ffffff;
-        }
-
         @media (max-width: 480px) {
             .floating-request-btn {
                 bottom: 80px;
                 right: 8px;
-                padding: 10px 16px;
-                font-size: 13px;
-            }
-            .floating-admin-btn {
-                bottom: 80px;
-                left: 8px;
                 padding: 10px 16px;
                 font-size: 13px;
             }
@@ -378,7 +347,7 @@
             margin-left: 12px;
         }
         
-        /* ========== НОВЫЙ РАЗДЕЛ ПОДДЕРЖКИ ========== */
+        /* ========== РАЗДЕЛ ПОДДЕРЖКИ ========== */
         .support-section {
             background-color: #2a2a2a;
             border-radius: 16px;
@@ -906,7 +875,7 @@
                 </div>
             </div>
             
-            <!-- Каталог товаров -->
+            <!-- Каталог товаров (12 товаров) -->
             <div class="section-title">Популярное</div>
             <div class="catalog-grid" id="catalog-grid"></div>
         </div>
@@ -929,7 +898,7 @@
             <div id="orders-list" class="orders-list"></div>
         </div>
         
-        <!-- НОВЫЙ РАЗДЕЛ ПОДДЕРЖКИ -->
+        <!-- РАЗДЕЛ ПОДДЕРЖКИ -->
         <div id="support-view" style="display: none;">
             <div class="support-section">
                 <div class="support-header">
@@ -960,7 +929,7 @@
                                 <div class="faq-question-text">Сколько ждать доставку?</div>
                             </div>
                             <div class="faq-answer">
-                                Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON и выбранного способа доставки.
+                                Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON.
                             </div>
                         </div>
                         
@@ -970,7 +939,7 @@
                                 <div class="faq-question-text">Как узнать цену?</div>
                             </div>
                             <div class="faq-answer">
-                                После того как вы оформите заказ, администратор проверит актуальную цену на POIZON, добавит комиссию магазина и стоимость доставки. Итоговая цена придет вам в уведомлении.
+                                После оформления заказа администратор проверит цену на POIZON и сообщит итоговую стоимость с комиссией и доставкой.
                             </div>
                         </div>
                         
@@ -980,7 +949,7 @@
                                 <div class="faq-question-text">Можно вернуть товар?</div>
                             </div>
                             <div class="faq-answer">
-                                Возврат возможен только в случае брака. Мы тщательно проверяем все товары перед отправкой, но если возникла проблема — напишите администратору.
+                                Возврат возможен только в случае брака. По всем вопросам пишите администратору.
                             </div>
                         </div>
                         
@@ -990,7 +959,7 @@
                                 <div class="faq-question-text">Откуда вы привозите?</div>
                             </div>
                             <div class="faq-answer">
-                                Мы заказываем товары с площадки POIZON — крупнейшая платформа с оригинальными вещами из Китая, Японии, Кореи и США.
+                                Мы заказываем товары с площадки POIZON — оригинальные вещи из Китая, Японии, Кореи и США.
                             </div>
                         </div>
                     </div>
@@ -1112,13 +1081,9 @@
             </div>
         </div>
         
-        <!-- ПЛАВАЮЩИЕ КНОПКИ -->
+        <!-- ПЛАВАЮЩАЯ КНОПКА (ТОЛЬКО СВОЙ ЗАПРОС) -->
         <button class="floating-request-btn" onclick="showFreeRequestModal()">
             <span style="font-size: 18px;">🔍</span> Свой запрос
-        </button>
-        
-        <button class="floating-admin-btn" onclick="window.open('https://t.me/closersmanager', '_blank')">
-            <span style="font-size: 18px;">💬</span> Админ
         </button>
         
         <!-- НИЖНЕЕ МЕНЮ -->
@@ -1155,14 +1120,20 @@
         const API_URL = 'https://maxkom.pythonanywhere.com/api';
         const ADMIN_CONTACT = 'https://t.me/closersmanager';
 
-        // ========== КАТАЛОГ ==========
+        // ========== КАТАЛОГ (12 ТОВАРОВ) ==========
         const CATALOG = [
             { id: 1, name: 'Nike Air Jordan 1 High OG', price: '195$', image: 'AJ1' },
             { id: 2, name: 'Essentials Fear of God Hoodie', price: '110$', image: 'FOG' },
             { id: 3, name: 'Stussy 8 Ball Zip Hoodie', price: '145$', image: 'STUSSY' },
             { id: 4, name: 'New Balance 990v6 Grey', price: '200$', image: 'NB990' },
             { id: 5, name: 'Adidas Samba OG', price: '100$', image: 'SAMBA' },
-            { id: 6, name: 'Supreme Box Logo Hoodie', price: '398$', image: 'SUPREME' }
+            { id: 6, name: 'Supreme Box Logo Hoodie', price: '398$', image: 'SUPREME' },
+            { id: 7, name: 'The North Face 1996 Nuptse', price: '320$', image: 'TNF' },
+            { id: 8, name: 'Arc\'teryx Beta AR Jacket', price: '599$', image: 'ARCTERYX' },
+            { id: 9, name: 'Palm Angels Track Pants', price: '295$', image: 'PALM' },
+            { id: 10, name: 'Ralph Lauren Bear Sweater', price: '185$', image: 'POLO' },
+            { id: 11, name: 'Carhartt WIP Detroit Jacket', price: '260$', image: 'CARHARTT' },
+            { id: 12, name: 'Gallery Dept. Los Angeles Tee', price: '175$', image: 'GALLERY' }
         ];
 
         // ========== КОРЗИНА ==========
