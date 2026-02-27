@@ -146,7 +146,7 @@
         
         .floating-request-btn {
             position: fixed;
-            bottom: 80px;
+            bottom: 90px;
             right: 16px;
             z-index: 99;
             background-color: #ffffff;
@@ -1185,7 +1185,7 @@
         // Категории
         let currentCategory = 'all';
 
-        // ========== КАТАЛОГ С КАТЕГОРИЯМИ ==========
+        // ========== КАТАЛОГ ==========
         const CATALOG = [
             { id: 1, name: 'Nike Air Jordan 1 High OG', price: '195$', image: 'AJ1', category: 'shoes' },
             { id: 2, name: 'Essentials Fear of God Hoodie', price: '110$', image: 'FOG', category: 'clothes' },
@@ -1264,7 +1264,6 @@
                 messageDiv.className = 'promo-success';
                 messageDiv.textContent = `✅ Промокод применен! Скидка ${VALID_PROMOS[code].type === 'percent' ? VALID_PROMOS[code].discount + '%' : VALID_PROMOS[code].discount + '₽'}`;
                 
-                // Показываем информацию о скидке в корзине
                 const discountInfo = document.getElementById('discount-info');
                 discountInfo.style.display = 'block';
                 discountInfo.textContent = `Скидка по промокоду ${code}: ${VALID_PROMOS[code].type === 'percent' ? VALID_PROMOS[code].discount + '%' : VALID_PROMOS[code].discount + '₽'}`;
@@ -1485,14 +1484,14 @@
                         query: item.query || '',
                         size: item.size || '',
                         color: item.color || '',
-                        notes: item.notes || '',  // ← ТЕПЕРЬ ПОЖЕЛАНИЯ ПЕРЕДАЮТСЯ!
+                        notes: item.notes || '',
                         photos: item.photos || []
                     })),
                     promoCode: appliedPromo ? appliedPromo.code : null,
                     totalItems: cart.length
                 };
                 
-                console.log('📤 Отправка заказа с пожеланиями:', orderData);
+                console.log('📤 Отправка заказа:', orderData);
                 
                 let response = await fetch(API_URL + '/create-order', {
                     method: 'POST',
@@ -1533,74 +1532,33 @@
         };
 
         // ========== ЗАГРУЗКА ЗАКАЗОВ ==========
-        // ========== ЗАГРУЗКА ЗАКАЗОВ ==========
-async function loadOrders() {
-    try {
-        let response = await fetch(API_URL + '/user-orders?userId=' + user.id);
-        let orders = await response.json();
-        
-        if (!orders || orders.length === 0) {
-            document.getElementById('orders-list').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">У ВАС ПОКА НЕТ ЗАКАЗОВ</div>';
-            return;
-        }
-        
-        let html = '';
-        orders.forEach(order => {
-            // Статусы для трекинга
-            const statuses = [
-                { key: 'pending', label: 'Ожидание', date: order.date },
-                { key: 'searching', label: 'Поиск на POIZON', date: order.searchDate },
-                { key: 'ordered', label: 'Заказано у поставщика', date: order.orderedDate },
-                { key: 'shipping', label: 'В пути в Россию', date: order.shippingDate },
-                { key: 'stock', label: 'На складе', date: order.stockDate },
-                { key: 'delivery', label: 'Передано в доставку', date: order.deliveryDate },
-                { key: 'completed', label: 'Получен', date: order.completedDate }
-            ];
-            
-            const currentStatus = order.status || 'pending';
-            let currentIndex = statuses.findIndex(s => s.key === currentStatus);
-            if (currentIndex === -1) currentIndex = 0;
-            
-            html += `
-                <div class="order-card">
-                    <div class="order-header">
-                        <span class="order-id">ЗАКАЗ #${order.id}</span>
-                        <span class="order-status-badge">${statuses[currentIndex].label}</span>
-                    </div>
+        async function loadOrders() {
+            try {
+                let response = await fetch(API_URL + '/user-orders?userId=' + user.id);
+                let orders = await response.json();
+                
+                if (!orders || orders.length === 0) {
+                    document.getElementById('orders-list').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">У ВАС ПОКА НЕТ ЗАКАЗОВ</div>';
+                    return;
+                }
+                
+                let html = '';
+                orders.forEach(order => {
+                    const statuses = [
+                        { key: 'pending', label: 'Ожидание', date: order.date },
+                        { key: 'searching', label: 'Поиск на POIZON', date: order.searchDate },
+                        { key: 'ordered', label: 'Заказано у поставщика', date: order.orderedDate },
+                        { key: 'shipping', label: 'В пути в Россию', date: order.shippingDate },
+                        { key: 'stock', label: 'На складе', date: order.stockDate },
+                        { key: 'delivery', label: 'Передано в доставку', date: order.deliveryDate },
+                        { key: 'completed', label: 'Получен', date: order.completedDate }
+                    ];
                     
-                    <div class="status-timeline">
-                        ${statuses.map((status, idx) => {
-                            let statusClass = '';
-                            if (idx < currentIndex) statusClass = 'completed';
-                            else if (idx === currentIndex) statusClass = 'active';
-                            
-                            return `
-                                <div class="status-step">
-                                    <div class="status-dot ${statusClass}"></div>
-                                    ${idx < statuses.length - 1 ? '<div class="status-line"></div>' : ''}
-                                    <div class="status-content">
-                                        <div class="status-title">${status.label}</div>
-                                        ${status.date ? `<div class="status-date">${new Date(status.date).toLocaleString('ru-RU')}</div>` : ''}
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
+                    const currentStatus = order.status || 'pending';
+                    let currentIndex = statuses.findIndex(s => s.key === currentStatus);
+                    if (currentIndex === -1) currentIndex = 0;
                     
-                    <div style="font-size: 12px; color: #999; margin-top: 12px;">
-                        Товаров: ${order.items ? order.items.length : 1}
-                        ${order.promoCode ? `\n🎟️ Промокод: ${order.promoCode}` : ''}
-                    </div>
-                </div>
-            `;
-        });
-        
-        document.getElementById('orders-list').innerHTML = html;
-    } catch (error) {
-        console.error('Ошибка загрузки заказов:', error);
-        document.getElementById('orders-list').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">ОШИБКА ЗАГРУЗКИ</div>';
-    }
-}
+                    html += `
                         <div class="order-card">
                             <div class="order-header">
                                 <span class="order-id">ЗАКАЗ #${order.id}</span>
@@ -1636,7 +1594,7 @@ async function loadOrders() {
                 
                 document.getElementById('orders-list').innerHTML = html;
             } catch (error) {
-                console.error(error);
+                console.error('Ошибка загрузки заказов:', error);
                 document.getElementById('orders-list').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">ОШИБКА ЗАГРУЗКИ</div>';
             }
         }
@@ -1674,5 +1632,3 @@ async function loadOrders() {
     </script>
 </body>
 </html>
-
-
