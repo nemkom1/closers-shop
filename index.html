@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLOSERS shop</title>
+    <title>CLOSERS | Поиск и заказ с POIZON</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -13,7 +13,6 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         
-        /* ========== ТЕМНАЯ ТЕМА ========== */
         body {
             background-color: #1a1a1a;
             color: #ffffff;
@@ -25,11 +24,10 @@
             margin: 0 auto;
         }
         
-        /* ========== ХЕДЕР ========== */
         .header {
             text-align: center;
-            margin-bottom: 22px;
-            padding-bottom: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
             border-bottom: 1px solid #333333;
         }
         
@@ -49,7 +47,6 @@
             letter-spacing: 2px;
         }
         
-        /* ========== УВЕДОМЛЕНИЕ О VPN ========== */
         .vpn-notification {
             background-color: #2a2a2a;
             border-left: 4px solid #ffffff;
@@ -99,7 +96,6 @@
             padding: 0 4px;
         }
         
-        /* ========== НИЖНЕЕ МЕНЮ ========== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -148,10 +144,9 @@
             font-weight: 600;
         }
         
-        /* ========== ПЛАВАЮЩАЯ КНОПКА (ТОЛЬКО СВОЙ ЗАПРОС) ========== */
         .floating-request-btn {
             position: fixed;
-            bottom: 90px;
+            bottom: 80px;
             right: 16px;
             z-index: 99;
             background-color: #ffffff;
@@ -175,14 +170,13 @@
 
         @media (max-width: 480px) {
             .floating-request-btn {
-                bottom: 90px;
+                bottom: 80px;
                 right: 8px;
                 padding: 10px 16px;
                 font-size: 13px;
             }
         }
 
-        /* ========== БЫСТРАЯ ПЛАШКА В КАТАЛОГЕ ========== */
         .quick-request-banner {
             background: linear-gradient(145deg, #2a2a2a, #222222);
             border-radius: 16px;
@@ -238,7 +232,38 @@
             background-color: #f0f0f0;
         }
         
-        /* ========== КАТАЛОГ (3 КОЛОНКИ) ========== */
+        /* ========== КАТЕГОРИИ ========== */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding: 4px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .category-tab {
+            background-color: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 13px;
+            color: #cccccc;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        
+        .category-tab.active {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border-color: #ffffff;
+        }
+        
+        .category-tab:hover {
+            border-color: #ffffff;
+        }
+        
         .section-title {
             font-size: 18px;
             font-weight: 600;
@@ -322,7 +347,6 @@
             font-weight: bold;
         }
         
-        /* ========== РАЗДЕЛИТЕЛЬ ========== */
         .divider {
             display: flex;
             align-items: center;
@@ -347,7 +371,6 @@
             margin-left: 12px;
         }
         
-        /* ========== РАЗДЕЛ ПОДДЕРЖКИ ========== */
         .support-section {
             background-color: #2a2a2a;
             border-radius: 16px;
@@ -475,7 +498,6 @@
             line-height: 1.5;
         }
         
-        /* ========== МОДАЛЬНЫЕ ОКНА ========== */
         .modal {
             display: none;
             position: fixed;
@@ -544,7 +566,6 @@
             font-size: 14px;
         }
         
-        /* ========== ФОРМЫ ========== */
         .form-group {
             margin-bottom: 16px;
         }
@@ -588,7 +609,6 @@
             color: #ffffff;
         }
         
-        /* ========== ЗАГРУЗКА ФОТО ========== */
         .photo-upload-area {
             border: 1px dashed #3a3a3a;
             border-radius: 12px;
@@ -641,7 +661,52 @@
             cursor: pointer;
         }
         
-        /* ========== КОРЗИНА ========== */
+        /* ========== ПРОМОКОДЫ ========== */
+        .promo-section {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid #3a3a3a;
+        }
+        
+        .promo-input-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .promo-input-group input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            font-size: 14px;
+        }
+        
+        .promo-input-group button {
+            padding: 12px 20px;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .promo-success {
+            color: #4caf50;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        
+        .promo-error {
+            color: #f44336;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        
         .cart-container {
             background-color: #2a2a2a;
             border-radius: 16px;
@@ -696,7 +761,6 @@
             cursor: pointer;
         }
         
-        /* ========== КНОПКИ ========== */
         .btn {
             width: 100%;
             padding: 16px;
@@ -740,7 +804,6 @@
             color: #ffffff;
         }
         
-        /* ========== ЗАКАЗЫ ========== */
         .orders-list {
             display: flex;
             flex-direction: column;
@@ -843,27 +906,23 @@
 </head>
 <body>
     <div class="app">
-        <!-- ХЕДЕР -->
         <header class="header">
             <h1>CLOSERS</h1>
-            <div class="subtitle">ОРИГИНАЛЬНЫЕ ВЕЩИ С POIZON</div>
+            <div class="subtitle">ПОИСК И ЗАКАЗ С POIZON</div>
         </header>
 
-        <!-- УВЕДОМЛЕНИЕ О VPN -->
         <div id="vpn-notification" class="vpn-notification">
             <div class="vpn-content">
                 <div class="vpn-icon">🛡️</div>
                 <div class="vpn-text">
                     <strong>Для стабильной работы</strong>
-                    Если приложение не загружается, попробуйте включить VPN. Это связано с особенностями работы в вашем регионе.
+                    Если приложение не загружается, попробуйте включить VPN.
                 </div>
                 <button class="vpn-close" onclick="this.parentElement.parentElement.style.display='none'">×</button>
             </div>
         </div>
 
-        <!-- КАТАЛОГ -->
         <div id="catalog-view">
-            <!-- Быстрая плашка для свободного запроса -->
             <div class="quick-request-banner">
                 <div class="quick-request-content">
                     <div class="quick-request-icon">🔍</div>
@@ -875,30 +934,48 @@
                 </div>
             </div>
             
-            <!-- Каталог товаров (12 товаров) -->
+            <!-- КАТЕГОРИИ -->
+            <div class="category-tabs">
+                <div class="category-tab active" onclick="filterCategory('all')">Все</div>
+                <div class="category-tab" onclick="filterCategory('shoes')">👟 Обувь</div>
+                <div class="category-tab" onclick="filterCategory('clothes')">👕 Одежда</div>
+                <div class="category-tab" onclick="filterCategory('perfume')">👃 Духи</div>
+                <div class="category-tab" onclick="filterCategory('glasses')">👓 Очки</div>
+                <div class="category-tab" onclick="filterCategory('bags')">👜 Сумки</div>
+            </div>
+            
             <div class="section-title">Популярное</div>
             <div class="catalog-grid" id="catalog-grid"></div>
         </div>
         
-        <!-- КОРЗИНА -->
         <div id="cart-view" style="display: none;">
             <div class="cart-container">
                 <div class="section-title">Корзина</div>
                 <div id="cart-items"></div>
+                
+                <!-- ПРОМОКОДЫ -->
+                <div class="promo-section">
+                    <div style="font-weight: 600; margin-bottom: 12px;">🎟️ Промокод</div>
+                    <div class="promo-input-group">
+                        <input type="text" id="promo-code" placeholder="Введите промокод">
+                        <button onclick="applyPromoCode()">Применить</button>
+                    </div>
+                    <div id="promo-message" class="promo-error" style="display: none;"></div>
+                </div>
+                
                 <div id="cart-summary" class="cart-summary" style="display: none;">
                     <p><span id="cart-total">0</span> ТОВАРОВ</p>
+                    <div id="discount-info" style="font-size: 14px; color: #4caf50; margin-top: 8px; display: none;"></div>
                 </div>
                 <button class="btn" onclick="submitOrder()" id="submit-order-btn">ОФОРМИТЬ ЗАКАЗ</button>
             </div>
         </div>
         
-        <!-- ЗАКАЗЫ -->
         <div id="orders-view" style="display: none;">
             <div class="section-title">Мои заказы</div>
             <div id="orders-list" class="orders-list"></div>
         </div>
         
-        <!-- РАЗДЕЛ ПОДДЕРЖКИ -->
         <div id="support-view" style="display: none;">
             <div class="support-section">
                 <div class="support-header">
@@ -906,7 +983,6 @@
                     <p>Мы всегда на связи и готовы помочь</p>
                 </div>
                 
-                <!-- Карточка админа -->
                 <div class="admin-card">
                     <div class="admin-avatar">👤</div>
                     <div class="admin-info">
@@ -918,7 +994,6 @@
                     </div>
                 </div>
                 
-                <!-- Часто задаваемые вопросы -->
                 <div style="margin-top: 24px;">
                     <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Часто задаваемые вопросы</h3>
                     
@@ -928,9 +1003,7 @@
                                 <div class="faq-icon">⏱️</div>
                                 <div class="faq-question-text">Сколько ждать доставку?</div>
                             </div>
-                            <div class="faq-answer">
-                                Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON.
-                            </div>
+                            <div class="faq-answer">Обычно доставка занимает до 5 дней с момента подтверждения заказа.</div>
                         </div>
                         
                         <div class="faq-item">
@@ -938,9 +1011,7 @@
                                 <div class="faq-icon">💰</div>
                                 <div class="faq-question-text">Как узнать цену?</div>
                             </div>
-                            <div class="faq-answer">
-                                После оформления заказа администратор проверит цену на POIZON и сообщит итоговую стоимость с комиссией и доставкой.
-                            </div>
+                            <div class="faq-answer">После оформления заказа администратор проверит цену на POIZON и сообщит итоговую стоимость.</div>
                         </div>
                         
                         <div class="faq-item">
@@ -948,26 +1019,13 @@
                                 <div class="faq-icon">🔄</div>
                                 <div class="faq-question-text">Можно вернуть товар?</div>
                             </div>
-                            <div class="faq-answer">
-                                Возврат возможен только в случае брака. По всем вопросам пишите администратору.
-                            </div>
-                        </div>
-                        
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <div class="faq-icon">📦</div>
-                                <div class="faq-question-text">Откуда вы привозите?</div>
-                            </div>
-                            <div class="faq-answer">
-                                Мы заказываем товары с площадки POIZON — оригинальные вещи из Китая, Японии, Кореи и США.
-                            </div>
+                            <div class="faq-answer">Возврат возможен только в случае брака. По всем вопросам пишите администратору.</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ТОВАРА ИЗ КАТАЛОГА -->
         <div id="product-modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1015,7 +1073,6 @@
             </div>
         </div>
 
-        <!-- МОДАЛЬНОЕ ОКНО ДЛЯ СВОБОДНОГО ЗАПРОСА -->
         <div id="free-request-modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1066,7 +1123,6 @@
                     <textarea id="modal-free-notes" rows="2" placeholder="Особые требования, состояние, бюджет..."></textarea>
                 </div>
                 
-                <!-- Загрузка фото -->
                 <div class="form-group">
                     <label>ФОТО (до 5 шт, необязательно)</label>
                     <div class="photo-upload-area" onclick="document.getElementById('modal-free-file-input').click()">
@@ -1081,12 +1137,10 @@
             </div>
         </div>
         
-        <!-- ПЛАВАЮЩАЯ КНОПКА (ТОЛЬКО СВОЙ ЗАПРОС) -->
         <button class="floating-request-btn" onclick="showFreeRequestModal()">
             <span style="font-size: 18px;">🔍</span> Свой запрос
         </button>
         
-        <!-- НИЖНЕЕ МЕНЮ -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="showView('catalog')">
                 <span class="nav-icon">🛍️</span>
@@ -1120,33 +1174,55 @@
         const API_URL = 'https://maxkom.pythonanywhere.com/api';
         const ADMIN_CONTACT = 'https://t.me/closersmanager';
 
-        // ========== КАТАЛОГ (12 ТОВАРОВ) ==========
+        // Промокоды
+        let appliedPromo = null;
+        const VALID_PROMOS = {
+            'CLOSERS10': { discount: 10, type: 'percent' },
+            'FIRST5': { discount: 5, type: 'percent' },
+            'FREESHIP': { discount: 500, type: 'fixed' }
+        };
+
+        // Категории
+        let currentCategory = 'all';
+
+        // ========== КАТАЛОГ С КАТЕГОРИЯМИ ==========
         const CATALOG = [
-            { id: 1, name: 'Nike Air Jordan 1 High OG', price: '195$', image: 'AJ1' },
-            { id: 2, name: 'Essentials Fear of God Hoodie', price: '110$', image: 'FOG' },
-            { id: 3, name: 'Stussy 8 Ball Zip Hoodie', price: '145$', image: 'STUSSY' },
-            { id: 4, name: 'New Balance 990v6 Grey', price: '200$', image: 'NB990' },
-            { id: 5, name: 'Adidas Samba OG', price: '100$', image: 'SAMBA' },
-            { id: 6, name: 'Supreme Box Logo Hoodie', price: '398$', image: 'SUPREME' },
-            { id: 7, name: 'The North Face 1996 Nuptse', price: '320$', image: 'TNF' },
-            { id: 8, name: 'Arc\'teryx Beta AR Jacket', price: '599$', image: 'ARCTERYX' },
-            { id: 9, name: 'Palm Angels Track Pants', price: '295$', image: 'PALM' },
-            { id: 10, name: 'Ralph Lauren Bear Sweater', price: '185$', image: 'POLO' },
-            { id: 11, name: 'Carhartt WIP Detroit Jacket', price: '260$', image: 'CARHARTT' },
-            { id: 12, name: 'Gallery Dept. Los Angeles Tee', price: '175$', image: 'GALLERY' }
+            { id: 1, name: 'Nike Air Jordan 1 High OG', price: '195$', image: 'AJ1', category: 'shoes' },
+            { id: 2, name: 'Essentials Fear of God Hoodie', price: '110$', image: 'FOG', category: 'clothes' },
+            { id: 3, name: 'Stussy 8 Ball Zip Hoodie', price: '145$', image: 'STUSSY', category: 'clothes' },
+            { id: 4, name: 'New Balance 990v6 Grey', price: '200$', image: 'NB990', category: 'shoes' },
+            { id: 5, name: 'Adidas Samba OG', price: '100$', image: 'SAMBA', category: 'shoes' },
+            { id: 6, name: 'Supreme Box Logo Hoodie', price: '398$', image: 'SUPREME', category: 'clothes' },
+            { id: 7, name: 'Creed Aventus', price: '250$', image: 'CREED', category: 'perfume' },
+            { id: 8, name: 'Dior Sauvage', price: '120$', image: 'DIOR', category: 'perfume' },
+            { id: 9, name: 'Ray-Ban Aviator', price: '180$', image: 'RAYBAN', category: 'glasses' },
+            { id: 10, name: 'Oakley Holbrook', price: '150$', image: 'OAKLEY', category: 'glasses' },
+            { id: 11, name: 'Louis Vuitton Neverfull', price: '1200$', image: 'LV', category: 'bags' },
+            { id: 12, name: 'Gucci GG Marmont', price: '980$', image: 'GUCCI', category: 'bags' }
         ];
 
-        // ========== КОРЗИНА ==========
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let modalFreePhotos = [];
         let currentModalProduct = null;
         let lastOrderTime = 0;
         const SPAM_DELAY = 30000;
 
-        // ========== ОТОБРАЖЕНИЕ КАТАЛОГА ==========
+        // ========== ФИЛЬТРАЦИЯ ПО КАТЕГОРИЯМ ==========
+        window.filterCategory = function(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCatalog();
+        };
+
         function renderCatalog() {
+            let filteredProducts = CATALOG;
+            if (currentCategory !== 'all') {
+                filteredProducts = CATALOG.filter(p => p.category === currentCategory);
+            }
+            
             let html = '';
-            CATALOG.forEach(product => {
+            filteredProducts.forEach(product => {
                 const inCart = cart.some(item => item.catalogId === product.id);
                 const cartCount = cart.filter(item => item.catalogId === product.id).length;
                 
@@ -1159,10 +1235,49 @@
                     </div>
                 `;
             });
+            
+            if (filteredProducts.length === 0) {
+                html = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">В этой категории пока нет товаров</div>';
+            }
+            
             document.getElementById('catalog-grid').innerHTML = html;
         }
 
-        // ========== МОДАЛКА ДЛЯ ТОВАРА ИЗ КАТАЛОГА ==========
+        // ========== ПРОМОКОДЫ ==========
+        window.applyPromoCode = function() {
+            const code = document.getElementById('promo-code').value.trim().toUpperCase();
+            const messageDiv = document.getElementById('promo-message');
+            
+            if (!code) {
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'promo-error';
+                messageDiv.textContent = 'Введите промокод';
+                return;
+            }
+            
+            if (VALID_PROMOS[code]) {
+                appliedPromo = {
+                    code: code,
+                    ...VALID_PROMOS[code]
+                };
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'promo-success';
+                messageDiv.textContent = `✅ Промокод применен! Скидка ${VALID_PROMOS[code].type === 'percent' ? VALID_PROMOS[code].discount + '%' : VALID_PROMOS[code].discount + '₽'}`;
+                
+                // Показываем информацию о скидке в корзине
+                const discountInfo = document.getElementById('discount-info');
+                discountInfo.style.display = 'block';
+                discountInfo.textContent = `Скидка по промокоду ${code}: ${VALID_PROMOS[code].type === 'percent' ? VALID_PROMOS[code].discount + '%' : VALID_PROMOS[code].discount + '₽'}`;
+            } else {
+                appliedPromo = null;
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'promo-error';
+                messageDiv.textContent = '❌ Недействительный промокод';
+                document.getElementById('discount-info').style.display = 'none';
+            }
+        };
+
+        // ========== МОДАЛКА ДЛЯ ТОВАРА ==========
         window.openProductModal = function(productId) {
             const product = CATALOG.find(p => p.id === productId);
             if (!product) return;
@@ -1186,7 +1301,6 @@
             currentModalProduct = null;
         };
 
-        // ========== ДОБАВЛЕНИЕ ИЗ КАТАЛОГА ==========
         window.addToCartFromModal = function() {
             if (!currentModalProduct) return;
             
@@ -1212,7 +1326,7 @@
             tg.showAlert(`✅ Товар добавлен в корзину`);
         };
 
-        // ========== ФУНКЦИИ ДЛЯ СВОБОДНОГО ЗАПРОСА ==========
+        // ========== СВОБОДНЫЙ ЗАПРОС ==========
         window.showFreeRequestModal = function() {
             modalFreePhotos = [];
             document.getElementById('modal-free-query').value = '';
@@ -1299,6 +1413,7 @@
             if (cart.length === 0) {
                 document.getElementById('cart-items').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">КОРЗИНА ПУСТА</div>';
                 document.getElementById('cart-summary').style.display = 'none';
+                document.getElementById('discount-info').style.display = 'none';
                 return;
             }
             
@@ -1370,11 +1485,14 @@
                         query: item.query || '',
                         size: item.size || '',
                         color: item.color || '',
-                        notes: item.notes || '',
+                        notes: item.notes || '',  // ← ТЕПЕРЬ ПОЖЕЛАНИЯ ПЕРЕДАЮТСЯ!
                         photos: item.photos || []
                     })),
+                    promoCode: appliedPromo ? appliedPromo.code : null,
                     totalItems: cart.length
                 };
+                
+                console.log('📤 Отправка заказа с пожеланиями:', orderData);
                 
                 let response = await fetch(API_URL + '/create-order', {
                     method: 'POST',
@@ -1397,6 +1515,7 @@
                     });
                     
                     cart = [];
+                    appliedPromo = null;
                     localStorage.removeItem('cart');
                     renderCart();
                     renderCatalog();
@@ -1468,6 +1587,7 @@
                             
                             <div style="font-size: 12px; color: #999; margin-top: 12px;">
                                 Товаров: ${order.items ? order.items.length : 1}
+                                ${order.promoCode ? `\n🎟️ Промокод: ${order.promoCode}` : ''}
                             </div>
                         </div>
                     `;
