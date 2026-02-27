@@ -663,6 +663,7 @@
         }
         
         /* ========== ПРОМОКОДЫ ========== */
+        /* ========== ПРОМОКОДЫ (АДАПТИВНЫЕ) ========== */
         .promo-section {
             background-color: #1a1a1a;
             border-radius: 12px;
@@ -674,10 +675,12 @@
         .promo-input-group {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap; /* Разрешаем перенос */
         }
         
         .promo-input-group input {
-            flex: 1;
+            flex: 2; /* Поле ввода занимает больше места */
+            min-width: 200px; /* Минимальная ширина */
             padding: 12px;
             border: 1px solid #3a3a3a;
             border-radius: 8px;
@@ -687,13 +690,30 @@
         }
         
         .promo-input-group button {
-            padding: 12px 20px;
+            flex: 1; /* Кнопка занимает меньше места */
+            min-width: 100px; /* Минимальная ширина кнопки */
+            padding: 12px 16px;
             background-color: #ffffff;
             color: #1a1a1a;
             border: none;
             border-radius: 8px;
             font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
+            white-space: nowrap; /* Запрещаем перенос текста */
+        }
+        
+        /* Для совсем маленьких экранов */
+        @media (max-width: 400px) {
+            .promo-input-group {
+                flex-direction: column; /* Кнопка под полем ввода */
+            }
+            
+            .promo-input-group input,
+            .promo-input-group button {
+                width: 100%;
+                min-width: auto;
+            }
         }
         
         .promo-success {
@@ -940,7 +960,7 @@
                 <div class="category-tab active" onclick="filterCategory('all')">Все</div>
                 <div class="category-tab" onclick="filterCategory('shoes')">👟 Обувь</div>
                 <div class="category-tab" onclick="filterCategory('clothes')">👕 Одежда</div>
-                <div class="category-tab" onclick="filterCategory('perfume')">👃 Духи</div>
+                <div class="category-tab" onclick="filterCategory('perfume')">🧴 Духи</div>
                 <div class="category-tab" onclick="filterCategory('glasses')">👓 Очки</div>
                 <div class="category-tab" onclick="filterCategory('bags')">👜 Сумки</div>
             </div>
@@ -1633,6 +1653,7 @@
     </script>
 </body>
 </html>
+
 
 
 
