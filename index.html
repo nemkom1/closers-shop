@@ -1533,33 +1533,74 @@
         };
 
         // ========== ЗАГРУЗКА ЗАКАЗОВ ==========
-        async function loadOrders() {
-            try {
-                let response = await fetch(API_URL + '/user-orders?userId=' + user.id);
-                let orders = await response.json();
-                
-                if (!orders || orders.length === 0) {
-                    document.getElementById('orders-list').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">У ВАС ПОКА НЕТ ЗАКАЗОВ</div>';
-                    return;
-                }
-                
-                let html = '';
-                orders.forEach(order => {
-                    const statuses = [
-                        { key: 'pending', label: 'Ожидание', date: order.date },
-                        { key: 'searching', label: 'Поиск на POIZON', date: order.searchDate },
-                        { key: 'ordered', label: 'Заказано у поставщика', date: order.orderedDate },
-                        { key: 'shipping', label: 'В пути в Россию', date: order.shippingDate },
-                        { key: 'stock', label: 'На складе', date: order.stockDate },
-                        { key: 'delivery', label: 'Передано в доставку', date: order.deliveryDate },
-                        { key: 'completed', label: 'Получен', date: order.completedDate }
-                    ];
+        // ========== ЗАГРУЗКА ЗАКАЗОВ ==========
+async function loadOrders() {
+    try {
+        let response = await fetch(API_URL + '/user-orders?userId=' + user.id);
+        let orders = await response.json();
+        
+        if (!orders || orders.length === 0) {
+            document.getElementById('orders-list').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">У ВАС ПОКА НЕТ ЗАКАЗОВ</div>';
+            return;
+        }
+        
+        let html = '';
+        orders.forEach(order => {
+            // Статусы для трекинга
+            const statuses = [
+                { key: 'pending', label: 'Ожидание', date: order.date },
+                { key: 'searching', label: 'Поиск на POIZON', date: order.searchDate },
+                { key: 'ordered', label: 'Заказано у поставщика', date: order.orderedDate },
+                { key: 'shipping', label: 'В пути в Россию', date: order.shippingDate },
+                { key: 'stock', label: 'На складе', date: order.stockDate },
+                { key: 'delivery', label: 'Передано в доставку', date: order.deliveryDate },
+                { key: 'completed', label: 'Получен', date: order.completedDate }
+            ];
+            
+            const currentStatus = order.status || 'pending';
+            let currentIndex = statuses.findIndex(s => s.key === currentStatus);
+            if (currentIndex === -1) currentIndex = 0;
+            
+            html += `
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-id">ЗАКАЗ #${order.id}</span>
+                        <span class="order-status-badge">${statuses[currentIndex].label}</span>
+                    </div>
                     
-                    const currentStatus = order.status || 'pending';
-                    let currentIndex = statuses.findIndex(s => s.key === currentStatus);
-                    if (currentIndex === -1) currentIndex = 0;
+                    <div class="status-timeline">
+                        ${statuses.map((status, idx) => {
+                            let statusClass = '';
+                            if (idx < currentIndex) statusClass = 'completed';
+                            else if (idx === currentIndex) statusClass = 'active';
+                            
+                            return `
+                                <div class="status-step">
+                                    <div class="status-dot ${statusClass}"></div>
+                                    ${idx < statuses.length - 1 ? '<div class="status-line"></div>' : ''}
+                                    <div class="status-content">
+                                        <div class="status-title">${status.label}</div>
+                                        ${status.date ? `<div class="status-date">${new Date(status.date).toLocaleString('ru-RU')}</div>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
                     
-                    html += `
+                    <div style="font-size: 12px; color: #999; margin-top: 12px;">
+                        Товаров: ${order.items ? order.items.length : 1}
+                        ${order.promoCode ? `\n🎟️ Промокод: ${order.promoCode}` : ''}
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.getElementById('orders-list').innerHTML = html;
+    } catch (error) {
+        console.error('Ошибка загрузки заказов:', error);
+        document.getElementById('orders-list').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">ОШИБКА ЗАГРУЗКИ</div>';
+    }
+}
                         <div class="order-card">
                             <div class="order-header">
                                 <span class="order-id">ЗАКАЗ #${order.id}</span>
@@ -1633,3 +1674,4 @@
     </script>
 </body>
 </html>
+
