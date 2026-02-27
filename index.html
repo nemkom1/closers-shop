@@ -996,55 +996,94 @@
             <div id="orders-list" class="orders-list"></div>
         </div>
         
-        <div id="support-view" style="display: none;">
-            <div class="support-section">
-                <div class="support-header">
-                    <h2>Поддержка</h2>
-                    <p>Мы всегда на связи и готовы помочь</p>
-                </div>
-                
-                <div class="admin-card">
-                    <div class="admin-avatar">👤</div>
-                    <div class="admin-info">
-                        <div class="admin-name">closersmanager</div>
-                        <div class="admin-username">@closersmanager</div>
-                        <button class="admin-chat-btn" onclick="window.open('https://t.me/closersmanager', '_blank')">
-                            <span>💬</span> Написать админу
-                        </button>
+        <!-- РАЗДЕЛ ПОДДЕРЖКИ -->
+<div id="support-view" style="display: none;">
+    <div class="support-section">
+        <div class="support-header">
+            <h2>Поддержка</h2>
+            <p>Мы всегда на связи и готовы помочь</p>
+        </div>
+        
+        <!-- Карточка админа -->
+        <div class="admin-card">
+            <div class="admin-avatar">👤</div>
+            <div class="admin-info">
+                <div class="admin-name">closersmanager</div>
+                <div class="admin-username">@closersmanager</div>
+                <button class="admin-chat-btn" onclick="window.open('https://t.me/closersmanager', '_blank')">
+                    <span>💬</span> Написать админу
+                </button>
+            </div>
+        </div>
+        
+        <!-- Часто задаваемые вопросы -->
+        <div style="margin-top: 24px;">
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Часто задаваемые вопросы</h3>
+            
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-icon">⏱️</div>
+                        <div class="faq-question-text">Сколько ждать доставку?</div>
+                    </div>
+                    <div class="faq-answer">
+                        Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON и выбранного способа доставки.
                     </div>
                 </div>
                 
-                <div style="margin-top: 24px;">
-                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Часто задаваемые вопросы</h3>
-                    
-                    <div class="faq-grid">
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <div class="faq-icon">⏱️</div>
-                                <div class="faq-question-text">Сколько ждать доставку?</div>
-                            </div>
-                            <div class="faq-answer">Обычно доставка занимает до 5 дней с момента подтверждения заказа.</div>
-                        </div>
-                        
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <div class="faq-icon">💰</div>
-                                <div class="faq-question-text">Как узнать цену?</div>
-                            </div>
-                            <div class="faq-answer">После оформления заказа администратор проверит цену на POIZON и сообщит итоговую стоимость.</div>
-                        </div>
-                        
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <div class="faq-icon">🔄</div>
-                                <div class="faq-question-text">Можно вернуть товар?</div>
-                            </div>
-                            <div class="faq-answer">Возврат возможен только в случае брака. По всем вопросам пишите администратору.</div>
-                        </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-icon">💰</div>
+                        <div class="faq-question-text">Как узнать цену?</div>
+                    </div>
+                    <div class="faq-answer">
+                        После того как вы оформите заказ, администратор проверит актуальную цену на POIZON, добавит комиссию магазина и стоимость доставки. Итоговая цена придет вам в уведомлении.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-icon">🔄</div>
+                        <div class="faq-question-text">Можно вернуть товар?</div>
+                    </div>
+                    <div class="faq-answer">
+                        Возврат возможен только в случае брака. Мы тщательно проверяем все товары перед отправкой, но если возникла проблема — напишите администратору, и мы решим вопрос.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-icon">📦</div>
+                        <div class="faq-question-text">Откуда вы привозите?</div>
+                    </div>
+                    <div class="faq-answer">
+                        Мы заказываем товары с площадки POIZON — это крупнейшая платформа с оригинальными вещами из Китая, Японии, Кореи и США.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-icon">🔍</div>
+                        <div class="faq-question-text">Что делать, если не нашел вещь в каталоге?</div>
+                    </div>
+                    <div class="faq-answer">
+                        Используйте форму "Свободный запрос" — просто вставьте ссылку с POIZON, артикул или название, и мы найдем нужный товар.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <div class="faq-icon">💳</div>
+                        <div class="faq-question-text">Как оплатить заказ?</div>
+                    </div>
+                    <div class="faq-answer">
+                        После подтверждения заказа администратор свяжется с вами и уточнит детали оплаты. Мы принимаем переводы на карту, по QR-коду или наличные при самовывозе.
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
         
         <div id="product-modal" class="modal">
             <div class="modal-content">
@@ -1652,6 +1691,7 @@
     </script>
 </body>
 </html>
+
 
 
 
