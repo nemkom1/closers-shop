@@ -662,69 +662,68 @@
             cursor: pointer;
         }
         
-        /* ========== ПРОМОКОДЫ ========== */
-        /* ========== ПРОМОКОДЫ (АДАПТИВНЫЕ) ========== */
+        /* ========== ПРОМОКОДЫ (КОМПАКТНЫЕ) ========== */
         .promo-section {
             background-color: #1a1a1a;
             border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
+            padding: 12px;
+            margin: 12px 0;
             border: 1px solid #3a3a3a;
+        }
+        
+        .promo-section > div:first-child {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 13px;
         }
         
         .promo-input-group {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap; /* Разрешаем перенос */
+            gap: 6px;
+            align-items: center;
         }
         
         .promo-input-group input {
-            flex: 2; /* Поле ввода занимает больше места */
-            min-width: 200px; /* Минимальная ширина */
-            padding: 12px;
+            flex: 1;
+            padding: 10px 12px;
             border: 1px solid #3a3a3a;
             border-radius: 8px;
             background-color: #2a2a2a;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 13px;
+            height: 40px;
         }
         
         .promo-input-group button {
-            flex: 1; /* Кнопка занимает меньше места */
-            min-width: 100px; /* Минимальная ширина кнопки */
-            padding: 12px 16px;
+            padding: 0 12px;
             background-color: #ffffff;
             color: #1a1a1a;
             border: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
-            white-space: nowrap; /* Запрещаем перенос текста */
-        }
-        
-        /* Для совсем маленьких экранов */
-        @media (max-width: 400px) {
-            .promo-input-group {
-                flex-direction: column; /* Кнопка под полем ввода */
-            }
-            
-            .promo-input-group input,
-            .promo-input-group button {
-                width: 100%;
-                min-width: auto;
-            }
+            height: 40px;
+            white-space: nowrap;
+            min-width: 80px;
+            max-width: 100px;
         }
         
         .promo-success {
             color: #4caf50;
-            font-size: 13px;
-            margin-top: 8px;
+            font-size: 12px;
+            margin-top: 6px;
         }
         
         .promo-error {
             color: #f44336;
-            font-size: 13px;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+        
+        /* Убираем лишние отступы */
+        #discount-info {
+            font-size: 12px;
             margin-top: 8px;
         }
         
@@ -1653,6 +1652,7 @@
     </script>
 </body>
 </html>
+
 
 
 
