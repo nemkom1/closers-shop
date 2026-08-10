@@ -2,950 +2,64 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>CLOSERS | Поиск и заказ с POIZON</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-        
-        body {
-            background-color: #1a1a1a;
-            color: #ffffff;
-            padding: 0 12px 80px 12px;
-        }
-        
-        .app {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 26px;
-            padding-bottom: 16px;
-            border-bottom: 4px solid #333333;
-            padding-top: 6px;
-        }
-        
-        .header h1 {
-            font-size: 36px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
-        
-        .subtitle {
-            color: #999999;
-            font-size: 14px;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        
-        .vpn-notification {
-            background-color: #2a2a2a;
-            border-left: 4px solid #ffffff;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .vpn-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .vpn-icon {
-            width: 40px;
-            height: 40px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #1a1a1a;
-            font-size: 20px;
-        }
-        
-        .vpn-text {
-            flex: 1;
-            font-size: 13px;
-            color: #cccccc;
-            line-height: 1.4;
-        }
-        
-        .vpn-text strong {
-            color: #ffffff;
-            display: block;
-            margin-bottom: 4px;
-        }
-        
-        .vpn-close {
-            background: none;
-            border: none;
-            color: #999;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0 4px;
-        }
-        
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #1a1a1a;
-            border-top: 1px solid #333333;
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 16px 20px 16px;
-            max-width: 600px;
-            margin: 0 auto;
-            z-index: 100;
-        }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: none;
-            border: none;
-            font-size: 11px;
-            color: #999999;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 8px;
-            gap: 4px;
-        }
-        
-        .nav-item.active {
-            color: #ffffff;
-            font-weight: 500;
-        }
-        
-        .nav-icon {
-            font-size: 22px;
-        }
-        
-        #cart-badge {
-            background-color: #ffffff;
-            color: #1a1a1a;
-            border-radius: 20px;
-            padding: 2px 6px;
-            font-size: 10px;
-            margin-left: 2px;
-            font-weight: 600;
-        }
-        
-        .floating-request-btn {
-            position: fixed;
-            bottom: 90px;
-            right: 16px;
-            z-index: 99;
-            background-color: #ffffff;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 30px;
-            padding: 12px 20px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .floating-request-btn:hover {
-            transform: scale(1.05);
-            background-color: #f0f0f0;
-        }
-
-        @media (max-width: 480px) {
-            .floating-request-btn {
-                bottom: 90px;
-                right: 8px;
-                padding: 10px 16px;
-                font-size: 13px;
-            }
-        }
-
-        .quick-request-banner {
-            background: linear-gradient(145deg, #2a2a2a, #222222);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 1px solid #3a3a3a;
-        }
-
-        .quick-request-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .quick-request-icon {
-            width: 40px;
-            height: 40px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .quick-request-text {
-            flex: 1;
-        }
-
-        .quick-request-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: #ffffff;
-        }
-
-        .quick-request-subtitle {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .quick-request-button {
-            background-color: #ffffff;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 20px;
-            padding: 8px 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .quick-request-button:hover {
-            background-color: #f0f0f0;
-        }
-        
-        /* ========== КАТЕГОРИИ ========== */
-        .category-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding: 4px 0;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .category-tab {
-            background-color: #2a2a2a;
-            border: 1px solid #3a3a3a;
-            border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 13px;
-            color: #cccccc;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        
-        .category-tab.active {
-            background-color: #ffffff;
-            color: #1a1a1a;
-            border-color: #ffffff;
-        }
-        
-        .category-tab:hover {
-            border-color: #ffffff;
-        }
-        
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 20px 0 12px 0;
-            color: #ffffff;
-        }
-        
-        .catalog-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-        
-        .product-card {
-            background-color: #2a2a2a;
-            border-radius: 12px;
-            padding: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid #3a3a3a;
-            position: relative;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-2px);
-            border-color: #ffffff;
-        }
-        
-        .product-card.in-cart {
-            border-color: #ffffff;
-            background-color: #333333;
-        }
-        
-        .product-image {
-            width: 100%;
-            aspect-ratio: 1/1;
-            background-color: #3a3a3a;
-            border-radius: 8px;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999999;
-            font-size: 10px;
-            font-weight: 500;
-        }
-        
-        .product-title {
-            font-size: 11px;
-            font-weight: 500;
-            margin-bottom: 2px;
-            line-height: 1.2;
-            height: 26px;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            color: #ffffff;
-        }
-        
-        .product-price {
-            font-size: 12px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-        
-        .cart-badge-mini {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background-color: #ffffff;
-            color: #1a1a1a;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 24px 0;
-            color: #999999;
-            font-size: 12px;
-        }
-        
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #333333;
-        }
-        
-        .divider::before {
-            margin-right: 12px;
-        }
-        
-        .divider::after {
-            margin-left: 12px;
-        }
-        
-        .support-section {
-            background-color: #2a2a2a;
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 16px;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .support-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        
-        .support-header h2 {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #ffffff;
-        }
-        
-        .support-header p {
-            color: #999999;
-            font-size: 14px;
-        }
-        
-        .admin-card {
-            background: linear-gradient(145deg, #1a1a1a, #222222);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .admin-avatar {
-            width: 60px;
-            height: 60px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-        }
-        
-        .admin-info {
-            flex: 1;
-        }
-        
-        .admin-name {
-            font-weight: 600;
-            font-size: 18px;
-            margin-bottom: 4px;
-            color: #ffffff;
-        }
-        
-        .admin-username {
-            color: #999999;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-        
-        .admin-chat-btn {
-            background-color: #ffffff;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 30px;
-            padding: 8px 20px;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-        
-        .admin-chat-btn:hover {
-            background-color: #e0e0e0;
-            transform: scale(1.02);
-        }
-        
-        .faq-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        .faq-item {
-            background-color: #1a1a1a;
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .faq-question {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-        
-        .faq-icon {
-            width: 32px;
-            height: 32px;
-            background-color: #2a2a2a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        
-        .faq-question-text {
-            font-weight: 600;
-            font-size: 15px;
-            color: #ffffff;
-        }
-        
-        .faq-answer {
-            padding-left: 44px;
-            color: #cccccc;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background-color: #2a2a2a;
-            border-radius: 20px;
-            padding: 20px;
-            width: 100%;
-            max-width: 400px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        
-        .modal-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999999;
-        }
-        
-        .modal-product-preview {
-            margin-bottom: 16px;
-            padding: 12px;
-            background-color: #1a1a1a;
-            border-radius: 12px;
-        }
-        
-        .modal-product-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: #ffffff;
-        }
-        
-        .modal-product-price {
-            color: #999999;
-            font-size: 14px;
-        }
-        
-        .form-group {
-            margin-bottom: 16px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #999999;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #3a3a3a;
-            border-radius: 8px;
-            background-color: #1a1a1a;
-            color: #ffffff;
-            font-size: 14px;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #ffffff;
-        }
-        
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: #666666;
-        }
-        
-        select option {
-            background-color: #1a1a1a;
-            color: #ffffff;
-        }
-        
-        .photo-upload-area {
-            border: 1px dashed #3a3a3a;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            margin-bottom: 12px;
-            cursor: pointer;
-            background-color: #1a1a1a;
-        }
-        
-        .photo-upload-area:hover {
-            border-color: #ffffff;
-        }
-        
-        .photo-preview-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin: 12px 0;
-        }
-        
-        .photo-preview-item {
-            position: relative;
-            aspect-ratio: 1/1;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .photo-preview-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .photo-remove {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            background-color: rgba(0,0,0,0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        
-        /* ========== ПРОМОКОДЫ (КОМПАКТНЫЕ) ========== */
-        .promo-section {
-            background-color: #1a1a1a;
-            border-radius: 12px;
-            padding: 12px;
-            margin: 12px 0;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .promo-section > div:first-child {
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-        
-        .promo-input-group {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-        
-        .promo-input-group input {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid #3a3a3a;
-            border-radius: 8px;
-            background-color: #2a2a2a;
-            color: #ffffff;
-            font-size: 13px;
-            height: 40px;
-        }
-        
-        .promo-input-group button {
-            padding: 0 12px;
-            background-color: #ffffff;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            height: 40px;
-            white-space: nowrap;
-            min-width: 80px;
-            max-width: 100px;
-        }
-        
-        .promo-success {
-            color: #4caf50;
-            font-size: 12px;
-            margin-top: 6px;
-        }
-        
-        .promo-error {
-            color: #f44336;
-            font-size: 12px;
-            margin-top: 6px;
-        }
-        
-        /* Убираем лишние отступы */
-        #discount-info {
-            font-size: 12px;
-            margin-top: 8px;
-        }
-        
-        .cart-container {
-            background-color: #2a2a2a;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 12px;
-            background-color: #1a1a1a;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .cart-item-info {
-            flex: 1;
-        }
-        
-        .cart-item-title {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 4px;
-            color: #ffffff;
-        }
-        
-        .cart-item-details {
-            font-size: 12px;
-            color: #cccccc;
-            white-space: pre-line;
-        }
-        
-        .cart-item-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            background-color: #2a2a2a;
-            border-radius: 12px;
-            font-size: 10px;
-            margin-bottom: 4px;
-            color: #999999;
-        }
-        
-        .cart-item-remove {
-            background: none;
-            border: none;
-            color: #666666;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 16px;
-            background-color: #ffffff;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 8px;
-            transition: all 0.2s;
-        }
-        
-        .btn:hover {
-            background-color: #e0e0e0;
-        }
-        
-        .btn-secondary {
-            background-color: #2a2a2a;
-            color: #ffffff;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #333333;
-        }
-        
-        .cart-summary {
-            padding: 20px;
-            background-color: #1a1a1a;
-            border-radius: 12px;
-            margin: 20px 0;
-            border: 1px solid #3a3a3a;
-            text-align: center;
-        }
-        
-        .cart-summary p {
-            font-size: 18px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-        
-        .orders-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        .order-card {
-            background-color: #2a2a2a;
-            border-radius: 16px;
-            padding: 16px;
-            border: 1px solid #3a3a3a;
-        }
-        
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .order-id {
-            font-weight: 700;
-            font-size: 15px;
-            color: #ffffff;
-        }
-        
-        .order-status-badge {
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 500;
-            background-color: #1a1a1a;
-            color: #cccccc;
-        }
-        
-        .status-timeline {
-            margin: 16px 0;
-        }
-        
-        .status-step {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            position: relative;
-        }
-        
-        .status-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: #3a3a3a;
-            margin-right: 12px;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .status-dot.completed {
-            background-color: #ffffff;
-        }
-        
-        .status-dot.active {
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(255,255,255,0.2);
-        }
-        
-        .status-line {
-            position: absolute;
-            left: 9px;
-            top: 20px;
-            width: 2px;
-            height: calc(100% - 8px);
-            background-color: #3a3a3a;
-            z-index: 1;
-        }
-        
-        .status-content {
-            flex: 1;
-            padding-bottom: 12px;
-        }
-        
-        .status-title {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 2px;
-            color: #ffffff;
-        }
-        
-        .status-date {
-            font-size: 11px;
-            color: #999999;
-        }
-        
-        .loading {
-            text-align: center;
-            color: #999999;
-            padding: 40px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!--
+    REVISION: пользователь отклонил направление «Табло обменника» целиком — «не так цветасто, попроще, основные цвета как у POIZON».
+    Проверено по официальной странице POIZON в App Store: чёрная иконка, белый логотип, один бирюзовый акцент (#1fd8c1) — почти монохром.
+    Новая система: чёрный фон, белый текст, один акцент вместо четырёх цветов, без декоративных швов/перфорации/анимации переворота, без кастомного дисплейного шрифта — только системный гротеск.
+    -->
+    <link rel="icon" href="data:,">
+    <svg style="display:none" aria-hidden="true">
+        <defs>
+            <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9c-4-1.5-7-4.5-7-9V6l7-3z"/></symbol>
+            <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.2"/><line x1="20" y1="20" x2="15.4" y2="15.4"/></symbol>
+            <symbol id="icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.8h7.6a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9.2" cy="20" r="1.3" fill="currentColor" stroke="none"/><circle cx="17.2" cy="20" r="1.3" fill="currentColor" stroke="none"/></symbol>
+            <symbol id="icon-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><line x1="12" y1="11" x2="12" y2="21"/></symbol>
+            <symbol id="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></symbol>
+            <symbol id="icon-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></symbol>
+            <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></symbol>
+            <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l1.4-2.4h5.2L16 7h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.4"/></symbol>
+            <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></symbol>
+            <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 13 10 18 19 7"/></symbol>
+            <symbol id="icon-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9 15.5H3l9-15.5z"/><line x1="12" y1="10" x2="12" y2="14"/><circle cx="12" cy="16.8" r="0.4" fill="currentColor" stroke="none"/></symbol>
+            <symbol id="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.5l9.5-9.5H19a2 2 0 0 1 2 2v6.5l-9.5 9.5a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8z"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></symbol>
+            <symbol id="icon-shoes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.3c0-2.3 1.8-3.9 4-4.1l1.6-.2c.9-.1 1.7-.5 2.4-1.1l1.6-1.4c.6-.5 1.4-.8 2.2-.8h1.7c1.4 0 2.5 1.1 2.5 2.5v3.6"/><rect x="16" y="10.5" width="4" height="6.5" rx="1.2"/><rect x="2.5" y="17.1" width="19" height="1.8" rx="0.9"/></symbol>
+            <symbol id="icon-shirt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M2 7L5 10L5 21L19 21L19 10L22 7L17 5Q12 9 7 5Z"/></symbol>
+            <symbol id="icon-perfume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8.7" y="9.2" width="6.6" height="10.8" rx="1.4"/><rect x="10.3" y="5.4" width="3.4" height="3.8" rx="0.6"/><line x1="11" y1="4" x2="13" y2="4"/></symbol>
+            <symbol id="icon-glasses" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.6" cy="13.2" r="3.1"/><circle cx="17.4" cy="13.2" r="3.1"/><line x1="9.7" y1="12.4" x2="14.3" y2="12.4"/><path d="M3.5 12.6l-2 -1"/><path d="M20.5 12.6l2 -1"/></symbol>
+            <symbol id="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.3 9h11.4l-1.2 12H7.5L6.3 9z"/><path d="M9 9V7.4C9 5.5 10.3 4 12 4s3 1.5 3 3.4V9"/><path d="M7.6 12.3h8.8"/></symbol>
+            <symbol id="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></symbol>
+            <symbol id="icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2l-1.4-1.3C5.6 14.6 3 12.3 3 9.3 3 6.8 5 5 7.4 5c1.4 0 2.7.6 3.6 1.8C11.9 5.6 13.2 5 14.6 5 17 5 19 6.8 19 9.3c0 3-2.6 5.3-7.6 9.6l-1.4 1.3z"/></symbol>
+            <symbol id="icon-ruler" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="19" height="8" rx="1.4" transform="rotate(-8 12 12)"/><path d="M6.7 9.4l.6 2M10 8.8l.6 2M13.3 8.3l.6 2M16.6 7.7l.6 2"/></symbol>
+        </defs>
+    </svg>
+
     <div class="app">
         <header class="header">
-            <h1>CLOSERS</h1>
-            <div class="subtitle">ПОИСК И ЗАКАЗ С POIZON</div>
+            <h1>CL<span class="accent">O</span>SERS</h1>
+            <div class="subtitle">Поиск и заказ с POIZON</div>
         </header>
 
         <div id="vpn-notification" class="vpn-notification">
             <div class="vpn-content">
-                <div class="vpn-icon">🛡️</div>
+                <div class="icon-tile"><svg class="icon"><use href="#icon-shield"></use></svg></div>
                 <div class="vpn-text">
                     <strong>Для стабильной работы</strong>
                     Если приложение не загружается, попробуйте включить VPN.
                 </div>
-                <button class="vpn-close" onclick="this.parentElement.parentElement.style.display='none'">×</button>
+                <button class="vpn-close" onclick="this.parentElement.parentElement.style.display='none'" aria-label="Закрыть"><svg class="icon" style="width:16px;height:16px"><use href="#icon-close"></use></svg></button>
             </div>
         </div>
 
         <div id="catalog-view">
             <div class="quick-request-banner">
                 <div class="quick-request-content">
-                    <div class="quick-request-icon">🔍</div>
+                    <div class="icon-tile"><svg class="icon"><use href="#icon-search"></use></svg></div>
                     <div class="quick-request-text">
                         <div class="quick-request-title">Ищете что-то конкретное?</div>
                         <div class="quick-request-subtitle">Отправьте запрос — мы найдем на POIZON</div>
@@ -953,149 +67,181 @@
                     <button class="quick-request-button" onclick="showFreeRequestModal()">Запросить</button>
                 </div>
             </div>
-            
+
+            <!-- ПОИСК + ИЗБРАННОЕ -->
+            <div class="catalog-toolbar">
+                <div class="search-input-wrap">
+                    <svg class="icon"><use href="#icon-search"></use></svg>
+                    <input type="text" id="catalog-search" placeholder="Поиск по каталогу" oninput="renderCatalog()">
+                </div>
+                <button class="wishlist-toggle" id="wishlist-toggle-btn" onclick="toggleWishlistFilter()" aria-label="Избранное">
+                    <svg class="icon"><use href="#icon-heart"></use></svg>
+                </button>
+            </div>
+
             <!-- КАТЕГОРИИ -->
             <div class="category-tabs">
-                <div class="category-tab active" onclick="filterCategory('all')">Все</div>
-                <div class="category-tab" onclick="filterCategory('shoes')">👟 Обувь</div>
-                <div class="category-tab" onclick="filterCategory('clothes')">👕 Одежда</div>
-                <div class="category-tab" onclick="filterCategory('perfume')">🧴 Духи</div>
-                <div class="category-tab" onclick="filterCategory('glasses')">👓 Очки</div>
-                <div class="category-tab" onclick="filterCategory('bags')">👜 Сумки</div>
+                <div class="category-tab active" onclick="filterCategory('all')"><svg class="icon"><use href="#icon-grid"></use></svg> Все</div>
+                <div class="category-tab" onclick="filterCategory('shoes')"><svg class="icon"><use href="#icon-shoes"></use></svg> Обувь</div>
+                <div class="category-tab" onclick="filterCategory('clothes')"><svg class="icon"><use href="#icon-shirt"></use></svg> Одежда</div>
+                <div class="category-tab" onclick="filterCategory('perfume')"><svg class="icon"><use href="#icon-perfume"></use></svg> Духи</div>
+                <div class="category-tab" onclick="filterCategory('glasses')"><svg class="icon"><use href="#icon-glasses"></use></svg> Очки</div>
+                <div class="category-tab" onclick="filterCategory('bags')"><svg class="icon"><use href="#icon-bag"></use></svg> Сумки</div>
             </div>
-            
+
             <div class="section-title">Популярное</div>
             <div class="catalog-grid" id="catalog-grid"></div>
         </div>
-        
+
         <div id="cart-view" style="display: none;">
             <div class="cart-container">
-                <div class="section-title">Корзина</div>
+                <div class="section-title" style="margin-top: 0;">Корзина</div>
                 <div id="cart-items"></div>
-                
-                <!-- ПРОМОКОДЫ -->
+
+                <!-- ПРОМОКОД -->
                 <div class="promo-section">
-                    <div style="font-weight: 600; margin-bottom: 12px;">🎟️ Промокод</div>
+                    <div><svg class="icon" style="width:12px;height:12px"><use href="#icon-tag"></use></svg> Промокод</div>
                     <div class="promo-input-group">
                         <input type="text" id="promo-code" placeholder="Введите промокод">
                         <button onclick="applyPromoCode()">Применить</button>
                     </div>
                     <div id="promo-message" class="promo-error" style="display: none;"></div>
                 </div>
-                
+
                 <div id="cart-summary" class="cart-summary" style="display: none;">
                     <p><span id="cart-total">0</span> ТОВАРОВ</p>
-                    <div id="discount-info" style="font-size: 14px; color: #4caf50; margin-top: 8px; display: none;"></div>
+                    <div id="discount-info" style="display: none;"></div>
                 </div>
-                <button class="btn" onclick="submitOrder()" id="submit-order-btn">ОФОРМИТЬ ЗАКАЗ</button>
+                <button class="btn" onclick="submitOrder()" id="submit-order-btn">Оформить заказ</button>
             </div>
         </div>
-        
+
         <div id="orders-view" style="display: none;">
-            <div class="section-title">Мои заказы</div>
+            <div class="section-title" style="margin-top: 0;">Мои заказы</div>
             <div id="orders-list" class="orders-list"></div>
         </div>
-        
+
         <!-- РАЗДЕЛ ПОДДЕРЖКИ -->
-<div id="support-view" style="display: none;">
-    <div class="support-section">
-        <div class="support-header">
-            <h2>Поддержка</h2>
-            <p>Мы всегда на связи и готовы помочь</p>
-        </div>
-        
-        <!-- Карточка админа -->
-        <div class="admin-card">
-            <div class="admin-avatar">👤</div>
-            <div class="admin-info">
-                <div class="admin-name">closersmanager</div>
-                <div class="admin-username">@closersmanager</div>
-                <button class="admin-chat-btn" onclick="window.open('https://t.me/closersmanager', '_blank')">
-                    <span>💬</span> Написать админу
-                </button>
+        <div id="support-view" style="display: none;">
+            <div class="support-section">
+                <div class="support-header">
+                    <h2>Поддержка</h2>
+                    <p>Мы всегда на связи и готовы помочь</p>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-avatar"><svg class="icon"><use href="#icon-user"></use></svg></div>
+                    <div class="admin-info">
+                        <div class="admin-name">closersmanager</div>
+                        <div class="admin-username">@closersmanager</div>
+                        <button class="admin-chat-btn" onclick="window.open('https://t.me/closersmanager', '_blank')">
+                            <svg class="icon" style="width:13px;height:13px"><use href="#icon-chat"></use></svg> Написать админу
+                        </button>
+                    </div>
+                </div>
+
+                <div class="referral-card">
+                    <div class="referral-header">
+                        <div class="icon-tile"><svg class="icon"><use href="#icon-heart"></use></svg></div>
+                        <div class="referral-text">
+                            <div class="referral-title">Пригласи друга</div>
+                            <div class="referral-subtitle">Друг оформит первый заказ — вы оба получите скидку</div>
+                        </div>
+                    </div>
+                    <div class="referral-actions">
+                        <button class="btn" style="margin-bottom:0" onclick="shareReferralLink()">Поделиться ссылкой</button>
+                        <button class="btn btn-secondary" style="margin-bottom:0" onclick="copyReferralLink()">Копировать</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 14px; color: var(--text);">Часто задаваемые вопросы</h3>
+
+                    <div class="faq-grid">
+                        <details class="faq-item">
+                            <summary class="faq-question">
+                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-box"></use></svg></div>
+                                <div class="faq-question-text">Сколько ждать доставку?</div>
+                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON и выбранного способа доставки.
+                            </div>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary class="faq-question">
+                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-tag"></use></svg></div>
+                                <div class="faq-question-text">Как узнать цену?</div>
+                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                После того как вы оформите заказ, администратор проверит актуальную цену на POIZON, добавит комиссию магазина и стоимость доставки. Итоговая цена придет вам в уведомлении.
+                            </div>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary class="faq-question">
+                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-check"></use></svg></div>
+                                <div class="faq-question-text">Можно вернуть товар?</div>
+                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                Возврат возможен только в случае брака. Мы тщательно проверяем все товары перед отправкой, но если возникла проблема — напишите администратору, и мы решим вопрос.
+                            </div>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary class="faq-question">
+                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-box"></use></svg></div>
+                                <div class="faq-question-text">Откуда вы привозите?</div>
+                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                Мы заказываем товары с площадки POIZON — это крупнейшая платформа с оригинальными вещами из Китая, Японии, Кореи и США.
+                            </div>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary class="faq-question">
+                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-search"></use></svg></div>
+                                <div class="faq-question-text">Что делать, если не нашел вещь в каталоге?</div>
+                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                Используйте форму «Свободный запрос» — просто вставьте ссылку с POIZON, артикул или название, и мы найдем нужный товар.
+                            </div>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary class="faq-question">
+                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-cart"></use></svg></div>
+                                <div class="faq-question-text">Как оплатить заказ?</div>
+                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
+                            </summary>
+                            <div class="faq-answer">
+                                После подтверждения заказа администратор свяжется с вами и уточнит детали оплаты. Мы принимаем переводы на карту, по QR-коду или наличные при самовывозе.
+                            </div>
+                        </details>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <!-- Часто задаваемые вопросы -->
-        <div style="margin-top: 24px;">
-            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Часто задаваемые вопросы</h3>
-            
-            <div class="faq-grid">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <div class="faq-icon">⏱️</div>
-                        <div class="faq-question-text">Сколько ждать доставку?</div>
-                    </div>
-                    <div class="faq-answer">
-                        Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON и выбранного способа доставки.
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <div class="faq-icon">💰</div>
-                        <div class="faq-question-text">Как узнать цену?</div>
-                    </div>
-                    <div class="faq-answer">
-                        После того как вы оформите заказ, администратор проверит актуальную цену на POIZON, добавит комиссию магазина и стоимость доставки. Итоговая цена придет вам в уведомлении.
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <div class="faq-icon">🔄</div>
-                        <div class="faq-question-text">Можно вернуть товар?</div>
-                    </div>
-                    <div class="faq-answer">
-                        Возврат возможен только в случае брака. Мы тщательно проверяем все товары перед отправкой, но если возникла проблема — напишите администратору, и мы решим вопрос.
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <div class="faq-icon">📦</div>
-                        <div class="faq-question-text">Откуда вы привозите?</div>
-                    </div>
-                    <div class="faq-answer">
-                        Мы заказываем товары с площадки POIZON — это крупнейшая платформа с оригинальными вещами из Китая, Японии, Кореи и США.
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <div class="faq-icon">🔍</div>
-                        <div class="faq-question-text">Что делать, если не нашел вещь в каталоге?</div>
-                    </div>
-                    <div class="faq-answer">
-                        Используйте форму "Свободный запрос" — просто вставьте ссылку с POIZON, артикул или название, и мы найдем нужный товар.
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <div class="faq-icon">💳</div>
-                        <div class="faq-question-text">Как оплатить заказ?</div>
-                    </div>
-                    <div class="faq-answer">
-                        После подтверждения заказа администратор свяжется с вами и уточнит детали оплаты. Мы принимаем переводы на карту, по QR-коду или наличные при самовывозе.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-        
+
         <div id="product-modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">Добавить в корзину</div>
-                    <button class="modal-close" onclick="closeModal()">×</button>
+                    <button class="modal-close" onclick="closeModal()" aria-label="Закрыть"><svg class="icon" style="width:20px;height:20px"><use href="#icon-close"></use></svg></button>
                 </div>
-                
+
                 <div id="modal-product" class="modal-product-preview"></div>
-                
+
                 <div class="form-group">
-                    <label>РАЗМЕР (необязательно)</label>
+                    <div class="form-group-label-row">
+                        <label>Размер (необязательно)</label>
+                        <button type="button" class="size-guide-link" onclick="openSizeGuide()"><svg class="icon" style="width:12px;height:12px"><use href="#icon-ruler"></use></svg> Таблица размеров</button>
+                    </div>
                     <select id="modal-size">
                         <option value="">Выберите размер</option>
                         <option value="XS">XS</option>
@@ -1117,18 +263,18 @@
                         <option value="46">46 EU</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
-                    <label>ЦВЕТ (необязательно)</label>
+                    <label>Цвет (необязательно)</label>
                     <input type="text" id="modal-color" placeholder="Например: Black/White">
                 </div>
-                
+
                 <div class="form-group">
-                    <label>ПОЖЕЛАНИЯ (необязательно)</label>
+                    <label>Пожелания (необязательно)</label>
                     <textarea id="modal-notes" rows="2" placeholder="Особые требования..."></textarea>
                 </div>
-                
-                <button class="btn" onclick="addToCartFromModal()">ДОБАВИТЬ В КОРЗИНУ</button>
+
+                <button class="btn" onclick="addToCartFromModal()">Добавить в корзину</button>
             </div>
         </div>
 
@@ -1136,20 +282,23 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">Свободный запрос</div>
-                    <button class="modal-close" onclick="closeFreeRequestModal()">×</button>
+                    <button class="modal-close" onclick="closeFreeRequestModal()" aria-label="Закрыть"><svg class="icon" style="width:20px;height:20px"><use href="#icon-close"></use></svg></button>
                 </div>
-                
-                <div style="background-color: #1a1a1a; border-radius: 8px; padding: 12px; margin-bottom: 20px; color: #cccccc; font-size: 13px;">
+
+                <div style="background-color: var(--surface-2); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 20px; color: var(--text-secondary); font-size: 13px;">
                     Мы найдем и привезем любой товар с POIZON
                 </div>
-                
+
                 <div class="form-group">
-                    <label>ЧТО ИЩЕТЕ? *</label>
+                    <label>Что ищете? *</label>
                     <input type="text" id="modal-free-query" placeholder="Ссылка, артикул или название товара">
                 </div>
-                
+
                 <div class="form-group">
-                    <label>РАЗМЕР (необязательно)</label>
+                    <div class="form-group-label-row">
+                        <label>Размер (необязательно)</label>
+                        <button type="button" class="size-guide-link" onclick="openSizeGuide()"><svg class="icon" style="width:12px;height:12px"><use href="#icon-ruler"></use></svg> Таблица размеров</button>
+                    </div>
                     <select id="modal-free-size">
                         <option value="">Выберите размер</option>
                         <option value="XS">XS</option>
@@ -1171,529 +320,97 @@
                         <option value="46">46 EU</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
-                    <label>ЦВЕТ (необязательно)</label>
+                    <label>Цвет (необязательно)</label>
                     <input type="text" id="modal-free-color" placeholder="Например: Black/White">
                 </div>
-                
+
                 <div class="form-group">
-                    <label>ПОЖЕЛАНИЯ (необязательно)</label>
+                    <label>Пожелания (необязательно)</label>
                     <textarea id="modal-free-notes" rows="2" placeholder="Особые требования, состояние, бюджет..."></textarea>
                 </div>
-                
+
                 <div class="form-group">
-                    <label>ФОТО (до 5 шт, необязательно)</label>
+                    <label>Фото (до 5 шт, необязательно)</label>
                     <div class="photo-upload-area" onclick="document.getElementById('modal-free-file-input').click()">
-                        <span style="font-size: 24px;">📷</span>
-                        <div style="font-size: 12px; color: #999;">Нажмите, чтобы загрузить фото</div>
+                        <svg class="icon"><use href="#icon-camera"></use></svg>
+                        <div style="font-size: 12px; margin-top: 4px;">Нажмите, чтобы загрузить фото</div>
                     </div>
                     <input type="file" id="modal-free-file-input" accept="image/*" multiple style="display: none;" onchange="handleModalFreePhotos(event)">
                     <div id="modal-free-photo-preview" class="photo-preview-grid"></div>
                 </div>
-                
-                <button class="btn" onclick="addFreeRequestFromModal()">➕ ОТПРАВИТЬ ЗАПРОС</button>
+
+                <button class="btn" onclick="addFreeRequestFromModal()">Отправить запрос</button>
             </div>
         </div>
-        
+
+        <div id="size-guide-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Таблица размеров</div>
+                    <button class="modal-close" onclick="closeSizeGuide()" aria-label="Закрыть"><svg class="icon" style="width:20px;height:20px"><use href="#icon-close"></use></svg></button>
+                </div>
+
+                <div class="section-title" style="margin-top:0">Обувь</div>
+                <div class="size-table-wrap">
+                    <table class="size-table">
+                        <thead><tr><th>US</th><th>EU</th><th>UK</th><th>см</th></tr></thead>
+                        <tbody>
+                            <tr><td>6</td><td>39</td><td>5.5</td><td>24.5</td></tr>
+                            <tr><td>7</td><td>40</td><td>6.5</td><td>25.5</td></tr>
+                            <tr><td>8</td><td>41</td><td>7.5</td><td>26.5</td></tr>
+                            <tr><td>9</td><td>42</td><td>8.5</td><td>27.5</td></tr>
+                            <tr><td>10</td><td>43</td><td>9.5</td><td>28.5</td></tr>
+                            <tr><td>11</td><td>44</td><td>10.5</td><td>29.5</td></tr>
+                            <tr><td>12</td><td>45</td><td>11.5</td><td>30.5</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-title">Одежда</div>
+                <div class="size-table-wrap">
+                    <table class="size-table">
+                        <thead><tr><th>Буквенный</th><th>RU</th><th>EU</th><th>Грудь, см</th></tr></thead>
+                        <tbody>
+                            <tr><td>XS</td><td>42</td><td>44</td><td>84-88</td></tr>
+                            <tr><td>S</td><td>44</td><td>46</td><td>88-92</td></tr>
+                            <tr><td>M</td><td>46-48</td><td>48</td><td>92-98</td></tr>
+                            <tr><td>L</td><td>48-50</td><td>50</td><td>98-104</td></tr>
+                            <tr><td>XL</td><td>50-52</td><td>52</td><td>104-110</td></tr>
+                            <tr><td>XXL</td><td>52-54</td><td>54</td><td>110-116</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="size-guide-note">Размеры на POIZON — китайские бренды часто маломерят на 0.5-1 шаг. При сомнении между размерами советуем брать больший.</div>
+            </div>
+        </div>
+
         <button class="floating-request-btn" onclick="showFreeRequestModal()">
-            <span style="font-size: 18px;">🔍</span> Свой запрос
+            <svg class="icon"><use href="#icon-search"></use></svg> Свой запрос
         </button>
-        
+
         <div class="bottom-nav">
             <button class="nav-item active" onclick="showView('catalog')">
-                <span class="nav-icon">🛍️</span>
+                <svg class="icon"><use href="#icon-grid"></use></svg>
                 <span>Каталог</span>
             </button>
             <button class="nav-item" onclick="showView('cart')">
-                <span class="nav-icon">🛒</span>
+                <svg class="icon"><use href="#icon-cart"></use></svg>
                 <span>Корзина <span id="cart-badge">0</span></span>
             </button>
             <button class="nav-item" onclick="showView('orders')">
-                <span class="nav-icon">📦</span>
+                <svg class="icon"><use href="#icon-box"></use></svg>
                 <span>Заказы</span>
             </button>
             <button class="nav-item" onclick="showView('support')">
-                <span class="nav-icon">💬</span>
+                <svg class="icon"><use href="#icon-chat"></use></svg>
                 <span>Поддержка</span>
             </button>
         </div>
     </div>
 
-    <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-        
-        let user = tg.initDataUnsafe?.user || { 
-            id: Math.floor(Math.random() * 1000000), 
-            first_name: 'Гость',
-            username: 'guest'
-        };
-
-        const API_URL = 'https://maxkom.pythonanywhere.com/api';
-        const ADMIN_CONTACT = 'https://t.me/closersmanager';
-
-        // Промокоды
-        let appliedPromo = null;
-        const VALID_PROMOS = {
-            'CLOSERS10': { discount: 10, type: 'percent' },
-            'FIRST5': { discount: 5, type: 'percent' },
-            'FREESHIP': { discount: 500, type: 'fixed' }
-        };
-
-        // Категории
-        let currentCategory = 'all';
-
-        // ========== КАТАЛОГ ==========
-        const CATALOG = [
-            { id: 1, name: 'Nike Air Jordan 1 High OG', price: '195$', image: 'AJ1', category: 'shoes' },
-            { id: 2, name: 'Essentials Fear of God Hoodie', price: '110$', image: 'FOG', category: 'clothes' },
-            { id: 3, name: 'Stussy 8 Ball Zip Hoodie', price: '145$', image: 'STUSSY', category: 'clothes' },
-            { id: 4, name: 'New Balance 990v6 Grey', price: '200$', image: 'NB990', category: 'shoes' },
-            { id: 5, name: 'Adidas Samba OG', price: '100$', image: 'SAMBA', category: 'shoes' },
-            { id: 6, name: 'Supreme Box Logo Hoodie', price: '398$', image: 'SUPREME', category: 'clothes' },
-            { id: 7, name: 'Creed Aventus', price: '250$', image: 'CREED', category: 'perfume' },
-            { id: 8, name: 'Dior Sauvage', price: '120$', image: 'DIOR', category: 'perfume' },
-            { id: 9, name: 'Ray-Ban Aviator', price: '180$', image: 'RAYBAN', category: 'glasses' },
-            { id: 10, name: 'Oakley Holbrook', price: '150$', image: 'OAKLEY', category: 'glasses' },
-            { id: 11, name: 'Louis Vuitton Neverfull', price: '1200$', image: 'LV', category: 'bags' },
-            { id: 12, name: 'Gucci GG Marmont', price: '980$', image: 'GUCCI', category: 'bags' }
-        ];
-
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let modalFreePhotos = [];
-        let currentModalProduct = null;
-        let lastOrderTime = 0;
-        const SPAM_DELAY = 30000;
-
-        // ========== ФИЛЬТРАЦИЯ ПО КАТЕГОРИЯМ ==========
-        window.filterCategory = function(category) {
-            currentCategory = category;
-            document.querySelectorAll('.category-tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-            renderCatalog();
-        };
-
-        function renderCatalog() {
-            let filteredProducts = CATALOG;
-            if (currentCategory !== 'all') {
-                filteredProducts = CATALOG.filter(p => p.category === currentCategory);
-            }
-            
-            let html = '';
-            filteredProducts.forEach(product => {
-                const inCart = cart.some(item => item.catalogId === product.id);
-                const cartCount = cart.filter(item => item.catalogId === product.id).length;
-                
-                html += `
-                    <div class="product-card ${inCart ? 'in-cart' : ''}" onclick="openProductModal(${product.id})">
-                        <div class="product-image">${product.image}</div>
-                        <div class="product-title">${product.name}</div>
-                        <div class="product-price">${product.price}</div>
-                        ${cartCount > 0 ? `<div class="cart-badge-mini">${cartCount}</div>` : ''}
-                    </div>
-                `;
-            });
-            
-            if (filteredProducts.length === 0) {
-                html = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">В этой категории пока нет товаров</div>';
-            }
-            
-            document.getElementById('catalog-grid').innerHTML = html;
-        }
-
-        // ========== ПРОМОКОДЫ ==========
-        window.applyPromoCode = function() {
-            const code = document.getElementById('promo-code').value.trim().toUpperCase();
-            const messageDiv = document.getElementById('promo-message');
-            
-            if (!code) {
-                messageDiv.style.display = 'block';
-                messageDiv.className = 'promo-error';
-                messageDiv.textContent = 'Введите промокод';
-                return;
-            }
-            
-            if (VALID_PROMOS[code]) {
-                appliedPromo = {
-                    code: code,
-                    ...VALID_PROMOS[code]
-                };
-                messageDiv.style.display = 'block';
-                messageDiv.className = 'promo-success';
-                messageDiv.textContent = `✅ Промокод применен! Скидка ${VALID_PROMOS[code].type === 'percent' ? VALID_PROMOS[code].discount + '%' : VALID_PROMOS[code].discount + '₽'}`;
-                
-                const discountInfo = document.getElementById('discount-info');
-                discountInfo.style.display = 'block';
-                discountInfo.textContent = `Скидка по промокоду ${code}: ${VALID_PROMOS[code].type === 'percent' ? VALID_PROMOS[code].discount + '%' : VALID_PROMOS[code].discount + '₽'}`;
-            } else {
-                appliedPromo = null;
-                messageDiv.style.display = 'block';
-                messageDiv.className = 'promo-error';
-                messageDiv.textContent = '❌ Недействительный промокод';
-                document.getElementById('discount-info').style.display = 'none';
-            }
-        };
-
-        // ========== МОДАЛКА ДЛЯ ТОВАРА ==========
-        window.openProductModal = function(productId) {
-            const product = CATALOG.find(p => p.id === productId);
-            if (!product) return;
-            
-            currentModalProduct = product;
-            
-            document.getElementById('modal-product').innerHTML = `
-                <div class="modal-product-name">${product.name}</div>
-                <div class="modal-product-price">${product.price}</div>
-            `;
-            
-            document.getElementById('modal-size').value = '';
-            document.getElementById('modal-color').value = '';
-            document.getElementById('modal-notes').value = '';
-            
-            document.getElementById('product-modal').classList.add('active');
-        };
-
-        window.closeModal = function() {
-            document.getElementById('product-modal').classList.remove('active');
-            currentModalProduct = null;
-        };
-
-        window.addToCartFromModal = function() {
-            if (!currentModalProduct) return;
-            
-            const size = document.getElementById('modal-size').value;
-            const color = document.getElementById('modal-color').value;
-            const notes = document.getElementById('modal-notes').value;
-            
-            cart.push({
-                catalogId: currentModalProduct.id,
-                type: 'catalog',
-                name: currentModalProduct.name,
-                price: currentModalProduct.price,
-                size: size,
-                color: color,
-                notes: notes,
-                addedAt: new Date().toISOString()
-            });
-            
-            localStorage.setItem('cart', JSON.stringify(cart));
-            renderCatalog();
-            updateCartBadge();
-            closeModal();
-            tg.showAlert(`✅ Товар добавлен в корзину`);
-        };
-
-        // ========== СВОБОДНЫЙ ЗАПРОС ==========
-        window.showFreeRequestModal = function() {
-            modalFreePhotos = [];
-            document.getElementById('modal-free-query').value = '';
-            document.getElementById('modal-free-size').value = '';
-            document.getElementById('modal-free-color').value = '';
-            document.getElementById('modal-free-notes').value = '';
-            document.getElementById('modal-free-photo-preview').innerHTML = '';
-            
-            document.getElementById('free-request-modal').classList.add('active');
-        };
-
-        window.closeFreeRequestModal = function() {
-            document.getElementById('free-request-modal').classList.remove('active');
-            modalFreePhotos = [];
-        };
-
-        window.handleModalFreePhotos = function(event) {
-            const files = Array.from(event.target.files);
-            if (modalFreePhotos.length + files.length > 5) {
-                tg.showAlert('Можно загрузить не более 5 фото');
-                return;
-            }
-            
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    modalFreePhotos.push(e.target.result);
-                    renderModalFreePhotoPreview();
-                };
-                reader.readAsDataURL(file);
-            });
-        };
-
-        function renderModalFreePhotoPreview() {
-            let html = '';
-            modalFreePhotos.forEach((photo, index) => {
-                html += `
-                    <div class="photo-preview-item">
-                        <img src="${photo}" alt="preview">
-                        <button class="photo-remove" onclick="removeModalFreePhoto(${index})">×</button>
-                    </div>
-                `;
-            });
-            document.getElementById('modal-free-photo-preview').innerHTML = html;
-        }
-
-        window.removeModalFreePhoto = function(index) {
-            modalFreePhotos.splice(index, 1);
-            renderModalFreePhotoPreview();
-        };
-
-        window.addFreeRequestFromModal = function() {
-            const query = document.getElementById('modal-free-query').value;
-            const size = document.getElementById('modal-free-size').value;
-            const color = document.getElementById('modal-free-color').value;
-            const notes = document.getElementById('modal-free-notes').value;
-            
-            if (!query) {
-                tg.showAlert('Введите запрос');
-                return;
-            }
-            
-            cart.push({
-                type: 'free',
-                name: 'Запрос: ' + query.substring(0, 30),
-                query: query,
-                size: size,
-                color: color,
-                notes: notes,
-                photos: modalFreePhotos.slice(),
-                addedAt: new Date().toISOString()
-            });
-            
-            localStorage.setItem('cart', JSON.stringify(cart));
-            
-            closeFreeRequestModal();
-            updateCartBadge();
-            tg.showAlert(`✅ Запрос добавлен в корзину`);
-            showView('cart');
-        };
-
-        // ========== КОРЗИНА ==========
-        function renderCart() {
-            if (cart.length === 0) {
-                document.getElementById('cart-items').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">КОРЗИНА ПУСТА</div>';
-                document.getElementById('cart-summary').style.display = 'none';
-                document.getElementById('discount-info').style.display = 'none';
-                return;
-            }
-            
-            let html = '';
-            cart.forEach((item, index) => {
-                const typeLabel = item.type === 'catalog' ? '📦 Товар из каталога' : '🔍 Свободный запрос';
-                
-                html += `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <div class="cart-item-badge">${typeLabel}</div>
-                            <div class="cart-item-title">${item.name}</div>
-                            <div class="cart-item-details">
-                                ${item.query ? `🔍 ${item.query.substring(0, 40)}${item.query.length > 40 ? '...' : ''}\n` : ''}
-                                ${item.size ? `📏 Размер: ${item.size}\n` : ''}
-                                ${item.color ? `🎨 Цвет: ${item.color}\n` : ''}
-                                ${item.notes ? `📝 ${item.notes.substring(0, 30)}${item.notes.length > 30 ? '...' : ''}\n` : ''}
-                                ${item.photos && item.photos.length ? `📸 Фото: ${item.photos.length} шт.` : ''}
-                            </div>
-                        </div>
-                        <button class="cart-item-remove" onclick="removeFromCart(${index})">×</button>
-                    </div>
-                `;
-            });
-            
-            document.getElementById('cart-items').innerHTML = html;
-            document.getElementById('cart-total').textContent = cart.length;
-            document.getElementById('cart-summary').style.display = 'block';
-        }
-
-        window.removeFromCart = function(index) {
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
-            renderCatalog();
-            updateCartBadge();
-        };
-
-        function updateCartBadge() {
-            document.getElementById('cart-badge').textContent = cart.length;
-        }
-
-        // ========== ОФОРМЛЕНИЕ ЗАКАЗА ==========
-        window.submitOrder = async function() {
-            if (cart.length === 0) {
-                tg.showAlert('Корзина пуста');
-                return;
-            }
-            
-            const now = Date.now();
-            if (now - lastOrderTime < SPAM_DELAY) {
-                const remaining = Math.ceil((SPAM_DELAY - (now - lastOrderTime)) / 1000);
-                tg.showAlert(`⏳ Подождите ${remaining} сек.`);
-                return;
-            }
-            
-            const btn = document.getElementById('submit-order-btn');
-            btn.disabled = true;
-            btn.textContent = 'ОТПРАВКА...';
-            
-            try {
-                const orderData = {
-                    userId: String(user.id),
-                    userName: user.first_name || 'Гость',
-                    username: user.username || 'guest',
-                    items: cart.map(item => ({
-                        type: item.type,
-                        name: item.name,
-                        query: item.query || '',
-                        size: item.size || '',
-                        color: item.color || '',
-                        notes: item.notes || '',
-                        photos: item.photos || []
-                    })),
-                    promoCode: appliedPromo ? appliedPromo.code : null,
-                    totalItems: cart.length
-                };
-                
-                console.log('📤 Отправка заказа:', orderData);
-                
-                let response = await fetch(API_URL + '/create-order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
-                });
-                
-                let result = await response.json();
-                
-                if (result.success) {
-                    lastOrderTime = Date.now();
-                    
-                    tg.showPopup({
-                        title: '✅ ЗАКАЗ ОФОРМЛЕН',
-                        message: `Заказ #${result.orderId}\n\nПо вопросам: @closersmanager`,
-                        buttons: [
-                            { type: 'default', text: '✉️ НАПИСАТЬ АДМИНУ', url: ADMIN_CONTACT },
-                            { type: 'ok', text: 'ОК' }
-                        ]
-                    });
-                    
-                    cart = [];
-                    appliedPromo = null;
-                    localStorage.removeItem('cart');
-                    renderCart();
-                    renderCatalog();
-                    updateCartBadge();
-                    await loadOrders();
-                    showView('orders');
-                }
-            } catch (error) {
-                console.error(error);
-                tg.showAlert('Ошибка соединения с сервером');
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'ОФОРМИТЬ ЗАКАЗ';
-            }
-        };
-
-        // ========== ЗАГРУЗКА ЗАКАЗОВ ==========
-        async function loadOrders() {
-            try {
-                let response = await fetch(API_URL + '/user-orders?userId=' + user.id);
-                let orders = await response.json();
-                
-                if (!orders || orders.length === 0) {
-                    document.getElementById('orders-list').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">У ВАС ПОКА НЕТ ЗАКАЗОВ</div>';
-                    return;
-                }
-                
-                let html = '';
-                orders.forEach(order => {
-                    const statuses = [
-                        { key: 'pending', label: 'Ожидание', date: order.date },
-                        { key: 'searching', label: 'Поиск на POIZON', date: order.searchDate },
-                        { key: 'ordered', label: 'Заказано у поставщика', date: order.orderedDate },
-                        { key: 'shipping', label: 'В пути в Россию', date: order.shippingDate },
-                        { key: 'stock', label: 'На складе', date: order.stockDate },
-                        { key: 'delivery', label: 'Передано в доставку', date: order.deliveryDate },
-                        { key: 'completed', label: 'Получен', date: order.completedDate }
-                    ];
-                    
-                    const currentStatus = order.status || 'pending';
-                    let currentIndex = statuses.findIndex(s => s.key === currentStatus);
-                    if (currentIndex === -1) currentIndex = 0;
-                    
-                    html += `
-                        <div class="order-card">
-                            <div class="order-header">
-                                <span class="order-id">ЗАКАЗ #${order.id}</span>
-                                <span class="order-status-badge">${statuses[currentIndex].label}</span>
-                            </div>
-                            
-                            <div class="status-timeline">
-                                ${statuses.map((status, idx) => {
-                                    let statusClass = '';
-                                    if (idx < currentIndex) statusClass = 'completed';
-                                    else if (idx === currentIndex) statusClass = 'active';
-                                    
-                                    return `
-                                        <div class="status-step">
-                                            <div class="status-dot ${statusClass}"></div>
-                                            ${idx < statuses.length - 1 ? '<div class="status-line"></div>' : ''}
-                                            <div class="status-content">
-                                                <div class="status-title">${status.label}</div>
-                                                ${status.date ? `<div class="status-date">${new Date(status.date).toLocaleString('ru-RU')}</div>` : ''}
-                                            </div>
-                                        </div>
-                                    `;
-                                }).join('')}
-                            </div>
-                            
-                            <div style="font-size: 12px; color: #999; margin-top: 12px;">
-                                Товаров: ${order.items ? order.items.length : 1}
-                                ${order.promoCode ? `\n🎟️ Промокод: ${order.promoCode}` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                document.getElementById('orders-list').innerHTML = html;
-            } catch (error) {
-                console.error('Ошибка загрузки заказов:', error);
-                document.getElementById('orders-list').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">ОШИБКА ЗАГРУЗКИ</div>';
-            }
-        }
-
-        // ========== НАВИГАЦИЯ ==========
-        function showView(view) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.getElementById('catalog-view').style.display = 'none';
-            document.getElementById('cart-view').style.display = 'none';
-            document.getElementById('orders-view').style.display = 'none';
-            document.getElementById('support-view').style.display = 'none';
-            
-            if (view === 'catalog') {
-                document.querySelectorAll('.nav-item')[0].classList.add('active');
-                document.getElementById('catalog-view').style.display = 'block';
-                renderCatalog();
-            } else if (view === 'cart') {
-                document.querySelectorAll('.nav-item')[1].classList.add('active');
-                document.getElementById('cart-view').style.display = 'block';
-                renderCart();
-            } else if (view === 'orders') {
-                document.querySelectorAll('.nav-item')[2].classList.add('active');
-                document.getElementById('orders-view').style.display = 'block';
-                loadOrders();
-            } else if (view === 'support') {
-                document.querySelectorAll('.nav-item')[3].classList.add('active');
-                document.getElementById('support-view').style.display = 'block';
-            }
-        }
-
-        // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        renderCatalog();
-        updateCartBadge();
-        loadOrders();
-    </script>
+    <script src="js/app.js"></script>
 </body>
 </html>
-
-
-
-
-
-
