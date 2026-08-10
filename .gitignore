@@ -1,0 +1,5 @@
+backend/.env
+backend/orders.db
+backend/__pycache__/
+backend/venv/
+*.pyc

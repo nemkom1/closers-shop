@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: closers-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_CHAT_ID
+        sync: false
+      - key: ADMIN_SECRET
+        sync: false
+      # На free-плане диск эфемерный — orders.db обнуляется при каждом деплое/рестарте.
+      # Если подключишь платный persistent disk (mountPath, например /var/data),
+      # добавь сюда DB_PATH=/var/data/orders.db — код уже это читает.
