@@ -13,6 +13,8 @@ services:
         sync: false
       - key: ADMIN_SECRET
         sync: false
+      - key: WEBHOOK_SECRET
+        sync: false
       # На free-плане диск эфемерный — orders.db обнуляется при каждом деплое/рестарте.
       # Если подключишь платный persistent disk (mountPath, например /var/data),
       # добавь сюда DB_PATH=/var/data/orders.db — код уже это читает.

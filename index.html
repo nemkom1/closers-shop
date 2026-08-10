@@ -35,6 +35,7 @@
             <symbol id="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.3 9h11.4l-1.2 12H7.5L6.3 9z"/><path d="M9 9V7.4C9 5.5 10.3 4 12 4s3 1.5 3 3.4V9"/><path d="M7.6 12.3h8.8"/></symbol>
             <symbol id="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></symbol>
             <symbol id="icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2l-1.4-1.3C5.6 14.6 3 12.3 3 9.3 3 6.8 5 5 7.4 5c1.4 0 2.7.6 3.6 1.8C11.9 5.6 13.2 5 14.6 5 17 5 19 6.8 19 9.3c0 3-2.6 5.3-7.6 9.6l-1.4 1.3z"/></symbol>
+            <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.6"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></symbol>
             <symbol id="icon-ruler" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="19" height="8" rx="1.4" transform="rotate(-8 12 12)"/><path d="M6.7 9.4l.6 2M10 8.8l.6 2M13.3 8.3l.6 2M16.6 7.7l.6 2"/></symbol>
         </defs>
     </svg>
@@ -119,6 +120,12 @@
         <div id="orders-view" style="display: none;">
             <div class="section-title" style="margin-top: 0;">Мои заказы</div>
             <div id="orders-list" class="orders-list"></div>
+        </div>
+
+        <!-- АДМИН (видно только администратору) -->
+        <div id="admin-view" style="display: none;">
+            <div class="section-title" style="margin-top: 0;">Все заказы</div>
+            <div id="admin-orders-list" class="orders-list"></div>
         </div>
 
         <!-- РАЗДЕЛ ПОДДЕРЖКИ -->
@@ -407,6 +414,10 @@
             <button class="nav-item" onclick="showView('support')">
                 <svg class="icon"><use href="#icon-chat"></use></svg>
                 <span>Поддержка</span>
+            </button>
+            <button class="nav-item" id="admin-nav-item" onclick="showView('admin')" style="display:none">
+                <svg class="icon"><use href="#icon-lock"></use></svg>
+                <span>Админ</span>
             </button>
         </div>
     </div>

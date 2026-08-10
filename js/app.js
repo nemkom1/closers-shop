@@ -10,6 +10,7 @@ let user = tg.initDataUnsafe?.user || {
 const API_URL = 'https://closers-backend.onrender.com/api';
 const ADMIN_CONTACT = 'https://t.me/closersmanager';
 const BOT_USERNAME = 'closers_shop_bot';
+const ADMIN_ID = 721667711;
 
 // ========== РЕФЕРАЛЬНАЯ ПРОГРАММА ==========
 const referredBy = tg.initDataUnsafe?.start_param || null;
@@ -582,6 +583,8 @@ async function loadOrders() {
                         Товаров: ${order.items ? order.items.length : 1}
                         ${order.promoCode ? `\nПромокод: ${order.promoCode}` : ''}
                     </div>
+
+                    ${renderPaymentSection(order)}
                 </div>
             `;
         });
@@ -593,6 +596,52 @@ async function loadOrders() {
     }
 }
 
+// ========== ОПЛАТА ==========
+function renderPaymentSection(order) {
+    const status = order.paymentStatus || 'unpaid';
+    if (status === 'confirmed') {
+        return `<div class="payment-section payment-confirmed"><svg class="icon" style="width:14px;height:14px"><use href="#icon-check"></use></svg> Оплата подтверждена</div>`;
+    }
+    if (status === 'submitted') {
+        return `<div class="payment-section payment-pending">Скриншот оплаты на проверке у администратора</div>`;
+    }
+    const rejectedNote = status === 'rejected' ? '<div class="payment-rejected-note">Оплата не подтверждена, пришлите скриншот ещё раз</div>' : '';
+    return `
+        <div class="payment-section">
+            ${rejectedNote}
+            <button class="btn btn-secondary" style="margin-bottom:0" onclick="document.getElementById('payment-file-${order.id}').click()">Отправить скриншот оплаты</button>
+            <input type="file" id="payment-file-${order.id}" accept="image/*" style="display:none" onchange="submitPaymentScreenshot(${order.id}, event)">
+        </div>
+    `;
+}
+
+window.submitPaymentScreenshot = function(orderId, event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const response = await fetch(API_URL + '/submit-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId, userId: String(user.id), screenshot: e.target.result })
+            });
+            const result = await response.json();
+            if (result.success) {
+                tg.showAlert('Скриншот отправлен, ждите подтверждения');
+                loadOrders();
+            } else {
+                tg.showAlert('Не удалось отправить скриншот');
+            }
+        } catch (error) {
+            console.error(error);
+            tg.showAlert('Ошибка соединения с сервером');
+        }
+    };
+    reader.readAsDataURL(file);
+};
+
 // ========== НАВИГАЦИЯ ==========
 function showView(view) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -600,6 +649,7 @@ function showView(view) {
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('orders-view').style.display = 'none';
     document.getElementById('support-view').style.display = 'none';
+    document.getElementById('admin-view').style.display = 'none';
 
     if (view === 'catalog') {
         document.querySelectorAll('.nav-item')[0].classList.add('active');
@@ -616,11 +666,85 @@ function showView(view) {
     } else if (view === 'support') {
         document.querySelectorAll('.nav-item')[3].classList.add('active');
         document.getElementById('support-view').style.display = 'block';
+    } else if (view === 'admin') {
+        document.getElementById('admin-nav-item').classList.add('active');
+        document.getElementById('admin-view').style.display = 'block';
+        renderAdminOrders();
     }
 }
 window.showView = showView;
+
+// ========== АДМИН ==========
+const STATUS_OPTIONS = [
+    { key: 'pending', label: 'Ожидание' },
+    { key: 'searching', label: 'Поиск на POIZON' },
+    { key: 'ordered', label: 'Заказано у поставщика' },
+    { key: 'shipping', label: 'В пути в Россию' },
+    { key: 'stock', label: 'На складе' },
+    { key: 'delivery', label: 'Передано в доставку' },
+    { key: 'completed', label: 'Получен' }
+];
+const PAYMENT_LABEL = { unpaid: 'Не оплачен', submitted: 'На проверке', confirmed: 'Оплачен', rejected: 'Отклонён' };
+
+async function renderAdminOrders() {
+    const list = document.getElementById('admin-orders-list');
+    list.innerHTML = '<div class="loading">Загрузка...</div>';
+    try {
+        const response = await fetch(API_URL + '/admin/orders?initData=' + encodeURIComponent(tg.initData));
+        const orders = await response.json();
+
+        if (!Array.isArray(orders)) {
+            list.innerHTML = '<div class="empty-state">НЕТ ДОСТУПА</div>';
+            return;
+        }
+        if (orders.length === 0) {
+            list.innerHTML = '<div class="empty-state">ЗАКАЗОВ ПОКА НЕТ</div>';
+            return;
+        }
+
+        list.innerHTML = orders.map(order => `
+            <div class="order-card">
+                <div class="order-header">
+                    <span class="order-id">ЗАКАЗ #${order.id}</span>
+                    <span class="order-status-badge">${PAYMENT_LABEL[order.paymentStatus] || order.paymentStatus}</span>
+                </div>
+                <div class="order-meta" style="margin-top:0;padding-top:0;border-top:none">
+                    ${order.userName || '?'} (@${order.username || 'guest'})${order.promoCode ? `\nПромокод: ${order.promoCode}` : ''}
+                </div>
+                <div class="form-group" style="margin-top:12px;margin-bottom:0">
+                    <label>Статус заказа</label>
+                    <select onchange="adminChangeStatus(${order.id}, this.value)">
+                        ${STATUS_OPTIONS.map(s => `<option value="${s.key}" ${s.key === order.status ? 'selected' : ''}>${s.label}</option>`).join('')}
+                    </select>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Ошибка загрузки заказов (админ):', error);
+        list.innerHTML = '<div class="empty-state">ОШИБКА ЗАГРУЗКИ</div>';
+    }
+}
+
+window.adminChangeStatus = async function(orderId, status) {
+    try {
+        const response = await fetch(API_URL + '/admin/update-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId, status, initData: tg.initData })
+        });
+        const result = await response.json();
+        if (!result.success) tg.showAlert('Не удалось изменить статус');
+    } catch (error) {
+        console.error(error);
+        tg.showAlert('Ошибка соединения с сервером');
+    }
+};
 
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
 renderCatalog();
 updateCartBadge();
 loadOrders();
+
+if (user.id === ADMIN_ID) {
+    document.getElementById('admin-nav-item').style.display = '';
+}
