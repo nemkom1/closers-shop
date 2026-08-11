@@ -10,411 +10,292 @@
 </head>
 <body>
     <!--
-    THESIS: CLOSERS is a night-lit private showroom, not a fluorescent supermarket aisle — a proxy-buying service that sources $1200 bags earns trust by feeling exclusive and hand-run, so the surface reads like a dark boutique where the goods are the only thing lit.
-    OWN-WORLD: near-black page (#08080b) with a warm halo bleeding from the top edge; a single warm gold (#e8b25f) that never appears flat — always a gradient, a glow, or gradient-filled text; hairline gold rules instead of heavy borders; every card is a lifted dark panel with a gold capline.
-    STORY: the visitor scans lit product panels that cascade in one by one, every tap answers with a ripple and a haptic tick, the active order pulses gold down a lit timeline, and the whole surface stays quiet dark so that goods, prices and progress are the only things glowing.
-    FIRST VIEWPORT: glass header with the gold-lit CLOSERS wordmark over a search field that ignites gold on focus, gold category pills, a gold-edged free-request panel, then the product grid animating in.
-    FORM: dark showroom under warm gold light; Golos Text; gradient-on-gold for all primary actions, hairline gradient rules for structure.
+    THESIS: CLOSERS has one surface, not five tabs — the cart and the order stop being places you navigate to and become live rails that are always on screen, so the two facts that decide a proxy-buying purchase (what it costs, where it is) are never more than a glance away.
+    OWN-WORLD: cool near-black ground (#0d0e11) held by hairlines only, no card borders and no shadows; one electric indigo (#4361ff) as solid fill on actions and live state; product photography enlarged to carry all remaining color, sitting on full-bleed light panels; a single family, Golos Text, with tabular figures for every number.
+    STORY: the visitor scrolls one uninterrupted feed whose rhythm alternates a full-width hero against a pair, taps a photo to open its sheet, and watches the bottom rail keep a running count and sum; when an order exists, a status rail pins under the wordmark and carries its live stage everywhere.
+    FIRST VIEWPORT: wordmark with the "Поиск и заказ с POIZON" line and a menu control, the live order rail when there is one, a hairline search row and category words, then the first hero photo already filling most of the screen.
+    FORM: one-surface feed with live rails, replacing the tab-bar topology every previous build shared; minimalism kept, arrangement and object logic rebuilt at the user's direction.
     FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.
     -->
     <link rel="icon" href="data:,">
     <svg style="display:none" aria-hidden="true">
         <defs>
-            <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9c-4-1.5-7-4.5-7-9V6l7-3z"/></symbol>
-            <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.2"/><line x1="20" y1="20" x2="15.4" y2="15.4"/></symbol>
-            <symbol id="icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.8h7.6a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9.2" cy="20" r="1.3" fill="currentColor" stroke="none"/><circle cx="17.2" cy="20" r="1.3" fill="currentColor" stroke="none"/></symbol>
+            <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.4"/><line x1="20" y1="20" x2="15.6" y2="15.6"/></symbol>
+            <symbol id="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></symbol>
+            <symbol id="icon-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="20" y1="12" x2="5" y2="12"/><polyline points="11 6 5 12 11 18"/></symbol>
+            <symbol id="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></symbol>
+            <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></symbol>
+            <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+            <symbol id="icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2l-1.4-1.3C5.6 14.6 3 12.3 3 9.3 3 6.8 5 5 7.4 5c1.4 0 2.7.6 3.6 1.8C11.9 5.6 13.2 5 14.6 5 17 5 19 6.8 19 9.3c0 3-2.6 5.3-7.6 9.6l-1.4 1.3z"/></symbol>
+            <symbol id="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6.4A3 3 0 0 1 15 6.4V8"/></symbol>
             <symbol id="icon-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><line x1="12" y1="11" x2="12" y2="21"/></symbol>
             <symbol id="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></symbol>
-            <symbol id="icon-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></symbol>
-            <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></symbol>
-            <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l1.4-2.4h5.2L16 7h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.4"/></symbol>
+            <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.4"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></symbol>
             <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></symbol>
+            <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l1.4-2.4h5.2L16 7h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.4"/></symbol>
             <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 13 10 18 19 7"/></symbol>
-            <symbol id="icon-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9 15.5H3l9-15.5z"/><line x1="12" y1="10" x2="12" y2="14"/><circle cx="12" cy="16.8" r="0.4" fill="currentColor" stroke="none"/></symbol>
-            <symbol id="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.5l9.5-9.5H19a2 2 0 0 1 2 2v6.5l-9.5 9.5a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8z"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></symbol>
-            <symbol id="icon-shoes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.3c0-2.3 1.8-3.9 4-4.1l1.6-.2c.9-.1 1.7-.5 2.4-1.1l1.6-1.4c.6-.5 1.4-.8 2.2-.8h1.7c1.4 0 2.5 1.1 2.5 2.5v3.6"/><rect x="16" y="10.5" width="4" height="6.5" rx="1.2"/><rect x="2.5" y="17.1" width="19" height="1.8" rx="0.9"/></symbol>
-            <symbol id="icon-shirt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M2 7L5 10L5 21L19 21L19 10L22 7L17 5Q12 9 7 5Z"/></symbol>
-            <symbol id="icon-perfume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8.7" y="9.2" width="6.6" height="10.8" rx="1.4"/><rect x="10.3" y="5.4" width="3.4" height="3.8" rx="0.6"/><line x1="11" y1="4" x2="13" y2="4"/></symbol>
-            <symbol id="icon-glasses" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.6" cy="13.2" r="3.1"/><circle cx="17.4" cy="13.2" r="3.1"/><line x1="9.7" y1="12.4" x2="14.3" y2="12.4"/><path d="M3.5 12.6l-2 -1"/><path d="M20.5 12.6l2 -1"/></symbol>
-            <symbol id="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.3 9h11.4l-1.2 12H7.5L6.3 9z"/><path d="M9 9V7.4C9 5.5 10.3 4 12 4s3 1.5 3 3.4V9"/><path d="M7.6 12.3h8.8"/></symbol>
-            <symbol id="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></symbol>
-            <symbol id="icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2l-1.4-1.3C5.6 14.6 3 12.3 3 9.3 3 6.8 5 5 7.4 5c1.4 0 2.7.6 3.6 1.8C11.9 5.6 13.2 5 14.6 5 17 5 19 6.8 19 9.3c0 3-2.6 5.3-7.6 9.6l-1.4 1.3z"/></symbol>
-            <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.6"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></symbol>
-            <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
-            <symbol id="icon-ruler" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="19" height="8" rx="1.4" transform="rotate(-8 12 12)"/><path d="M6.7 9.4l.6 2M10 8.8l.6 2M13.3 8.3l.6 2M16.6 7.7l.6 2"/></symbol>
+            <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9c-4-1.5-7-4.5-7-9V6l7-3z"/></symbol>
+            <symbol id="icon-ruler" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="19" height="8" rx="1.2" transform="rotate(-8 12 12)"/><path d="M6.7 9.4l.6 2M10 8.8l.6 2M13.3 8.3l.6 2M16.6 7.7l.6 2"/></symbol>
         </defs>
     </svg>
 
-    <div class="app">
-        <header class="header">
-            <div class="header-row">
-                <div class="wordmark">CL<span class="accent">O</span>SERS</div>
-                <div class="header-actions">
-                    <button class="wishlist-toggle" id="wishlist-toggle-btn" onclick="toggleWishlistFilter()" aria-label="Избранное">
-                        <svg class="icon"><use href="#icon-heart"></use></svg>
-                    </button>
-                </div>
+    <!-- ВЕРХНЯЯ ПОЛОСА -->
+    <header class="top">
+        <div class="top-row">
+            <button class="top-back" id="top-back" onclick="showView('catalog')" hidden aria-label="Назад в каталог">
+                <svg class="icon"><use href="#icon-back"></use></svg>
+            </button>
+            <div class="brand">
+                <span class="brand-mark">CLOSERS</span>
+                <span class="brand-line" id="brand-line">Поиск и заказ с POIZON</span>
             </div>
-            <div class="search-input-wrap">
-                <svg class="icon"><use href="#icon-search"></use></svg>
-                <input type="text" id="catalog-search" placeholder="Искать на POIZON…" oninput="renderCatalog()">
-            </div>
-        </header>
-
-        <div id="vpn-notification" class="vpn-notification">
-            <svg class="icon"><use href="#icon-shield"></use></svg>
-            <span>Если приложение не загружается — включите VPN.</span>
-            <button class="vpn-close" onclick="this.parentElement.style.display='none'" aria-label="Закрыть"><svg class="icon" style="width:13px;height:13px"><use href="#icon-close"></use></svg></button>
+            <button class="top-menu" onclick="openMenu()" aria-label="Разделы">
+                <svg class="icon"><use href="#icon-menu"></use></svg>
+            </button>
         </div>
+    </header>
 
+    <!-- ЖИВАЯ ПОЛОСА ЗАКАЗА -->
+    <button class="rail" id="order-rail" hidden onclick="showView('orders')">
+        <span class="rail-pulse" aria-hidden="true"></span>
+        <span class="rail-text" id="order-rail-text"></span>
+        <svg class="icon rail-arrow"><use href="#icon-arrow"></use></svg>
+    </button>
+
+    <div id="vpn-notification" class="notice">
+        <svg class="icon"><use href="#icon-shield"></use></svg>
+        <span>Приложение не загружается? Включите VPN</span>
+        <button class="notice-close" onclick="this.parentElement.remove()" aria-label="Скрыть">
+            <svg class="icon"><use href="#icon-close"></use></svg>
+        </button>
+    </div>
+
+    <main>
+        <!-- КАТАЛОГ -->
         <div id="catalog-view">
-            <!-- КАТЕГОРИИ -->
-            <div class="category-tabs">
-                <div class="category-tab active" onclick="filterCategory('all')"><svg class="icon"><use href="#icon-grid"></use></svg> Все</div>
-                <div class="category-tab" onclick="filterCategory('shoes')"><svg class="icon"><use href="#icon-shoes"></use></svg> Обувь</div>
-                <div class="category-tab" onclick="filterCategory('clothes')"><svg class="icon"><use href="#icon-shirt"></use></svg> Одежда</div>
-                <div class="category-tab" onclick="filterCategory('perfume')"><svg class="icon"><use href="#icon-perfume"></use></svg> Духи</div>
-                <div class="category-tab" onclick="filterCategory('glasses')"><svg class="icon"><use href="#icon-glasses"></use></svg> Очки</div>
-                <div class="category-tab" onclick="filterCategory('bags')"><svg class="icon"><use href="#icon-bag"></use></svg> Сумки</div>
+            <div class="find">
+                <div class="find-input">
+                    <svg class="icon"><use href="#icon-search"></use></svg>
+                    <input type="text" id="catalog-search" placeholder="Что ищете?" oninput="renderCatalog()">
+                </div>
+                <button class="find-saved" id="wishlist-toggle-btn" onclick="toggleWishlistFilter()" aria-label="Только отложенное">
+                    <svg class="icon"><use href="#icon-heart"></use></svg>
+                </button>
             </div>
 
-            <div class="quick-request-banner" onclick="showFreeRequestModal()">
-                <div class="quick-request-text">
-                    <div class="quick-request-title">Не нашли нужную вещь?</div>
-                    <div class="quick-request-subtitle">Пришлите ссылку или артикул — привезём с POIZON</div>
+            <nav class="cats" id="cats" aria-label="Категории"></nav>
+
+            <div class="feed" id="catalog-grid"></div>
+
+            <section class="ask">
+                <h2 class="ask-title">Не нашли — привезём</h2>
+                <p class="ask-text">Каталог показывает, что мы умеем. Заказать можно что угодно с POIZON: пришлите ссылку, артикул или просто фото.</p>
+                <button class="btn btn-line" onclick="showFreeRequestModal()">Описать свой запрос</button>
+            </section>
+        </div>
+
+        <!-- ЗАКАЗЫ -->
+        <div id="orders-view" hidden>
+            <h1 class="page-title">Заказы</h1>
+            <div id="orders-list"></div>
+        </div>
+
+        <!-- АДМИН -->
+        <div id="admin-view" hidden>
+            <h1 class="page-title">Все заказы</h1>
+            <div class="admin-stats" id="admin-stats"></div>
+            <div id="admin-orders-list"></div>
+        </div>
+
+        <!-- ПОДДЕРЖКА -->
+        <div id="support-view" hidden>
+            <h1 class="page-title">Поддержка</h1>
+
+            <div class="person">
+                <div class="person-face"><svg class="icon"><use href="#icon-user"></use></svg></div>
+                <div>
+                    <p class="person-name">@closersmanager</p>
+                    <p class="person-role">Ваш менеджер. Ведёт заказ от поиска на POIZON до вручения: на всех этапах один и тот же человек.</p>
                 </div>
-                <div class="quick-request-button">Запросить <svg class="icon" style="width:13px;height:13px"><use href="#icon-chevron"></use></svg></div>
+            </div>
+            <button class="btn" onclick="window.open('https://t.me/closersmanager', '_blank')">Написать менеджеру</button>
+
+            <h2 class="sec-title">Пригласить друга</h2>
+            <p class="sec-text">Поделитесь ссылкой: друг попадёт сразу в приложение, а мы будем знать, что он от вас.</p>
+            <div class="pair">
+                <button class="btn" onclick="shareReferralLink()">Поделиться</button>
+                <button class="btn btn-line" onclick="copyReferralLink()">Копировать</button>
             </div>
 
-            <div class="section-title">Популярное</div>
-            <div class="catalog-grid" id="catalog-grid"></div>
-        </div>
-
-        <div id="cart-view" style="display: none;">
-            <div class="cart-container">
-                <div class="section-title" style="margin-top: 0;">Корзина</div>
-                <div id="cart-items"></div>
-
-                <!-- ПРОМОКОД -->
-                <div class="promo-section">
-                    <div><svg class="icon" style="width:12px;height:12px"><use href="#icon-tag"></use></svg> Промокод</div>
-                    <div class="promo-input-group">
-                        <input type="text" id="promo-code" placeholder="Введите промокод">
-                        <button onclick="applyPromoCode()">Применить</button>
-                    </div>
-                    <div id="promo-message" class="promo-error" style="display: none;"></div>
-                </div>
-
-                <div id="cart-summary" class="cart-summary" style="display: none;">
-                    <p><span id="cart-total">0</span> ТОВАРОВ</p>
-                    <div id="discount-info" style="display: none;"></div>
-                </div>
-                <button class="btn" onclick="submitOrder()" id="submit-order-btn">Оформить заказ</button>
+            <h2 class="sec-title">Вопросы</h2>
+            <div class="qa">
+                <details class="qa-item">
+                    <summary class="qa-q"><span>Сколько ждать доставку?</span><svg class="icon qa-mark"><use href="#icon-plus"></use></svg></summary>
+                    <div class="qa-a">Обычно до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON и выбранного способа доставки.</div>
+                </details>
+                <details class="qa-item">
+                    <summary class="qa-q"><span>Как узнать цену?</span><svg class="icon qa-mark"><use href="#icon-plus"></use></svg></summary>
+                    <div class="qa-a">Цены в каталоге — ориентир по POIZON. После оформления менеджер проверяет актуальную цену, добавляет комиссию и доставку, и присылает итоговую сумму до оплаты.</div>
+                </details>
+                <details class="qa-item">
+                    <summary class="qa-q"><span>Можно вернуть товар?</span><svg class="icon qa-mark"><use href="#icon-plus"></use></svg></summary>
+                    <div class="qa-a">Возврат возможен в случае брака. Мы проверяем товары перед отправкой, но если возникла проблема, напишите менеджеру, и мы решим вопрос.</div>
+                </details>
+                <details class="qa-item">
+                    <summary class="qa-q"><span>Откуда вы привозите?</span><svg class="icon qa-mark"><use href="#icon-plus"></use></svg></summary>
+                    <div class="qa-a">С площадки POIZON — крупнейшей платформы с оригинальными вещами из Китая, Японии, Кореи и США.</div>
+                </details>
+                <details class="qa-item">
+                    <summary class="qa-q"><span>Чего нет в каталоге?</span><svg class="icon qa-mark"><use href="#icon-plus"></use></svg></summary>
+                    <div class="qa-a">Каталог — витрина, а не ограничение. Опишите свой запрос: ссылка, артикул, название или фото. Найдём и привезём.</div>
+                </details>
+                <details class="qa-item">
+                    <summary class="qa-q"><span>Как оплатить?</span><svg class="icon qa-mark"><use href="#icon-plus"></use></svg></summary>
+                    <div class="qa-a">После подтверждения менеджер свяжется с вами и уточнит детали. Принимаем переводы на карту, по QR-коду или наличные при самовывозе. Скриншот оплаты прикладывается прямо в карточке заказа.</div>
+                </details>
             </div>
         </div>
+    </main>
 
-        <div id="orders-view" style="display: none;">
-            <div class="section-title" style="margin-top: 0;">Мои заказы</div>
-            <div id="orders-list" class="orders-list"></div>
+    <!-- ЖИВАЯ ПОЛОСА КОРЗИНЫ -->
+    <button class="bar" id="cart-bar" hidden onclick="openCart()">
+        <svg class="icon"><use href="#icon-bag"></use></svg>
+        <span class="bar-count" id="bar-count">0</span>
+        <span class="bar-label">в корзине</span>
+        <span class="bar-sum" id="bar-sum"></span>
+        <svg class="icon bar-arrow"><use href="#icon-arrow"></use></svg>
+    </button>
+
+    <!-- КОРЗИНА -->
+    <div id="cart-sheet" class="sheet">
+        <div class="sheet-in">
+            <div class="sheet-top">
+                <h2 class="sheet-title">Корзина</h2>
+                <button class="sheet-x" onclick="closeCart()" aria-label="Закрыть"><svg class="icon"><use href="#icon-close"></use></svg></button>
+            </div>
+            <div id="cart-items"></div>
+            <div id="cart-foot"></div>
         </div>
+    </div>
 
-        <!-- АДМИН (видно только администратору) -->
-        <div id="admin-view" style="display: none;">
-            <div class="section-title" style="margin-top: 0;">Все заказы</div>
-            <div id="admin-orders-list" class="orders-list"></div>
-        </div>
+    <!-- ТОВАР -->
+    <div id="product-modal" class="sheet">
+        <div class="sheet-in">
+            <div class="sheet-top">
+                <h2 class="sheet-title" id="product-sheet-title">Товар</h2>
+                <button class="sheet-x" onclick="closeModal()" aria-label="Закрыть"><svg class="icon"><use href="#icon-close"></use></svg></button>
+            </div>
+            <div id="modal-product"></div>
 
-        <!-- РАЗДЕЛ ПОДДЕРЖКИ -->
-        <div id="support-view" style="display: none;">
-            <div class="support-section">
-                <div class="support-header">
-                    <h2>Поддержка</h2>
-                    <p>Мы всегда на связи и готовы помочь</p>
-                </div>
-
-                <div class="admin-card">
-                    <div class="admin-avatar"><svg class="icon"><use href="#icon-user"></use></svg></div>
-                    <div class="admin-info">
-                        <div class="admin-name">closersmanager</div>
-                        <div class="admin-username">@closersmanager</div>
-                        <button class="admin-chat-btn" onclick="window.open('https://t.me/closersmanager', '_blank')">
-                            <svg class="icon" style="width:13px;height:13px"><use href="#icon-chat"></use></svg> Написать админу
+            <div class="pad">
+                <div class="field">
+                    <div class="field-head">
+                        <label for="modal-size">Размер</label>
+                        <button type="button" class="field-aux" onclick="toggleSizeGuide()" aria-expanded="false" aria-controls="size-guide">
+                            <svg class="icon"><use href="#icon-ruler"></use></svg> Таблица размеров
                         </button>
                     </div>
+                    <select id="modal-size"></select>
+                    <div class="guide" id="size-guide" hidden></div>
                 </div>
 
-                <div class="referral-card">
-                    <div class="referral-header">
-                        <div class="icon-tile"><svg class="icon"><use href="#icon-heart"></use></svg></div>
-                        <div class="referral-text">
-                            <div class="referral-title">Пригласи друга</div>
-                            <div class="referral-subtitle">Друг оформит первый заказ — вы оба получите скидку</div>
-                        </div>
-                    </div>
-                    <div class="referral-actions">
-                        <button class="btn" style="margin-bottom:0" onclick="shareReferralLink()">Поделиться ссылкой</button>
-                        <button class="btn btn-secondary" style="margin-bottom:0" onclick="copyReferralLink()">Копировать</button>
-                    </div>
+                <div class="field">
+                    <label for="modal-color">Цвет</label>
+                    <input type="text" id="modal-color" placeholder="например Black/White">
                 </div>
 
-                <div>
-                    <h3 style="font-size: 22px; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 14px; color: var(--text);">Часто задаваемые вопросы</h3>
-
-                    <div class="faq-grid">
-                        <details class="faq-item">
-                            <summary class="faq-question">
-                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-box"></use></svg></div>
-                                <div class="faq-question-text">Сколько ждать доставку?</div>
-                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
-                            </summary>
-                            <div class="faq-answer">
-                                Обычно доставка занимает до 5 дней с момента подтверждения заказа. Точные сроки зависят от наличия товара на POIZON и выбранного способа доставки.
-                            </div>
-                        </details>
-
-                        <details class="faq-item">
-                            <summary class="faq-question">
-                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-tag"></use></svg></div>
-                                <div class="faq-question-text">Как узнать цену?</div>
-                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
-                            </summary>
-                            <div class="faq-answer">
-                                После того как вы оформите заказ, администратор проверит актуальную цену на POIZON, добавит комиссию магазина и стоимость доставки. Итоговая цена придет вам в уведомлении.
-                            </div>
-                        </details>
-
-                        <details class="faq-item">
-                            <summary class="faq-question">
-                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-check"></use></svg></div>
-                                <div class="faq-question-text">Можно вернуть товар?</div>
-                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
-                            </summary>
-                            <div class="faq-answer">
-                                Возврат возможен только в случае брака. Мы тщательно проверяем все товары перед отправкой, но если возникла проблема — напишите администратору, и мы решим вопрос.
-                            </div>
-                        </details>
-
-                        <details class="faq-item">
-                            <summary class="faq-question">
-                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-box"></use></svg></div>
-                                <div class="faq-question-text">Откуда вы привозите?</div>
-                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
-                            </summary>
-                            <div class="faq-answer">
-                                Мы заказываем товары с площадки POIZON — это крупнейшая платформа с оригинальными вещами из Китая, Японии, Кореи и США.
-                            </div>
-                        </details>
-
-                        <details class="faq-item">
-                            <summary class="faq-question">
-                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-search"></use></svg></div>
-                                <div class="faq-question-text">Что делать, если не нашел вещь в каталоге?</div>
-                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
-                            </summary>
-                            <div class="faq-answer">
-                                Используйте форму «Свободный запрос» — просто вставьте ссылку с POIZON, артикул или название, и мы найдем нужный товар.
-                            </div>
-                        </details>
-
-                        <details class="faq-item">
-                            <summary class="faq-question">
-                                <div class="faq-icon"><svg class="icon" style="width:14px;height:14px"><use href="#icon-cart"></use></svg></div>
-                                <div class="faq-question-text">Как оплатить заказ?</div>
-                                <svg class="icon faq-chevron"><use href="#icon-chevron"></use></svg>
-                            </summary>
-                            <div class="faq-answer">
-                                После подтверждения заказа администратор свяжется с вами и уточнит детали оплаты. Мы принимаем переводы на карту, по QR-коду или наличные при самовывозе.
-                            </div>
-                        </details>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="product-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">Добавить в корзину</div>
-                    <button class="modal-close" onclick="closeModal()" aria-label="Закрыть"><svg class="icon" style="width:20px;height:20px"><use href="#icon-close"></use></svg></button>
-                </div>
-
-                <div id="modal-product" class="modal-product-preview"></div>
-
-                <div class="form-group">
-                    <div class="form-group-label-row">
-                        <label>Размер (необязательно)</label>
-                        <button type="button" class="size-guide-link" onclick="openSizeGuide()"><svg class="icon" style="width:12px;height:12px"><use href="#icon-ruler"></use></svg> Таблица размеров</button>
-                    </div>
-                    <select id="modal-size">
-                        <option value="">Выберите размер</option>
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                        <option value="36">36 EU</option>
-                        <option value="37">37 EU</option>
-                        <option value="38">38 EU</option>
-                        <option value="39">39 EU</option>
-                        <option value="40">40 EU</option>
-                        <option value="41">41 EU</option>
-                        <option value="42">42 EU</option>
-                        <option value="43">43 EU</option>
-                        <option value="44">44 EU</option>
-                        <option value="45">45 EU</option>
-                        <option value="46">46 EU</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Цвет (необязательно)</label>
-                    <input type="text" id="modal-color" placeholder="Например: Black/White">
-                </div>
-
-                <div class="form-group">
-                    <label>Пожелания (необязательно)</label>
-                    <textarea id="modal-notes" rows="2" placeholder="Особые требования..."></textarea>
+                <div class="field">
+                    <label for="modal-notes">Пожелания</label>
+                    <textarea id="modal-notes" rows="2" placeholder="что важно учесть"></textarea>
                 </div>
 
                 <button class="btn" onclick="addToCartFromModal()">Добавить в корзину</button>
             </div>
         </div>
+    </div>
 
-        <div id="free-request-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">Свободный запрос</div>
-                    <button class="modal-close" onclick="closeFreeRequestModal()" aria-label="Закрыть"><svg class="icon" style="width:20px;height:20px"><use href="#icon-close"></use></svg></button>
+    <!-- СВОБОДНЫЙ ЗАПРОС -->
+    <div id="free-request-modal" class="sheet">
+        <div class="sheet-in">
+            <div class="sheet-top">
+                <h2 class="sheet-title">Свой запрос</h2>
+                <button class="sheet-x" onclick="closeFreeRequestModal()" aria-label="Закрыть"><svg class="icon"><use href="#icon-close"></use></svg></button>
+            </div>
+
+            <div class="pad">
+                <p class="sheet-lede">Найдём и привезём любую вещь с POIZON, даже если её нет в каталоге.</p>
+
+                <div class="field">
+                    <label for="modal-free-query">Что ищете <span class="req">обязательно</span></label>
+                    <input type="text" id="modal-free-query" placeholder="ссылка, артикул или название">
                 </div>
 
-                <div style="background-color: var(--surface-2); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 20px; color: var(--text-secondary); font-size: 13px;">
-                    Мы найдем и привезем любой товар с POIZON
-                </div>
-
-                <div class="form-group">
-                    <label>Что ищете? *</label>
-                    <input type="text" id="modal-free-query" placeholder="Ссылка, артикул или название товара">
-                </div>
-
-                <div class="form-group">
-                    <div class="form-group-label-row">
-                        <label>Размер (необязательно)</label>
-                        <button type="button" class="size-guide-link" onclick="openSizeGuide()"><svg class="icon" style="width:12px;height:12px"><use href="#icon-ruler"></use></svg> Таблица размеров</button>
+                <div class="field">
+                    <div class="field-head">
+                        <label for="modal-free-size">Размер</label>
+                        <button type="button" class="field-aux" onclick="toggleSizeGuide('free')" aria-expanded="false" aria-controls="size-guide-free">
+                            <svg class="icon"><use href="#icon-ruler"></use></svg> Таблица размеров
+                        </button>
                     </div>
-                    <select id="modal-free-size">
-                        <option value="">Выберите размер</option>
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                        <option value="36">36 EU</option>
-                        <option value="37">37 EU</option>
-                        <option value="38">38 EU</option>
-                        <option value="39">39 EU</option>
-                        <option value="40">40 EU</option>
-                        <option value="41">41 EU</option>
-                        <option value="42">42 EU</option>
-                        <option value="43">43 EU</option>
-                        <option value="44">44 EU</option>
-                        <option value="45">45 EU</option>
-                        <option value="46">46 EU</option>
-                    </select>
+                    <select id="modal-free-size"></select>
+                    <div class="guide" id="size-guide-free" hidden></div>
                 </div>
 
-                <div class="form-group">
-                    <label>Цвет (необязательно)</label>
-                    <input type="text" id="modal-free-color" placeholder="Например: Black/White">
+                <div class="field">
+                    <label for="modal-free-color">Цвет</label>
+                    <input type="text" id="modal-free-color" placeholder="например Black/White">
                 </div>
 
-                <div class="form-group">
-                    <label>Пожелания (необязательно)</label>
-                    <textarea id="modal-free-notes" rows="2" placeholder="Особые требования, состояние, бюджет..."></textarea>
+                <div class="field">
+                    <label for="modal-free-notes">Пожелания</label>
+                    <textarea id="modal-free-notes" rows="2" placeholder="состояние, бюджет, что важно учесть"></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label>Фото (до 5 шт, необязательно)</label>
-                    <div class="photo-upload-area" onclick="document.getElementById('modal-free-file-input').click()">
+                <div class="field">
+                    <label>Фото <span class="hint">до 5 шт</span></label>
+                    <button type="button" class="drop" onclick="document.getElementById('modal-free-file-input').click()">
                         <svg class="icon"><use href="#icon-camera"></use></svg>
-                        <div style="font-size: 12px; margin-top: 4px;">Нажмите, чтобы загрузить фото</div>
-                    </div>
-                    <input type="file" id="modal-free-file-input" accept="image/*" multiple style="display: none;" onchange="handleModalFreePhotos(event)">
-                    <div id="modal-free-photo-preview" class="photo-preview-grid"></div>
+                        <span>Прикрепить фото</span>
+                    </button>
+                    <input type="file" id="modal-free-file-input" accept="image/*" multiple hidden onchange="handleModalFreePhotos(event)">
+                    <div id="modal-free-photo-preview" class="shots"></div>
                 </div>
 
                 <button class="btn" onclick="addFreeRequestFromModal()">Отправить запрос</button>
             </div>
         </div>
+    </div>
 
-        <div id="size-guide-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">Таблица размеров</div>
-                    <button class="modal-close" onclick="closeSizeGuide()" aria-label="Закрыть"><svg class="icon" style="width:20px;height:20px"><use href="#icon-close"></use></svg></button>
-                </div>
-
-                <div class="section-title" style="margin-top:0">Обувь</div>
-                <div class="size-table-wrap">
-                    <table class="size-table">
-                        <thead><tr><th>US</th><th>EU</th><th>UK</th><th>см</th></tr></thead>
-                        <tbody>
-                            <tr><td>6</td><td>39</td><td>5.5</td><td>24.5</td></tr>
-                            <tr><td>7</td><td>40</td><td>6.5</td><td>25.5</td></tr>
-                            <tr><td>8</td><td>41</td><td>7.5</td><td>26.5</td></tr>
-                            <tr><td>9</td><td>42</td><td>8.5</td><td>27.5</td></tr>
-                            <tr><td>10</td><td>43</td><td>9.5</td><td>28.5</td></tr>
-                            <tr><td>11</td><td>44</td><td>10.5</td><td>29.5</td></tr>
-                            <tr><td>12</td><td>45</td><td>11.5</td><td>30.5</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="section-title">Одежда</div>
-                <div class="size-table-wrap">
-                    <table class="size-table">
-                        <thead><tr><th>Буквенный</th><th>RU</th><th>EU</th><th>Грудь, см</th></tr></thead>
-                        <tbody>
-                            <tr><td>XS</td><td>42</td><td>44</td><td>84-88</td></tr>
-                            <tr><td>S</td><td>44</td><td>46</td><td>88-92</td></tr>
-                            <tr><td>M</td><td>46-48</td><td>48</td><td>92-98</td></tr>
-                            <tr><td>L</td><td>48-50</td><td>50</td><td>98-104</td></tr>
-                            <tr><td>XL</td><td>50-52</td><td>52</td><td>104-110</td></tr>
-                            <tr><td>XXL</td><td>52-54</td><td>54</td><td>110-116</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="size-guide-note">Размеры на POIZON — китайские бренды часто маломерят на 0.5-1 шаг. При сомнении между размерами советуем брать больший.</div>
+    <!-- РАЗДЕЛЫ -->
+    <div id="menu-sheet" class="sheet">
+        <div class="sheet-in">
+            <div class="sheet-top">
+                <h2 class="sheet-title">Разделы</h2>
+                <button class="sheet-x" onclick="closeMenu()" aria-label="Закрыть"><svg class="icon"><use href="#icon-close"></use></svg></button>
             </div>
-        </div>
-
-        <button class="floating-request-btn" onclick="showFreeRequestModal()">
-            <svg class="icon"><use href="#icon-search"></use></svg> Свой запрос
-        </button>
-
-        <div class="bottom-nav">
-            <button class="nav-item active" onclick="showView('catalog')">
-                <svg class="icon"><use href="#icon-grid"></use></svg>
-                <span>Каталог</span>
-            </button>
-            <button class="nav-item" onclick="showView('cart')">
-                <svg class="icon"><use href="#icon-cart"></use></svg>
-                <span>Корзина <span id="cart-badge">0</span></span>
-            </button>
-            <button class="nav-item" onclick="showView('orders')">
-                <svg class="icon"><use href="#icon-box"></use></svg>
-                <span>Заказы</span>
-            </button>
-            <button class="nav-item" onclick="showView('support')">
-                <svg class="icon"><use href="#icon-chat"></use></svg>
-                <span>Поддержка</span>
-            </button>
-            <button class="nav-item" id="admin-nav-item" onclick="showView('admin')" style="display:none">
-                <svg class="icon"><use href="#icon-lock"></use></svg>
-                <span>Админ</span>
-            </button>
+            <nav class="menu">
+                <button class="menu-item" onclick="goFromMenu('catalog')">
+                    <svg class="icon"><use href="#icon-search"></use></svg>
+                    <span>Каталог</span>
+                    <svg class="icon menu-arrow"><use href="#icon-arrow"></use></svg>
+                </button>
+                <button class="menu-item" onclick="goFromMenu('orders')">
+                    <svg class="icon"><use href="#icon-box"></use></svg>
+                    <span>Заказы</span>
+                    <em id="menu-orders-count"></em>
+                    <svg class="icon menu-arrow"><use href="#icon-arrow"></use></svg>
+                </button>
+                <button class="menu-item" onclick="goFromMenu('support')">
+                    <svg class="icon"><use href="#icon-chat"></use></svg>
+                    <span>Поддержка</span>
+                    <svg class="icon menu-arrow"><use href="#icon-arrow"></use></svg>
+                </button>
+                <button class="menu-item" id="menu-admin" hidden onclick="goFromMenu('admin')">
+                    <svg class="icon"><use href="#icon-lock"></use></svg>
+                    <span>Админ</span>
+                    <svg class="icon menu-arrow"><use href="#icon-arrow"></use></svg>
+                </button>
+            </nav>
         </div>
     </div>
 
