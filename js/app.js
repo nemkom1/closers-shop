@@ -1,5 +1,7 @@
 let tg = window.Telegram.WebApp;
 tg.expand();
+tg.setHeaderColor?.('#08080b');
+tg.setBackgroundColor?.('#08080b');
 
 let user = tg.initDataUnsafe?.user || {
     id: Math.floor(Math.random() * 1000000),
@@ -162,7 +164,7 @@ function renderCatalog() {
     }
 
     let html = '';
-    filteredProducts.forEach(product => {
+    filteredProducts.forEach((product, index) => {
         const inCart = cart.some(item => item.catalogId === product.id);
         const cartCount = cart.filter(item => item.catalogId === product.id).length;
         const inWishlist = wishlist.includes(product.id);
@@ -170,7 +172,7 @@ function renderCatalog() {
         const thumb = product.photos && product.photos[0];
 
         html += `
-            <div class="product-card ${inCart ? 'in-cart' : ''}" onclick="openProductModal(${product.id})">
+            <div class="product-card ${inCart ? 'in-cart' : ''}" style="--i:${index}" onclick="openProductModal(${product.id})">
                 <div class="product-image">
                     <button class="wishlist-btn ${inWishlist ? 'active' : ''}" onclick="toggleWishlist(${product.id}, event)" aria-label="В избранное"><svg class="icon"><use href="#icon-heart"></use></svg></button>
                     ${thumb ? `<img src="${thumb}" alt="${product.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` : ''}
@@ -440,8 +442,15 @@ function renderCart() {
         const thumb = product?.photos?.[0];
         const icon = product ? (CATEGORY_META[product.category]?.icon || 'icon-box') : 'icon-search';
 
+        const details = [];
+        if (item.query) details.push(`Ссылка: ${item.query.substring(0, 40)}${item.query.length > 40 ? '...' : ''}`);
+        if (item.size) details.push(`Размер: ${item.size}`);
+        if (item.color) details.push(`Цвет: ${item.color}`);
+        if (item.notes) details.push(`Заметка: ${item.notes.substring(0, 30)}${item.notes.length > 30 ? '...' : ''}`);
+        if (item.photos && item.photos.length) details.push(`Фото: ${item.photos.length} шт.`);
+
         html += `
-            <div class="cart-item">
+            <div class="cart-item" style="--i:${index}">
                 <div class="cart-item-thumb">
                     ${thumb ? `<img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` : ''}
                     <div class="cart-item-thumb-fallback" style="${thumb ? 'display:none' : 'display:flex'}"><svg class="icon" style="width:18px;height:18px"><use href="#${icon}"></use></svg></div>
@@ -449,14 +458,7 @@ function renderCart() {
                 </div>
                 <div class="cart-item-info">
                     <div class="cart-item-title">${item.name}</div>
-                    <div class="cart-item-details">
-                        <span class="cart-item-type-label">${typeLabel}</span>
-                        ${item.query ? `\nСсылка: ${item.query.substring(0, 40)}${item.query.length > 40 ? '...' : ''}` : ''}
-                        ${item.size ? `\nРазмер: ${item.size}` : ''}
-                        ${item.color ? `\nЦвет: ${item.color}` : ''}
-                        ${item.notes ? `\nЗаметка: ${item.notes.substring(0, 30)}${item.notes.length > 30 ? '...' : ''}` : ''}
-                        ${item.photos && item.photos.length ? `\nФото: ${item.photos.length} шт.` : ''}
-                    </div>
+                    <div class="cart-item-details"><span class="cart-item-type-label">${typeLabel}</span>${details.length ? '\n' + details.join('\n') : ''}</div>
                 </div>
                 <button class="cart-item-remove" onclick="removeFromCart(${index})"><svg class="icon" style="width:16px;height:16px"><use href="#icon-close"></use></svg></button>
             </div>
@@ -610,10 +612,7 @@ async function loadOrders() {
                         }).join('')}
                     </div>
 
-                    <div class="order-meta">
-                        Товаров: ${order.items ? order.items.length : 1}
-                        ${order.promoCode ? `\nПромокод: ${order.promoCode}` : ''}
-                    </div>
+                    <div class="order-meta">Товаров: ${order.items ? order.items.length : 1}${order.promoCode ? `\nПромокод: ${order.promoCode}` : ''}</div>
 
                     ${renderPaymentSection(order)}
                 </div>
@@ -673,6 +672,30 @@ window.submitPaymentScreenshot = function(orderId, event) {
     reader.readAsDataURL(file);
 };
 
+// ========== ТАКТИЛЬНЫЙ ОТКЛИК ==========
+const RIPPLE_SELECTOR = '.btn, .nav-item, .category-tab, .product-quick-add, .promo-input-group button, .admin-chat-btn, .floating-request-btn, .wishlist-toggle';
+
+document.addEventListener('pointerdown', (e) => {
+    const target = e.target.closest(RIPPLE_SELECTOR);
+    if (!target || target.disabled) return;
+
+    const rect = target.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const dot = document.createElement('span');
+    dot.className = 'ripple-dot';
+    dot.style.width = dot.style.height = `${size}px`;
+    dot.style.left = `${e.clientX - rect.left - size / 2}px`;
+    dot.style.top = `${e.clientY - rect.top - size / 2}px`;
+    target.appendChild(dot);
+    dot.addEventListener('animationend', () => dot.remove());
+}, { passive: true });
+
+function playViewTransition(el) {
+    el.classList.remove('view-fade-in');
+    void el.offsetWidth;
+    el.classList.add('view-fade-in');
+}
+
 // ========== НАВИГАЦИЯ ==========
 function showView(view) {
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -682,26 +705,28 @@ function showView(view) {
     document.getElementById('support-view').style.display = 'none';
     document.getElementById('admin-view').style.display = 'none';
 
-    if (view === 'catalog') {
-        document.querySelectorAll('.nav-item')[0].classList.add('active');
-        document.getElementById('catalog-view').style.display = 'block';
-        renderCatalog();
-    } else if (view === 'cart') {
-        document.querySelectorAll('.nav-item')[1].classList.add('active');
-        document.getElementById('cart-view').style.display = 'block';
-        renderCart();
-    } else if (view === 'orders') {
-        document.querySelectorAll('.nav-item')[2].classList.add('active');
-        document.getElementById('orders-view').style.display = 'block';
-        loadOrders();
-    } else if (view === 'support') {
-        document.querySelectorAll('.nav-item')[3].classList.add('active');
-        document.getElementById('support-view').style.display = 'block';
-    } else if (view === 'admin') {
-        document.getElementById('admin-nav-item').classList.add('active');
-        document.getElementById('admin-view').style.display = 'block';
-        renderAdminOrders();
-    }
+    const views = {
+        catalog: { el: 'catalog-view', nav: 0, render: renderCatalog },
+        cart: { el: 'cart-view', nav: 1, render: renderCart },
+        orders: { el: 'orders-view', nav: 2, render: loadOrders },
+        support: { el: 'support-view', nav: 3 },
+        admin: { el: 'admin-view', nav: 'admin-nav-item', render: renderAdminOrders }
+    };
+
+    const config = views[view];
+    if (!config) return;
+
+    const navItem = typeof config.nav === 'number'
+        ? document.querySelectorAll('.nav-item')[config.nav]
+        : document.getElementById(config.nav);
+    navItem.classList.add('active');
+
+    const el = document.getElementById(config.el);
+    el.style.display = 'block';
+    playViewTransition(el);
+    config.render?.();
+
+    tg.HapticFeedback?.selectionChanged();
 }
 window.showView = showView;
 
@@ -739,9 +764,7 @@ async function renderAdminOrders() {
                     <span class="order-id">ЗАКАЗ #${order.id}</span>
                     <span class="order-status-badge">${PAYMENT_LABEL[order.paymentStatus] || order.paymentStatus}</span>
                 </div>
-                <div class="order-meta" style="margin-top:0;padding-top:0;border-top:none">
-                    ${order.userName || '?'} (@${order.username || 'guest'})${order.promoCode ? `\nПромокод: ${order.promoCode}` : ''}
-                </div>
+                <div class="order-meta" style="margin-top:0;padding-top:0;border-top:none">${order.userName || '?'} (@${order.username || 'guest'})${order.promoCode ? `\nПромокод: ${order.promoCode}` : ''}</div>
                 <div class="form-group" style="margin-top:12px;margin-bottom:0">
                     <label>Статус заказа</label>
                     <select onchange="adminChangeStatus(${order.id}, this.value)">
