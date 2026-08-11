@@ -175,9 +175,10 @@ function renderCatalog() {
                     <button class="wishlist-btn ${inWishlist ? 'active' : ''}" onclick="toggleWishlist(${product.id}, event)" aria-label="В избранное"><svg class="icon"><use href="#icon-heart"></use></svg></button>
                     ${thumb ? `<img src="${thumb}" alt="${product.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` : ''}
                     <div class="product-image-fallback" style="${thumb ? 'display:none' : 'display:flex'}"><svg class="icon" style="width:24px;height:24px"><use href="#${icon}"></use></svg></div>
+                    <button class="product-quick-add" onclick="quickAddToCart(${product.id}, event)" aria-label="Добавить в корзину"><svg class="icon"><use href="#icon-plus"></use></svg></button>
                 </div>
-                <div class="product-title">${product.name}</div>
                 <div class="product-price">${product.price}</div>
+                <div class="product-title">${product.name}</div>
                 ${cartCount > 0 ? `<div class="cart-badge-mini">${cartCount}</div>` : ''}
             </div>
         `;
@@ -291,6 +292,28 @@ window.openSizeGuide = function() {
 
 window.closeSizeGuide = function() {
     document.getElementById('size-guide-modal').classList.remove('active');
+};
+
+window.quickAddToCart = function(productId, event) {
+    event.stopPropagation();
+    const product = CATALOG.find(p => p.id === productId);
+    if (!product) return;
+
+    cart.push({
+        catalogId: product.id,
+        type: 'catalog',
+        name: product.name,
+        price: product.price,
+        size: '',
+        color: '',
+        notes: '',
+        addedAt: new Date().toISOString()
+    });
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCatalog();
+    updateCartBadge();
+    tg.HapticFeedback?.notificationOccurred('success');
 };
 
 window.addToCartFromModal = function() {
@@ -413,18 +436,26 @@ function renderCart() {
     cart.forEach((item, index) => {
         const typeIcon = item.type === 'catalog' ? 'icon-box' : 'icon-search';
         const typeLabel = item.type === 'catalog' ? 'Товар из каталога' : 'Свободный запрос';
+        const product = item.catalogId ? CATALOG.find(p => p.id === item.catalogId) : null;
+        const thumb = product?.photos?.[0];
+        const icon = product ? (CATEGORY_META[product.category]?.icon || 'icon-box') : 'icon-search';
 
         html += `
             <div class="cart-item">
+                <div class="cart-item-thumb">
+                    ${thumb ? `<img src="${thumb}" alt="${item.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">` : ''}
+                    <div class="cart-item-thumb-fallback" style="${thumb ? 'display:none' : 'display:flex'}"><svg class="icon" style="width:18px;height:18px"><use href="#${icon}"></use></svg></div>
+                    <div class="cart-item-type-tag"><svg class="icon"><use href="#${typeIcon}"></use></svg></div>
+                </div>
                 <div class="cart-item-info">
-                    <div class="cart-item-badge"><svg class="icon"><use href="#${typeIcon}"></use></svg> ${typeLabel}</div>
                     <div class="cart-item-title">${item.name}</div>
                     <div class="cart-item-details">
-                        ${item.query ? `Ссылка: ${item.query.substring(0, 40)}${item.query.length > 40 ? '...' : ''}\n` : ''}
-                        ${item.size ? `Размер: ${item.size}\n` : ''}
-                        ${item.color ? `Цвет: ${item.color}\n` : ''}
-                        ${item.notes ? `Заметка: ${item.notes.substring(0, 30)}${item.notes.length > 30 ? '...' : ''}\n` : ''}
-                        ${item.photos && item.photos.length ? `Фото: ${item.photos.length} шт.` : ''}
+                        <span class="cart-item-type-label">${typeLabel}</span>
+                        ${item.query ? `\nСсылка: ${item.query.substring(0, 40)}${item.query.length > 40 ? '...' : ''}` : ''}
+                        ${item.size ? `\nРазмер: ${item.size}` : ''}
+                        ${item.color ? `\nЦвет: ${item.color}` : ''}
+                        ${item.notes ? `\nЗаметка: ${item.notes.substring(0, 30)}${item.notes.length > 30 ? '...' : ''}` : ''}
+                        ${item.photos && item.photos.length ? `\nФото: ${item.photos.length} шт.` : ''}
                     </div>
                 </div>
                 <button class="cart-item-remove" onclick="removeFromCart(${index})"><svg class="icon" style="width:16px;height:16px"><use href="#icon-close"></use></svg></button>

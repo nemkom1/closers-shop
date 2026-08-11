@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
     <title>CLOSERS | Поиск и заказ с POIZON</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!--
-    REVISION: пользователь отклонил направление «Табло обменника» целиком — «не так цветасто, попроще, основные цвета как у POIZON».
-    Проверено по официальной странице POIZON в App Store: чёрная иконка, белый логотип, один бирюзовый акцент (#1fd8c1) — почти монохром.
-    Новая система: чёрный фон, белый текст, один акцент вместо четырёх цветов, без декоративных швов/перфорации/анимации переворота, без кастомного дисплейного шрифта — только системный гротеск.
+    THESIS: CLOSERS reads as a real, dense marketplace, not a quiet one-page product-request form — trust for a proxy-buying service comes from looking like a shop with real inventory, the same grammar this audience already hands money to daily (Wildberries/Ozon), not from a calm boutique app.
+    OWN-WORLD: white cards on a soft gray page, one committed teal (#00a389) for actions/badges, near-black chrome (nav pills, promo strip, quick-add circle); dense 2-col grid, bold black price outweighing the title, circular quick-add "+" bottom-right of every photo, heart top-left; Golos Text throughout.
+    STORY: visitor scans the grid the way they scan Wildberries, taps "+" to add without leaving the grid or opens the card for gallery/size; the order-status timeline and personal-manager support screen earn the same trust because they wear the same marketplace chrome.
+    FIRST VIEWPORT: sticky compact header (wordmark + wishlist) above a full-width search field, category pills beneath, a black promo strip for the free-request path, then the dense grid starts almost immediately.
+    FORM: grounded candidate 4 of 7 ("российский маркетплейс-каталог"), seed key f2e72220, assigned index 4.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.
     -->
     <link rel="icon" href="data:,">
     <svg style="display:none" aria-hidden="true">
@@ -36,50 +40,34 @@
             <symbol id="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></symbol>
             <symbol id="icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2l-1.4-1.3C5.6 14.6 3 12.3 3 9.3 3 6.8 5 5 7.4 5c1.4 0 2.7.6 3.6 1.8C11.9 5.6 13.2 5 14.6 5 17 5 19 6.8 19 9.3c0 3-2.6 5.3-7.6 9.6l-1.4 1.3z"/></symbol>
             <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.6"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></symbol>
+            <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
             <symbol id="icon-ruler" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="19" height="8" rx="1.4" transform="rotate(-8 12 12)"/><path d="M6.7 9.4l.6 2M10 8.8l.6 2M13.3 8.3l.6 2M16.6 7.7l.6 2"/></symbol>
         </defs>
     </svg>
 
     <div class="app">
         <header class="header">
-            <h1>CL<span class="accent">O</span>SERS</h1>
-            <div class="subtitle">Поиск и заказ с POIZON</div>
+            <div class="header-row">
+                <div class="wordmark">CL<span class="accent">O</span>SERS</div>
+                <div class="header-actions">
+                    <button class="wishlist-toggle" id="wishlist-toggle-btn" onclick="toggleWishlistFilter()" aria-label="Избранное">
+                        <svg class="icon"><use href="#icon-heart"></use></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="search-input-wrap">
+                <svg class="icon"><use href="#icon-search"></use></svg>
+                <input type="text" id="catalog-search" placeholder="Искать на POIZON…" oninput="renderCatalog()">
+            </div>
         </header>
 
         <div id="vpn-notification" class="vpn-notification">
-            <div class="vpn-content">
-                <div class="icon-tile"><svg class="icon"><use href="#icon-shield"></use></svg></div>
-                <div class="vpn-text">
-                    <strong>Для стабильной работы</strong>
-                    Если приложение не загружается, попробуйте включить VPN.
-                </div>
-                <button class="vpn-close" onclick="this.parentElement.parentElement.style.display='none'" aria-label="Закрыть"><svg class="icon" style="width:16px;height:16px"><use href="#icon-close"></use></svg></button>
-            </div>
+            <svg class="icon"><use href="#icon-shield"></use></svg>
+            <span>Если приложение не загружается — включите VPN.</span>
+            <button class="vpn-close" onclick="this.parentElement.style.display='none'" aria-label="Закрыть"><svg class="icon" style="width:13px;height:13px"><use href="#icon-close"></use></svg></button>
         </div>
 
         <div id="catalog-view">
-            <div class="quick-request-banner">
-                <div class="quick-request-content">
-                    <div class="icon-tile"><svg class="icon"><use href="#icon-search"></use></svg></div>
-                    <div class="quick-request-text">
-                        <div class="quick-request-title">Ищете что-то конкретное?</div>
-                        <div class="quick-request-subtitle">Отправьте запрос — мы найдем на POIZON</div>
-                    </div>
-                    <button class="quick-request-button" onclick="showFreeRequestModal()">Запросить</button>
-                </div>
-            </div>
-
-            <!-- ПОИСК + ИЗБРАННОЕ -->
-            <div class="catalog-toolbar">
-                <div class="search-input-wrap">
-                    <svg class="icon"><use href="#icon-search"></use></svg>
-                    <input type="text" id="catalog-search" placeholder="Поиск по каталогу" oninput="renderCatalog()">
-                </div>
-                <button class="wishlist-toggle" id="wishlist-toggle-btn" onclick="toggleWishlistFilter()" aria-label="Избранное">
-                    <svg class="icon"><use href="#icon-heart"></use></svg>
-                </button>
-            </div>
-
             <!-- КАТЕГОРИИ -->
             <div class="category-tabs">
                 <div class="category-tab active" onclick="filterCategory('all')"><svg class="icon"><use href="#icon-grid"></use></svg> Все</div>
@@ -88,6 +76,14 @@
                 <div class="category-tab" onclick="filterCategory('perfume')"><svg class="icon"><use href="#icon-perfume"></use></svg> Духи</div>
                 <div class="category-tab" onclick="filterCategory('glasses')"><svg class="icon"><use href="#icon-glasses"></use></svg> Очки</div>
                 <div class="category-tab" onclick="filterCategory('bags')"><svg class="icon"><use href="#icon-bag"></use></svg> Сумки</div>
+            </div>
+
+            <div class="quick-request-banner" onclick="showFreeRequestModal()">
+                <div class="quick-request-text">
+                    <div class="quick-request-title">Не нашли нужную вещь?</div>
+                    <div class="quick-request-subtitle">Пришлите ссылку или артикул — привезём с POIZON</div>
+                </div>
+                <div class="quick-request-button">Запросить <svg class="icon" style="width:13px;height:13px"><use href="#icon-chevron"></use></svg></div>
             </div>
 
             <div class="section-title">Популярное</div>
