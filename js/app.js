@@ -109,11 +109,57 @@ const CATALOG = [
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
 let wishlistOnly = false;
+let lastToggledWishlistId = null;
 let modalFreePhotos = [];
 let currentModalProduct = null;
 let userOrders = [];
 let lastOrderTime = 0;
 const SPAM_DELAY = 30000;
+
+// ========== ПОДТВЕРЖДЕНИЕ ДОБАВЛЕНИЯ В КОРЗИНУ ==========
+function bumpCartBadge() {
+    const el = document.getElementById('bar-count');
+    if (!el) return;
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
+}
+
+// Клонирует фото товара и «долетает» им до значка корзины — подтверждает
+// добавление конкретной вещью, а не абстрактной галочкой.
+function flyToCart(sourceImg, sourceRect) {
+    const bar = document.getElementById('cart-bar');
+    if (!bar || bar.hidden) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        bumpCartBadge();
+        return;
+    }
+
+    const bagIcon = bar.querySelector('.icon');
+    const targetRect = bagIcon.getBoundingClientRect();
+
+    const clone = sourceImg.cloneNode(false);
+    clone.className = 'fly-shot';
+    clone.style.left = sourceRect.left + 'px';
+    clone.style.top = sourceRect.top + 'px';
+    clone.style.width = sourceRect.width + 'px';
+    clone.style.height = sourceRect.height + 'px';
+    document.body.appendChild(clone);
+
+    const dx = (targetRect.left + targetRect.width / 2) - (sourceRect.left + sourceRect.width / 2);
+    const dy = (targetRect.top + targetRect.height / 2) - (sourceRect.top + sourceRect.height / 2);
+
+    const anim = clone.animate([
+        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+        { transform: `translate(${dx}px, ${dy}px) scale(0.1)`, opacity: 0 }
+    ], { duration: 520, easing: 'cubic-bezier(.2,.8,.3,1)' });
+
+    anim.onfinish = () => {
+        clone.remove();
+        bumpCartBadge();
+    };
+}
 
 // ========== ДЕНЬГИ ==========
 let usdToRub = null;
@@ -215,6 +261,7 @@ function renderCatalog() {
         const wide = index % 3 === 0;
         const inCart = cart.filter(i => i.catalogId === product.id).length;
         const saved = wishlist.includes(product.id);
+        const justSaved = product.id === lastToggledWishlistId;
         const shot = product.photos?.[0];
         const rub = rubOf(usdOf(product.price));
 
@@ -231,18 +278,25 @@ function renderCatalog() {
                         <span class="item-price">${product.price}${rub ? `<small>${rub}</small>` : ''}</span>
                     </span>
                 </button>
-                <button class="item-save ${saved ? 'on' : ''}" onclick="toggleWishlist(${product.id})" aria-label="${saved ? 'Убрать из отложенного' : 'Отложить'}">
+                <button class="item-save ${saved ? 'on' : ''} ${justSaved ? 'pop' : ''}" onclick="toggleWishlist(${product.id})" aria-label="${saved ? 'Убрать из отложенного' : 'Отложить'}">
                     <svg class="icon"><use href="#icon-heart"></use></svg>
                 </button>
             </div>
         `;
     }).join('');
+
+    lastToggledWishlistId = null;
 }
 
 window.toggleWishlist = function(productId) {
     const idx = wishlist.indexOf(productId);
-    if (idx === -1) wishlist.push(productId);
-    else wishlist.splice(idx, 1);
+    if (idx === -1) {
+        wishlist.push(productId);
+        lastToggledWishlistId = productId;
+    } else {
+        wishlist.splice(idx, 1);
+        lastToggledWishlistId = null;
+    }
     localStorage.setItem('wishlist', JSON.stringify(wishlist));
     tg.HapticFeedback?.selectionChanged();
     renderCatalog();
@@ -359,6 +413,11 @@ window.closeModal = function() {
 window.addToCartFromModal = function() {
     if (!currentModalProduct) return;
 
+    // Рект снимаем до закрытия модалки — после closeModal() элемент скрыт
+    // и getBoundingClientRect() вернёт нули.
+    const flyImg = document.querySelector('#modal-product .gal-track .gal-shot img');
+    const flyRect = flyImg ? flyImg.getBoundingClientRect() : null;
+
     cart.push({
         catalogId: currentModalProduct.id,
         type: 'catalog',
@@ -373,6 +432,9 @@ window.addToCartFromModal = function() {
     saveCart();
     closeModal();
     tg.HapticFeedback?.notificationOccurred('success');
+
+    if (flyImg && flyRect) flyToCart(flyImg, flyRect);
+    else bumpCartBadge();
 };
 
 // ========== СВОБОДНЫЙ ЗАПРОС ==========
@@ -445,6 +507,7 @@ window.addFreeRequestFromModal = function() {
 
     saveCart();
     closeFreeRequestModal();
+    bumpCartBadge();
     openCart();
 };
 
@@ -569,6 +632,16 @@ window.removeFromCart = function(index) {
     renderCart();
 };
 
+// renderCart() пересоздаёт #promo-code при каждом вызове, поэтому shake
+// нужно вешать на элемент уже ПОСЛЕ рендера, а не на тот, что был в момент клика
+function shakePromoInput() {
+    const input = document.getElementById('promo-code');
+    if (!input) return;
+    input.classList.remove('shake');
+    void input.offsetWidth;
+    input.classList.add('shake');
+}
+
 window.applyPromoCode = function() {
     const code = document.getElementById('promo-code').value.trim().toUpperCase();
     const msg = document.getElementById('promo-message');
@@ -577,6 +650,7 @@ window.applyPromoCode = function() {
         appliedPromo = null;
         msg.className = 'msg bad';
         msg.textContent = 'Введите промокод';
+        shakePromoInput();
         return;
     }
 
@@ -592,6 +666,7 @@ window.applyPromoCode = function() {
         const fresh = document.getElementById('promo-message');
         fresh.className = 'msg bad';
         fresh.textContent = 'Такой промокод не действует';
+        shakePromoInput();
     }
 };
 
@@ -677,6 +752,29 @@ const STEPS = [
     { key: 'completed', label: 'Получен', field: 'completedDate' }
 ];
 
+// Форма повторяет .order/.track, чтобы после ответа сервера макет не прыгал
+function skeletonOrders(count) {
+    let html = '';
+    for (let i = 0; i < count; i++) {
+        html += `
+            <div class="skel-order">
+                <div class="skel-row">
+                    <span class="skel-bar" style="--i:${i * 4}"></span>
+                    <span class="skel-bar" style="--i:${i * 4 + 1}"></span>
+                </div>
+                <div class="skel-steps">
+                    ${[0, 1, 2].map(j => `
+                        <div class="skel-step">
+                            <span class="skel-dot" style="--i:${i * 4 + j}"></span>
+                            <span class="skel-line" style="--i:${i * 4 + j}"></span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>`;
+    }
+    return html;
+}
+
 function trackHtml(order, currentIndex) {
     return `<div class="track">${STEPS.map((step, idx) => {
         const state = idx < currentIndex ? 'done' : (idx === currentIndex ? 'now' : '');
@@ -695,10 +793,11 @@ function trackHtml(order, currentIndex) {
 async function loadOrders() {
     const list = document.getElementById('orders-list');
 
-    // Бэкенд на бесплатном тарифе просыпается небыстро, поэтому пустой
-    // экран во время ожидания недопустим.
+    // Бэкенд на бесплатном тарифе просыпается небыстро (холодный старт до
+    // ~50с), поэтому пустой экран во время ожидания недопустим — показываем
+    // скелет в форме реальных карточек заказа, а не текст-заглушку.
     if (!list.children.length) {
-        list.innerHTML = '<div class="empty"><p class="empty-text">Загружаем заказы…</p></div>';
+        list.innerHTML = skeletonOrders(2);
     }
 
     try {

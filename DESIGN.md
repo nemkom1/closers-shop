@@ -1,222 +1,189 @@
 ---
 name: CLOSERS
-description: Telegram Mini App для прокси-покупки товаров с POIZON — тёмный ночной шоурум под тёплым золотым светом, где светятся только товары, цены и прогресс заказа
+description: Telegram Mini App для прокси-покупки товаров с POIZON — одна плоская тёмная поверхность, один холодный акцент, статус заказа и корзина видны как живые полосы
 colors:
-  bg: "#08080b"
-  surface: "#131318"
-  surface-2: "#1a1a22"
-  surface-3: "#202029"
-  border: "rgba(255, 255, 255, 0.07)"
-  border-strong: "rgba(232, 178, 95, 0.3)"
-  text: "#f5f5f7"
-  text-secondary: "#b4b4bf"
-  text-tertiary: "#8f8f9c"
-  accent: "#e8b25f"
-  accent-soft: "#f4cd8c"
-  accent-dark: "#c99548"
-  accent-dim: "rgba(232, 178, 95, 0.12)"
-  accent-ink: "#14120b"
-  signal: "#ff6b5f"
-  signal-dim: "rgba(255, 107, 95, 0.12)"
+  ground: "#0d0e11"
+  raise: "#16181d"
+  raise-2: "#1e2128"
+  line: "rgba(255, 255, 255, 0.09)"
+  line-soft: "rgba(255, 255, 255, 0.055)"
+  text: "#f4f5f7"
+  text-secondary: "#a8adb8"
+  text-tertiary: "#7d838f"
+  accent: "#5b4fe8"
+  accent-press: "#4438c4"
+  accent-text: "#a99cff"
+  accent-ink: "#ffffff"
+  accent-wash: "rgba(91, 79, 232, 0.14)"
+  good: "#3ddc91"
+  bad: "#ff6a5e"
   plate: "#ffffff"
-  plate-ink: "#6e6961"
+  plate-ink: "#6d6a64"
 typography:
   display:
     fontFamily: "'Golos Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-    fontSize: "22px"
+    fontSize: "28px"
     fontWeight: 800
-    letterSpacing: "-0.02em"
+    letterSpacing: "-0.03em"
   title:
     fontFamily: "'Golos Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-    fontSize: "15px"
-    fontWeight: 800
-    letterSpacing: "-0.01em"
+    fontSize: "18px"
+    fontWeight: 700
+    letterSpacing: "-0.015em"
   body:
     fontFamily: "'Golos Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
     fontSize: "14px"
     fontWeight: 400
   label:
     fontFamily: "'Golos Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-    fontSize: "11px"
-    fontWeight: 700
-    letterSpacing: "0.4px"
+    fontSize: "12px"
+    fontWeight: 600
 rounded:
-  sm: "10px"
-  md: "14px"
-  lg: "20px"
-  full: "999px"
+  none: "0px"
+  full: "50%"
 spacing:
-  sm: "8px"
-  md: "14px"
-  lg: "20px"
+  pad: "18px"
+  tap: "44px"
 components:
   button-primary:
-    background: "linear-gradient(135deg, {colors.accent-soft}, {colors.accent})"
+    backgroundColor: "{colors.accent}"
     textColor: "{colors.accent-ink}"
-    rounded: "{rounded.md}"
-    padding: "15px"
+    rounded: "{rounded.none}"
+    padding: "14px 18px"
   button-secondary:
-    background: "transparent"
+    backgroundColor: "transparent"
     textColor: "{colors.text}"
-    border: "1.5px solid {colors.border-strong}"
-    rounded: "{rounded.md}"
-    padding: "15px"
-  category-tab-active:
-    background: "linear-gradient(135deg, {colors.accent-soft}, {colors.accent})"
-    textColor: "{colors.accent-ink}"
-    rounded: "{rounded.full}"
-    padding: "8px 14px"
-  quick-add-button:
-    background: "linear-gradient(135deg, {colors.accent-soft}, {colors.accent})"
-    textColor: "{colors.accent-ink}"
-    rounded: "50%"
-    size: "30px"
+    rounded: "{rounded.none}"
+    padding: "14px 18px"
+  field-input:
+    backgroundColor: "{colors.raise}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.none}"
+    padding: "12px 14px"
   product-plate:
     backgroundColor: "{colors.plate}"
-    rounded: "{rounded.sm}"
+    rounded: "{rounded.none}"
 ---
 
 # Design System: CLOSERS
 
 ## Overview
 
-**Creative North Star: "The Night Showroom"**
+**Creative North Star: "The Open Rail"**
 
-CLOSERS is a night-lit private showroom, not a supermarket aisle. This is the third complete visual world the project has shipped, and it fully replaces the second (a light Wildberries/Ozon-style marketplace grid on white cards and a gray page) — the two must not be reconciled, and this file describes only what is in the build today. The change was driven by product truth: CLOSERS brokers €200–1200 goods through one named human manager, so the surface has to feel exclusive and hand-run rather than mass-market. A near-black page carries a warm gold halo bleeding from the top edge; every card is a lifted dark panel; and a single warm gold is the only chromatic color allowed on screen.
+CLOSERS is one flat surface, not a stack of cards. This is the third complete visual world the project has shipped (after a light Wildberries/Ozon-style grid, then a golden "Night Showroom" theme), and it fully replaces both of those, this file describes only what is in the build today. The page is a single near-black plane; hairline dividers separate sections instead of raised card boxes; and the only things that lift off that plane are two live status strips (the order-progress rail under the header, the cart summary bar pinned to the bottom) plus form fields, which get a faint inset highlight to read as tactile without becoming full cards. The name "Open Rail" is literal: the product's core promise is that price and order status are never hidden behind a card wall, they're a rail that's always visible.
 
-Gold here is never flat. It appears as a gradient fill (buttons, pills, quick-add circles), as a glow (focus rings, active nav, wordmark), or as a hairline gradient rule (header underline, card caplines, dividers) — but the one place it is deliberately *solid* is text, because gradient-filled text is a legibility and craft failure at these sizes.
-
-Because every product photo in the catalog is shot on a white background, product imagery sits on an explicit pure-white **plate** rather than a dark well. This is load-bearing, not a compromise: a white-background photo dropped onto a dark surface reads as a broken white rectangle punched through the card, whereas a full-bleed white plate reads as a lit display case. Goods, prices and order progress are the only bright things on screen.
+Color follows the same restraint: one cold accent (`#5b4fe8`, indigo-violet) does every job color has to do, buttons, links, focus rings, the live pulse dot, and nothing else on screen carries chroma except the semantic green/coral pair reserved for payment success/failure. Because every catalog photo is shot on a white background, product imagery sits on an explicit pure-white **plate** rather than a dark well, a photo dropped straight onto a dark card reads as a broken white rectangle, a full-bleed white plate reads as a lit display case. Corners are sharp everywhere except the handful of live-state indicators (the pulse dot, step dots), which are full circles, this is a deliberate two-value shape system, not an oversight.
 
 **Key Characteristics:**
-- Near-black page (`#08080b`) with a fixed warm radial halo from the top edge — the room's light source
-- Exactly one chromatic color: warm gold (`#e8b25f`), always gradient/glow when it is a surface and always solid when it is text
-- Pure-white product plates inside dark cards — the lit display case, matched to white-background product photography
-- Hairline structure: 1px `rgba(255,255,255,.07)` borders and gold gradient rules, never heavy dividers
-- Motion is confirmation, not decoration — ripple on touch, cascade-in on lists, pulse on the live order step
-- Golos Text (self-hosted, Cyrillic+Latin, 400–800) throughout, including the wordmark
+- Near-black page (`#0d0e11`) as one continuous plane, sections divided by 1px hairlines, not boxed cards
+- Exactly one chromatic accent, cold indigo-violet (`#5b4fe8`), used identically everywhere it appears
+- Pure-white product plates inside an otherwise all-dark UI, matched to white-background product photography
+- Two "live" strips (order rail, cart bar) are the only elements that persist across scroll and carry state
+- Sharp corners by default; full-circle is reserved for live/status indicators only
+- Golos Text (self-hosted, Cyrillic+Latin, 400–800) throughout, one family for every role
 
 ## Colors
 
-Dark neutral base with exactly one chromatic hue, plus one deliberately inverted "plate" surface for product imagery.
+A near-black neutral base, one cold chromatic accent, and one deliberately inverted "plate" surface reserved for product photography.
 
 ### Primary
-- **Warm Gold / Accent** (`#e8b25f`): the only chromatic color in the system. Gradient fills (`linear-gradient(135deg, accent-soft, accent)`) on primary buttons, active category tabs, quick-add circles, cart badges, cart-item type tags, and completed/active status dots; glows on the wordmark "O", active nav item, and focus rings; hairline gradient rules under the header and across card caplines.
-- **Accent Soft** (`#f4cd8c`): the lighter gradient stop, and the solid color for gold *text* — prices, active nav labels, payment-confirmed text, promo success, size-guide links, cart-item type labels.
-- **Accent Dark** (`#c99548`): reserved as the darker gradient stop / pressed tone.
-- **Accent Dim** (`rgba(232, 178, 95, 0.12)`): tinted fills — icon tiles, FAQ icons, admin avatar, VPN strip, status badges, and the active status-dot halo.
-- **Accent Ink** (`#14120b`): the near-black text/icon color placed on top of gold fills. Never white on gold.
-
-### Secondary
-- **Border Strong** (`rgba(232, 178, 95, 0.3)`): the gold hairline. Used where a border must be visible as structure rather than as a mere edge — the free-request promo panel, secondary buttons, icon tiles, the modal drag handle, the floating request pill, the dashed photo-upload area.
-
-### Tertiary
-- **Signal** (`#ff6b5f`): error/negative only — promo-code errors, rejected-payment note, active (wishlisted) heart, cart remove on press. Warm-shifted from pure red so it belongs to the same warm room.
+- **Accent** (`#5b4fe8`): the only chromatic color in the system. Solid fill on primary buttons and the cart/order live bars, solid text/icon color (`accent-text`, `#a99cff`) for links, focus rings, active category underline, required-field markers, and the pulse dot on the order rail. Never a gradient, never a glow.
+- **Accent Press** (`#4438c4`): `:active` state for accent-filled buttons and bars.
+- **Accent Ink** (`#ffffff`): white text/icons on top of solid accent fills.
+- **Accent Wash** (`rgba(91, 79, 232, 0.14)`): the tinted background of the order-status rail, and the focus-ring halo on the current order step.
 
 ### Neutral
-- **Page** (`#08080b`) with a fixed `radial-gradient(ellipse 900px 460px at 50% -8%, rgba(232,178,95,.08), transparent 60%)` halo — the background is a light source, not a flat fill.
-- **Surface** (`#131318`): all lifted panels — product cards, cart items, order cards, admin/FAQ/referral cards, modal sheets.
-- **Surface 2** (`#1a1a22`): recessed panels one step deeper — form inputs, promo box, modal product-preview strip, size-table header, inactive status dots.
-- **Surface 3** (`#202029`): reserved deepest neutral step.
-- **Border** (`rgba(255,255,255,.07)`): the default hairline on cards, inputs, and dividers.
-- **Text** (`#f5f5f7` / `#b4b4bf` / `#8f8f9c`): primary / secondary / tertiary. All three clear 4.5:1 against `bg` and `surface`; `text-tertiary` at `#8f8f9c` is the floor — do not darken it further on these surfaces.
+- **Ground** (`#0d0e11`): the entire page background. There is no secondary "surface" plane, most content sits directly on ground.
+- **Raise** (`#16181d`) / **Raise 2** (`#1e2128`): the two steps used only where content genuinely needs to read as an input or an inset panel, form fields, the disabled-button fill, the promo input, admin selects, the size-guide header.
+- **Line** (`rgba(255,255,255,.09)`) / **Line Soft** (`rgba(255,255,255,.055)`): hairline dividers. Line for structural borders (inputs, buttons, the size guide table); Line Soft for section separators (header bottom edge, list-row dividers).
+- **Text / Text Secondary / Text Tertiary** (`#f4f5f7` / `#a8adb8` / `#7d838f`): primary, secondary, and muted text. All three clear 4.5:1 against `ground`.
+
+### Semantic
+- **Good** (`#3ddc91`): payment confirmed, promo applied successfully.
+- **Bad** (`#ff6a5e`): promo rejected, payment rejected.
 
 ### Inverted
-- **Plate** (`#ffffff`) and **Plate Ink** (`#6e6961`): the *only* light surface in the system, used exclusively behind product imagery — catalog tiles, modal gallery, cart thumbnails — and for the category-icon fallback drawn when a photo fails to load. Plate is not a general-purpose surface and must never be used for text panels, cards, or chrome.
+- **Plate** (`#ffffff`) and **Plate Ink** (`#6d6a64`): the only light surface in the system. Used exclusively behind product imagery, catalog tiles, the product-modal gallery, cart-line thumbnails, and for the fallback icon drawn when a photo fails to load. Never used for text panels, cards, or chrome.
 
 ### Named Rules
-**The One Gold Rule.** Gold is the only chromatic color anywhere. A second hue (green, blue, purple, teal) is drift, not a variant. Signal red is an exception reserved strictly for failure states.
+**The One Accent Rule.** `#5b4fe8` is the only chromatic color anywhere except the `good`/`bad` semantic pair, which is reserved strictly for payment states. A second decorative hue is drift, not a variant.
 
-**The Lit-Not-Flat Rule.** Whenever gold is a *surface* (button, pill, circle, tag, dot) it must be a gradient and usually a glow. Whenever gold is *text*, it must be a solid color — never `background-clip: text`. Gradient-filled text is banned in this system.
+**The Flat-By-Default Rule.** Content sits on `ground` with hairline dividers, not on raised card panels. A surface only lifts to `raise` when it is genuinely input-like (a field, a select, an inset panel), and even then the lift is a background-color step plus a faint top highlight, never a drop shadow.
 
 ## Typography
 
-**Display/Body/Label Font:** Golos Text (self-hosted `.woff2`, Cyrillic + Latin subsets, weights 400/600/700/800), fallback `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif`. One family for every role, including the wordmark.
+**Font:** Golos Text (self-hosted `.woff2`, Cyrillic + Latin subsets, weights 400/600/700/800), fallback `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif`. One family for every role, no display/body pairing.
 
-**Character:** A grounded Cyrillic-native text grotesk. Hierarchy is carried by weight (400→800), size, and negative letter-spacing at the largest sizes — never by switching typeface.
+**Character:** A grounded Cyrillic-native text grotesk. Hierarchy is carried by weight (400→800), size, and negative letter-spacing at the largest sizes, never by switching typeface. Sizes are drawn from a fixed token scale (`--fs-micro` 11px through `--fs-display` 28px) rather than one-off pixel values, so near-duplicate sizes don't accumulate.
 
 ### Hierarchy
-- **Display** (800, 20–22px, −0.01em to −0.02em): the "CL**O**SERS" wordmark, "Поддержка", "Часто задаваемые вопросы".
-- **Title** (700–800, 13.5–18px): section titles, modal titles, product/modal price, cart-item title, order ID, admin name, referral title, FAQ question text.
-- **Body** (400–500, 11.5–14px): product-card titles, cart-item detail lines, FAQ answers, form inputs, support intro.
-- **Label** (600–800, 9–12.5px, sometimes uppercase): form labels (uppercase, 0.4px tracking), order-status badge (uppercase), size-table headers (uppercase, 0.3px tracking), bottom-nav labels, category-tab labels, pill-button labels.
+- **Display** (800, 28px, −0.03em): `.page-title`, section-level page headers ("Ваши заказы", "Поддержка").
+- **Title** (700–800, 18–21px, −0.015em to −0.02em): `.sec-title`, `.headline-name` (product modal), `.sheet-title` (modal headers), `.brand-mark` (wordmark).
+- **Body** (400–600, 13–16px): product titles, cart-item detail lines, form inputs, FAQ answers, order step names.
+- **Label** (600, 11–12px): form labels, order-status text, admin stat captions. Not uppercase, weight and size alone carry the "label" register.
 
 ### Named Rules
-**The One Family Rule.** Golos Text is the only typeface, including the logotype. Hierarchy is a weight/size problem, never a font-swap problem.
+**The One Family Rule.** Golos Text is the only typeface, including the wordmark. Hierarchy is a weight/size problem, never a font-swap problem.
 
-## Layout
+**The Fixed-Scale Rule.** Every font-size traces to a `--fs-*` token. A new component reaches for the nearest existing step before introducing a new pixel value.
 
-Single-column app shell, `max-width: 600px`, centered. A sticky glass header (translucent `rgba(8,8,11,.86)` + 10px backdrop blur, closed by a gold gradient hairline) holds the wordmark and wishlist toggle above a full-width search field; category pills scroll horizontally beneath it, then a gold-edged free-request panel, then the catalog grid — matching the FIRST VIEWPORT contract. The catalog is a dense **2-column** grid (`repeat(2, 1fr)`, 10px gap). Horizontal content margin is a consistent 14px throughout. A fixed bottom nav (z-index 100, glass + blur) and a floating "Свой запрос" pill (z-index 99) sit above scroll content; body reserves 96px bottom padding. Modals are bottom sheets (`align-items: flex-end`), capped at 600px, max-height 85vh, opened by a gold drag handle, with `env(safe-area-inset-bottom)` padding.
+## Elevation
 
-## Elevation & Depth
-
-Depth is built from four stacked signals, not one: (1) tonal steps between page, surface, and surface-2; (2) a hairline border on every panel; (3) one shared shadow — `--shadow-card: inset 0 1px 0 rgba(255,255,255,.04), 0 10px 24px rgba(0,0,0,.4)` — whose *inset* top highlight simulates light catching the panel's top edge, which is what makes dark cards read as physical rather than as darker rectangles; and (4) gold caplines (a 2px `linear-gradient(90deg, accent, transparent)` bar) across the top of order cards and the cart summary. Gold-filled controls carry a colored glow instead of a neutral shadow (`--shadow-glow`, plus stronger per-control glows on the quick-add circle and floating pill). Glass surfaces (header, bottom nav) use backdrop blur rather than shadow to separate from content.
+The system is flat by default: most content sits directly on `ground` with a 1px `line` or `line-soft` border doing the separation work, not a shadow. The one elevation cue that exists, `--shadow-raise` (`inset 0 1px 0 rgba(255,255,255,.05)`), is a faint top highlight applied only to genuinely input-like surfaces sitting on `raise`, form fields, selects, the promo input, the size-guide header. It reads as "this is a control you type into or pick from," not as a lifted card. No component in the system uses an outer drop shadow.
 
 ### Named Rules
-**The Lit-Edge Rule.** Dark panels get the shared `--shadow-card` with its inset top highlight — never a plain drop shadow alone. Gold controls get a gold glow, never a neutral one.
-
-## Shapes
-
-Rounded rectangles at three steps — `--radius-sm` (10px) inputs and inset panels, `--radius-md` (14px) most cards, `--radius-lg` (20px) order cards, promo panel, and modal-sheet top corners — plus full pill rounding (`--radius-full`) for category tabs, badges, and pill buttons. Fully circular (`50%`): wishlist heart, quick-add "+", cart-item type tag, mini cart-count badge, status dots, admin avatar, modal close, and the active-nav indicator dot. No sharp corners anywhere.
-
-## Motion
-
-Motion exists to confirm input and to reveal content, never to decorate. All of it is disabled under `prefers-reduced-motion: reduce`.
-
-- **Ripple** (`.ripple-dot`, 0.55s): a touch-origin circle expands from the exact pointer position on every interactive control (buttons, nav items, category tabs, quick-add, floating pill, wishlist toggle). Attached globally via one delegated `pointerdown` listener, so any control matching the selector inherits it for free — such controls must therefore be `position: relative; overflow: hidden`.
-- **Cascade-in** (`card-in`, 0.45s, `cubic-bezier(.16,1,.3,1)`): product cards and cart items fade up in sequence via `animation-delay: calc(var(--i) * 45ms)`, where `--i` is set inline from the render loop index.
-- **View transition** (`view-in`, 0.32s): each screen fades up on tab switch, paired with a Telegram `selectionChanged()` haptic tick.
-- **Live-step pulse** (`dot-pulse`, 1.8s loop): only the *current* order-status dot breathes its gold halo — the one element on the surface allowed to loop indefinitely, because it represents live state.
-- **Button sheen** (`btn-sheen`, 3.4s loop): a slow diagonal highlight crosses primary gold buttons.
-- **Sheet-up** (0.22s): modals rise from the bottom edge.
-
-### Named Rules
-**The Confirmation Rule.** Every touch on an interactive control answers with a ripple; every tab switch answers with a haptic. Looping animation is reserved for elements representing live state (the active order step) and the primary CTA sheen — nothing else may loop.
+**The Inset-Not-Drop Rule.** When a surface needs to feel tactile, it gets `--shadow-raise`'s inset top highlight, never an outer `box-shadow` with blur and spread. Outer shadows on a near-black page read as muddy, not lifted.
 
 ## Components
 
 ### Buttons
-- **Primary (`.btn`):** gold gradient fill, `accent-ink` text, 15px padding, weight 800, full width, gold glow, looping sheen, scales to 0.98 on press.
-- **Secondary (`.btn-secondary`):** transparent fill, primary text, 1.5px `border-strong` gold hairline, no glow, no sheen.
-- **Chrome pills (floating request, modal close):** translucent dark fill with a gold hairline and gold text — the quiet counterpart to the primary button.
+- **Primary (`.btn`):** solid `accent` fill, `accent-ink` (white) text, weight 700, sharp corners, full width, `:active` darkens to `accent-press` and scales to 0.99. Disabled state fills `raise-2` with `text-tertiary` text.
+- **Secondary (`.btn-line`):** transparent fill, primary text, 1px `line` border, `:active` fills `raise`.
 
-### Chips
-- **Category tabs:** pill-rounded, `surface` fill with a 1.5px hairline at rest, 12.5px/600 `text-secondary`, `flex-shrink: 0` so labels never compress, horizontally scrollable with hidden scrollbar.
-- **Active state:** gold gradient fill, `accent-ink` text, gold glow.
+### Category Tabs
+- **Style:** plain text, no pill background, `text-tertiary` at rest, weight 600.
+- **Active state:** text turns `text` (full white), a 2px `accent` underline scales in from the left (`transform: scaleX`).
+
+### Live Rails (signature)
+The two elements allowed to persist across scroll and carry ambient, indefinite-loop state. The **order rail** (`.rail`) sits under the sticky header when an order is active: `accent-wash` background, a 7px dot that pulses opacity 1↔0.35 on a 2.2s loop, and the current step's label. The **cart bar** (`.bar`) is fixed to the bottom edge, solid `accent` fill, `accent-ink` text, item count and running total. Both are the sole elements the "Flat-By-Default" rule exempts, they are meant to read as persistent, not as page content.
+
+### Product Plate (signature)
+A dark `ground`-level cell holding a pure-white `plate` square (`object-fit: contain`, 8% padding) for the photo. Two controls anchor to the plate's corners: a wishlist heart (top-right, turns `bad` red when saved) and an in-cart count badge (bottom-left, solid `accent`) when the item is already in the cart. Below the plate: price in `text` at weight 700, then a two-line-clamped `text-secondary` title, price outweighs the title.
+
+### Add-to-Cart Confirmation (signature)
+Adding a catalog item clones its plate photo and animates it (`transform`/`opacity` only, 520ms, the system's one easing curve `cubic-bezier(.2,.8,.3,1)`) from the product modal to the cart bar's bag icon, then the bar's count badge does a single 0.38s scale-bump (`bump` keyframe, not looped). A free-request add (no reliable product photo) skips the flight and plays only the bump. This is the one-shot counterpart to the Live Rails: it confirms a single action and then stops, it never loops.
+
+### Loading Skeletons
+Async content (the orders list, while the free-tier backend cold-starts) shows shape-matched skeleton blocks (`.skel-order`, mirroring `.order`/`.track`) pulsing on the same `pulse` keyframe as the order-rail dot, instead of spinner or placeholder text. The pulse is bounded: it exists only until real data arrives, then the skeleton is replaced outright. This is a loading signal, not ambient decoration, it plays by the same "confirms live state" logic as the rails, just scoped to "data is in flight" instead of "an order is active."
 
 ### Cards / Containers
-- **Corner Style:** `--radius-md` default; `--radius-lg` for order cards and the promo panel.
-- **Background:** `surface` with a 1px hairline border and the shared `--shadow-card`.
-- **Capline:** order cards and the cart summary carry a 2px gold-to-transparent gradient bar across the top edge.
+There is no generic card component. Sections (orders, admin entries, FAQ items) are separated by `line-soft` top borders within a single continuous column, not wrapped in individually-bordered boxes.
 
 ### Inputs / Fields
-- **Style:** `surface-2` fill, 1.5px hairline, `--radius-sm`.
-- **Focus:** border turns gold plus a 3px `accent-dim` ring; the header search field additionally gains an outer gold glow.
+- **Style:** `raise` fill, 1px `line` border, `--shadow-raise` inset highlight, sharp corners, 16px font (deliberately not smaller, to avoid iOS auto-zoom on focus).
+- **Focus:** border turns `accent-text`.
 - **Placeholder:** `text-tertiary`.
 
-### Navigation
-- **Bottom nav:** fixed, translucent `rgba(10,10,13,.9)` + 12px backdrop blur, hairline top edge with a faint gold line beneath it. Inactive items `text-tertiary`; the active item turns `accent-soft`, gains a text glow, and grows a small glowing gold dot beneath its label.
-
-### Product Card (signature)
-A dark `surface` panel wrapping a **pure-white plate** (`--plate`) that holds the product photo (`object-fit: contain`, 10px padding). Two circular controls pin to the plate's corners: the wishlist heart (translucent dark circle, top-left, turns `signal` when active) and the quick-add "+" (gold gradient circle with gold glow, bottom-right, scales to 0.88 on press). A gold `cart-badge-mini` appears top-right once the item is in the cart, and the whole card gains a gold border and glow in that state. Below the plate: a solid `accent-soft` 800-weight price, then a two-line-clamped `text-secondary` title — price deliberately outweighs the title. Cards cascade in on render.
-
-### Cart Item Type Indicator (signature)
-Item type (catalog product vs. free POIZON request) is never a bold uppercase kicker above the title. It is carried by two quiet signals: (a) `.cart-item-type-tag`, an 18px gold-gradient circle with a 2px `surface` ring pinned to the thumbnail's bottom-right corner, holding an icon only; and (b) `.cart-item-type-label`, a 10.5px/600 `accent-soft` line that is simply the first line of the detail block, typographically no louder than the size/color/notes lines beneath it.
+### Modals (Sheets)
+Bottom sheets (`align-items: flex-end`), full width up to 640px, max-height 90vh, rising in from the bottom edge over 0.26s. A sticky header with title and close button; body content scrolls beneath it.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep the page near-black with the warm top halo — the background is the room's light source and is what makes gold read as *lit* rather than merely yellow.
-- **Do** keep exactly one chromatic color (gold `#e8b25f`), gradient-and-glowing as a surface, solid as text.
-- **Do** put product imagery on the pure-white plate — the photography is white-background, and a dark well turns every photo into a broken white rectangle.
-- **Do** give every dark panel the shared `--shadow-card` including its inset top highlight, rather than inventing a per-component shadow.
-- **Do** build detail lines (cart items, order meta) by joining an array with `\n`, since these blocks use `white-space: pre-line` — literal newlines inside the template render as blank lines.
+- **Do** keep the page one continuous `ground`-colored plane. New sections get a `line-soft` top divider, not a card wrapper.
+- **Do** keep exactly one chromatic accent (`#5b4fe8`); the `good`/`bad` pair is reserved strictly for payment states.
+- **Do** put product imagery on the pure-white `plate`, the photography is white-background, and a dark well turns every photo into a broken white rectangle.
+- **Do** reach for an existing `--fs-*` token before introducing a new font-size value.
+- **Do** keep the order rail and cart bar as the only elements with *indefinite* looping motion; a bounded loop tied to a real wait state (a loading skeleton) is allowed, it must stop the moment the wait ends.
+- **Do** confirm one-shot actions (add to cart) with a single, non-looping animation (`flyToCart`'s clone-and-travel, the badge `bump`), not with a permanent visual change.
 
 ### Don't:
-- **Don't** use `background-clip: text` with a gradient anywhere. Gold text is solid `accent-soft`.
-- **Don't** add a second chromatic accent beside gold; `signal` red is for failure states only.
-- **Don't** use `--plate` white for anything but product imagery and its fallback — it is not a general surface.
-- **Don't** put white text or icons on a gold fill; gold fills always carry `accent-ink` (`#14120b`).
-- **Don't** add looping animation to anything that is not live state or the primary CTA sheen.
-- **Don't** collapse the catalog to one column, or reintroduce a bold uppercase kicker above product or cart-item titles.
+- **Don't** add drop shadows to cards or panels. Depth comes from `--shadow-raise`'s inset highlight or from a `line`/`line-soft` border, never from an outer blurred shadow.
+- **Don't** add a second chromatic accent beside the indigo; a second hue is drift, not a variant.
+- **Don't** use `--plate` white for anything but product imagery and its fallback, it is not a general-purpose surface.
+- **Don't** round a corner beyond the two-value system (sharp by default, `50%` only for live/status dots). A rounded card or a pill-shaped button reintroduces a shape family the system doesn't have.
+- **Don't** add an *indefinite* loop anywhere outside the order rail's pulse. A skeleton's pulse is fine because it's bounded by the fetch it represents; a decorative loop with no real state behind it is not.
+- **Don't** add looping animation to anything that isn't the order-rail pulse; a second looping element competes with the one live signal the UI is built to highlight.
 - **Don't** load a second typeface; Golos Text is the only family, including the wordmark.
+- **Don't** invent fake social proof (reviews, ratings, "happy customers"), per PRODUCT.md: no real testimonials exist yet, and none may be fabricated.
