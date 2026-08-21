@@ -164,6 +164,10 @@ There is no generic card component. Sections (orders, admin entries, FAQ items) 
 - **Style:** `raise` fill, 1px `line` border, `--shadow-raise` inset highlight, sharp corners, 16px font (deliberately not smaller, to avoid iOS auto-zoom on focus).
 - **Focus:** border turns `accent-text`.
 - **Placeholder:** `text-tertiary`.
+- **Invalid input** (a rejected promo code): the field border turns `bad` and does a single bounded `shake` (0.4s), not a looping wobble, not just a text message under it.
+
+### Chips (size picker)
+A native `<select>` is deliberately not used for size, the tap target and the chosen value both need to be visible without opening a system picker. `.chip`: `raise` fill, 1px `line` border, `--shadow-raise` highlight, sharp corners, same as an input at rest. Selected state (`.chip.on`) inverts to solid `accent` fill with `accent-ink` text, no border, no shadow, matching how `.cat.on` and gold-fill controls elsewhere signal "this is the active choice." Tapping the already-selected chip deselects it back to "не указан."
 
 ### Modals (Sheets)
 Bottom sheets (`align-items: flex-end`), full width up to 640px, max-height 90vh, rising in from the bottom edge over 0.26s. A sticky header with title and close button; body content scrolls beneath it.

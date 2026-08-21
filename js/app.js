@@ -14,6 +14,16 @@ const ADMIN_CONTACT = 'https://t.me/closersmanager';
 const BOT_USERNAME = 'closers_shop_bot';
 const ADMIN_ID = 721667711;
 
+// ========== БАННЕР ПРО VPN — ПОКАЗЫВАЕМ ОДИН РАЗ ==========
+window.dismissVpnNotice = function() {
+    localStorage.setItem('vpnNoticeDismissed', '1');
+    document.getElementById('vpn-notification')?.remove();
+};
+
+if (localStorage.getItem('vpnNoticeDismissed')) {
+    document.getElementById('vpn-notification')?.remove();
+}
+
 // ========== ПРИГЛАШЕНИЕ ДРУГА ==========
 // Условий вознаграждения нет — ссылка просто приводит друга в приложение,
 // поэтому текст ничего не обещает.
@@ -131,7 +141,7 @@ function flyToCart(sourceImg, sourceRect) {
     const bar = document.getElementById('cart-bar');
     if (!bar || bar.hidden) return;
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || typeof sourceImg.animate !== 'function') {
         bumpCartBadge();
         return;
     }
@@ -150,15 +160,23 @@ function flyToCart(sourceImg, sourceRect) {
     const dx = (targetRect.left + targetRect.width / 2) - (sourceRect.left + sourceRect.width / 2);
     const dy = (targetRect.top + targetRect.height / 2) - (sourceRect.top + sourceRect.height / 2);
 
-    const anim = clone.animate([
-        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-        { transform: `translate(${dx}px, ${dy}px) scale(0.1)`, opacity: 0 }
-    ], { duration: 520, easing: 'cubic-bezier(.2,.8,.3,1)' });
+    // WebView в некоторых версиях Telegram-клиента может не поддержать
+    // Element.animate() — тогда просто гасим клон и подтверждаем бампом,
+    // а не оставляем зависшую картинку на экране.
+    try {
+        const anim = clone.animate([
+            { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+            { transform: `translate(${dx}px, ${dy}px) scale(0.1)`, opacity: 0 }
+        ], { duration: 520, easing: 'cubic-bezier(.2,.8,.3,1)' });
 
-    anim.onfinish = () => {
+        anim.onfinish = () => {
+            clone.remove();
+            bumpCartBadge();
+        };
+    } catch (e) {
         clone.remove();
         bumpCartBadge();
-    };
+    }
 }
 
 // ========== ДЕНЬГИ ==========
@@ -187,14 +205,16 @@ function usdOf(priceStr) {
     return Number.isFinite(value) ? value : 0;
 }
 
-function rubOf(usd) {
-    if (!usdToRub || !usd) return '';
-    const rub = Math.round(usd * usdToRub / 10) * 10;
-    return `${rub.toLocaleString('ru-RU')} ₽`;
-}
+// Запасной курс на случай, если fx ещё не подтянулся (первая секунда
+// самого первого запуска, пока не пришёл live-курс и нет кэша в localStorage) —
+// чтобы рубли не были пустыми, а не потому что курс правда такой.
+const FALLBACK_USD_RUB = 80;
 
-function usdText(usd) {
-    return `${usd.toLocaleString('ru-RU')}$`;
+function rubOf(usd) {
+    if (!usd) return '';
+    const rate = usdToRub || FALLBACK_USD_RUB;
+    const rub = Math.round(usd * rate / 10) * 10;
+    return `${rub.toLocaleString('ru-RU')} ₽`;
 }
 
 // Цены каталога — ориентир по POIZON. Менеджер подтверждает итог до оплаты,
@@ -213,7 +233,7 @@ function cartTotals() {
     if (appliedPromo && usd) {
         discount = appliedPromo.type === 'percent'
             ? Math.round(usd * appliedPromo.discount / 100)
-            : Math.min(usd, Math.round(appliedPromo.discount / (usdToRub || 100)));
+            : Math.min(usd, Math.round(appliedPromo.discount / (usdToRub || FALLBACK_USD_RUB)));
     }
 
     return { usd, unpriced, discount, total: Math.max(0, usd - discount) };
@@ -275,7 +295,7 @@ function renderCatalog() {
                     </span>
                     <span class="item-body">
                         <span class="item-name">${product.name}</span>
-                        <span class="item-price">${product.price}${rub ? `<small>${rub}</small>` : ''}</span>
+                        <span class="item-price">${rub}</span>
                     </span>
                 </button>
                 <button class="item-save ${saved ? 'on' : ''} ${justSaved ? 'pop' : ''}" onclick="toggleWishlist(${product.id})" aria-label="${saved ? 'Убрать из отложенного' : 'Отложить'}">
@@ -311,11 +331,33 @@ window.toggleWishlistFilter = function() {
 // ========== ТАБЛИЦА РАЗМЕРОВ ==========
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46'];
 
-function fillSizeSelects() {
-    const options = '<option value="">не указан</option>' +
-        SIZES.map(s => `<option value="${s}">${/^\d+$/.test(s) ? s + ' EU' : s}</option>`).join('');
-    document.getElementById('modal-size').innerHTML = options;
-    document.getElementById('modal-free-size').innerHTML = options;
+// Чипы вместо нативного <select> — тап виден и понятен без открытия
+// системного пикера; выбранный размер держим в скрытом input.value,
+// чтобы остальной код (addToCartFromModal и т.п.) не менялся.
+function fillSizeChips() {
+    [
+        { chips: 'modal-size-chips', hidden: 'modal-size' },
+        { chips: 'modal-free-size-chips', hidden: 'modal-free-size' }
+    ].forEach(({ chips, hidden }) => {
+        document.getElementById(chips).innerHTML = SIZES.map(s => `
+            <button type="button" class="chip" data-size="${s}" onclick="selectSize('${hidden}','${chips}','${s}')">${/^\d+$/.test(s) ? s : s}</button>
+        `).join('');
+    });
+}
+
+window.selectSize = function(hiddenId, chipsId, size) {
+    const hiddenInput = document.getElementById(hiddenId);
+    const deselect = hiddenInput.value === size;
+    hiddenInput.value = deselect ? '' : size;
+    document.querySelectorAll(`#${chipsId} .chip`).forEach(c => {
+        c.classList.toggle('on', !deselect && c.dataset.size === size);
+    });
+    tg.HapticFeedback?.selectionChanged();
+};
+
+function resetSizeChips(chipsId, hiddenId) {
+    document.getElementById(hiddenId).value = '';
+    document.querySelectorAll(`#${chipsId} .chip`).forEach(c => c.classList.remove('on'));
 }
 
 const GUIDE_HTML = `
@@ -381,8 +423,8 @@ window.openProductModal = function(productId) {
         ` : `<div class="gal gal-blank"><svg class="icon"><use href="#icon-bag"></use></svg></div>`}
         <div class="headline">
             <h3 class="headline-name">${product.name}</h3>
-            <p class="headline-price">${product.price}</p>
-            ${rub ? `<p class="headline-rub">${rub} · цена ориентировочная, менеджер подтвердит итог</p>` : ''}
+            <p class="headline-price">${rub}</p>
+            <p class="headline-rub">цена ориентировочная, менеджер подтвердит итог</p>
         </div>
     `;
 
@@ -395,7 +437,7 @@ window.openProductModal = function(productId) {
         }, { passive: true });
     }
 
-    document.getElementById('modal-size').value = '';
+    resetSizeChips('modal-size-chips', 'modal-size');
     document.getElementById('modal-color').value = '';
     document.getElementById('modal-notes').value = '';
     const guide = document.getElementById('size-guide');
@@ -440,8 +482,9 @@ window.addToCartFromModal = function() {
 // ========== СВОБОДНЫЙ ЗАПРОС ==========
 window.showFreeRequestModal = function() {
     modalFreePhotos = [];
-    ['modal-free-query', 'modal-free-size', 'modal-free-color', 'modal-free-notes']
+    ['modal-free-query', 'modal-free-color', 'modal-free-notes']
         .forEach(id => { document.getElementById(id).value = ''; });
+    resetSizeChips('modal-free-size-chips', 'modal-free-size');
     document.getElementById('modal-free-photo-preview').innerHTML = '';
     const guide = document.getElementById('size-guide-free');
     guide.hidden = true;
@@ -527,7 +570,7 @@ function updateCartBar() {
     const { total, unpriced } = cartTotals();
     document.getElementById('bar-count').textContent = cart.length;
     document.getElementById('bar-sum').textContent = total
-        ? (unpriced ? `от ${usdText(total)}` : usdText(total))
+        ? (unpriced ? `от ${rubOf(total)}` : rubOf(total))
         : 'цену уточним';
 }
 
@@ -576,7 +619,7 @@ function renderCart() {
                 <div class="line-body">
                     <p class="line-name">${item.name}</p>
                     ${spec.length ? `<p class="line-spec">${spec.join('\n')}</p>` : ''}
-                    <p class="line-price ${usd ? '' : 'soft'}">${usd ? item.price : 'цену уточнит менеджер'}</p>
+                    <p class="line-price ${usd ? '' : 'soft'}">${usd ? rubOf(usd) : 'цену уточнит менеджер'}</p>
                 </div>
                 <button class="line-x" onclick="removeFromCart(${index})" aria-label="Убрать из корзины"><svg class="icon"><use href="#icon-close"></use></svg></button>
             </div>
@@ -595,7 +638,7 @@ function renderCart() {
         <div class="sum">
             <div class="sum-row">
                 <span>${cart.length} ${plural(cart.length, 'позиция', 'позиции', 'позиций')} из каталога</span>
-                <span>${usd ? usdText(usd) : '—'}</span>
+                <span>${usd ? rubOf(usd) : '—'}</span>
             </div>
             ${unpriced ? `
             <div class="sum-row">
@@ -605,11 +648,11 @@ function renderCart() {
             ${discount ? `
             <div class="sum-row cut">
                 <span>Промокод ${appliedPromo.code}</span>
-                <span>−${usdText(discount)}</span>
+                <span>−${rubOf(discount)}</span>
             </div>` : ''}
             <div class="sum-row total">
                 <span>${unpriced ? 'Ориентир от' : 'Ориентир'}</span>
-                <b>${total ? usdText(total) : '—'}${total && rubOf(total) ? ` <span style="font-size:13px;font-weight:400;color:var(--text-3)">${rubOf(total)}</span>` : ''}</b>
+                <b>${total ? rubOf(total) : '—'}</b>
             </div>
             <p class="sum-note">Это цены с POIZON без комиссии и доставки. Менеджер проверит наличие, пересчитает итог и пришлёт точную сумму до оплаты.</p>
         </div>
@@ -1043,7 +1086,7 @@ function showView(view) {
 window.showView = showView;
 
 // ========== ЗАПУСК ==========
-fillSizeSelects();
+fillSizeChips();
 renderCats();
 renderCatalog();
 updateCartBar();

@@ -1031,6 +1031,37 @@ select option {
     color: var(--text);
 }
 
+/* Чипы размера — тап виден сразу, вместо системного пикера у select */
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    min-width: 44px;
+    height: 40px;
+    padding: 0 14px;
+    background-color: var(--raise);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-raise);
+    color: var(--text-2);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.chip:active { opacity: 0.6; }
+
+.chip.on {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    box-shadow: none;
+}
+
 /* Таблица размеров раскрывается на месте, а не вторым листом поверх первого */
 .guide {
     margin-top: 12px;
